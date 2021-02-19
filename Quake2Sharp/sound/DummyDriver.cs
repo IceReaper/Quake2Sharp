@@ -1,11 +1,4 @@
 /*
- * Created on Apr 25, 2004
- * 
- * Copyright (C) 2003
- *
- * $Id: DummyDriver.java,v 1.2 2005-12-04 17:26:33 cawe Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -24,93 +17,76 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.sound;
 
-import java.nio.ByteBuffer;
+namespace Quake2Sharp.sound
+{
+	using System.IO;
 
-/**
+	/**
  * DummyDriver
  * 
  * @author cwei
  */
-public final class DummyDriver implements Sound {
+	public sealed class DummyDriver : Sound
+	{
+		static DummyDriver()
+		{
+			S.register(new DummyDriver());
+		}
 
-	static {
-		S.register(new DummyDriver());
-	};
-	
-	private DummyDriver() {
-	}
+		private DummyDriver()
+		{
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#Init()
-	 */
-	public boolean Init() {
-		return true;
-	}
+		public bool Init()
+		{
+			return true;
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#Shutdown()
-	 */
-	public void Shutdown() {
-	}
+		public void Shutdown()
+		{
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#BeginRegistration()
-	 */
-	public void BeginRegistration() {
-	}
+		public void BeginRegistration()
+		{
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#RegisterSound(java.lang.String)
-	 */
-	public sfx_t RegisterSound(String sample) {
-		return null;
-	}
+		public sfx_t RegisterSound(string sample)
+		{
+			return null;
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#EndRegistration()
-	 */
-	public void EndRegistration() {
-	}
+		public void EndRegistration()
+		{
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#StartLocalSound(java.lang.String)
-	 */
-	public void StartLocalSound(String sound) {
-	}
+		public void StartLocalSound(string sound)
+		{
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#StartSound(float[], int, int, jake2.sound.sfx_t, float, float, float)
-	 */
-	public void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs) {
-	}
+		public void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs)
+		{
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#Update(float[], float[], float[], float[])
-	 */
-	public void Update(float[] origin, float[] forward, float[] right, float[] up) {
-	}
+		public void Update(float[] origin, float[] forward, float[] right, float[] up)
+		{
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#RawSamples(int, int, int, int, byte[])
-	 */
-	public void RawSamples(int samples, int rate, int width, int channels, ByteBuffer data) {
-	}
+		public void RawSamples(int samples, int rate, int width, int channels, BinaryReader data)
+		{
+		}
 
-    public void disableStreaming() {
-    }
+		public void disableStreaming()
+		{
+		}
 
-    /* (non-Javadoc)
-	 * @see jake2.sound.Sound#StopAllSounds()
-	 */
-	public void StopAllSounds() {
-	}
+		public void StopAllSounds()
+		{
+		}
 
-	/* (non-Javadoc)
-	 * @see jake2.sound.Sound#getName()
-	 */
-	public String getName() {
-		return "dummy";
+		public string getName()
+		{
+			return "dummy";
+		}
 	}
 }

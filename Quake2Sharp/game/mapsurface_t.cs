@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,20 +18,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 02.01.2004 by RST.
-// $Id: mapsurface_t.java,v 1.1 2004-07-07 19:59:26 hzi Exp $
+namespace Quake2Sharp.game
+{
+	// using Quake2Sharp;
+	// using Quake2Sharp.client;
+	// using Quake2Sharp.game;
+	// using Quake2Sharp.qcommon;
+	// using Quake2Sharp.render;
+	// using Quake2Sharp.server;
 
-package jake2.game;
-
-
-// import jake2.*;
-// import jake2.client.*;
-// import jake2.game.*;
-// import jake2.qcommon.*;
-// import jake2.render.*;
-// import jake2.server.*;
-
-public class mapsurface_t {
-	public csurface_t c = new csurface_t();
-	public String rname;
+	public class mapsurface_t
+	{
+		public csurface_t c = new();
+		public string rname;
+	}
 }

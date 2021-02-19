@@ -1,10 +1,4 @@
 /*
- * cparticle_t.java
- * Copyright (C) 2003
- *
- * $Id: cparticle_t.java,v 1.1 2004-07-07 19:58:52 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,24 +17,27 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.client;
 
-/**
+namespace Quake2Sharp.client
+{
+	/**
  * cparticle_t
  *  
  * @author cwei
  */
-public class cparticle_t {
+	public class cparticle_t
+	{
+		public cparticle_t next;
+		public float time;
 
-	public cparticle_t next;
-	public float time;
+		public float[] org = {0, 0, 0}; // vec3_t
+		public float[] vel = {0, 0, 0}; // vec3_t
+		public float[] accel = {0, 0, 0}; // vec3_t
 
-	public float[] org = {0, 0, 0}; // vec3_t
-	public float[] vel = {0, 0, 0}; // vec3_t
-	public float[] accel = {0, 0, 0}; // vec3_t
+		public float color;
 
-	public float color;
-	//public float colorvel;
-	public float alpha;
-	public float alphavel;
+		//public float colorvel;
+		public float alpha;
+		public float alphavel;
+	}
 }

@@ -1,107 +1,124 @@
 /*
- * Copyright (C) 1997-2001 Id Software, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *  
- */
+Copyright (C) 1997-2001 Id Software, Inc.
 
-// Created on 20.11.2003 by RST.
-package jake2.game;
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-public class gitem_t {
-    private static int id = 0;
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-    public gitem_t(int xxx) {
-        index = xxx;
-    }
+See the GNU General Public License for more details.
 
-    public gitem_t(String classname, EntInteractAdapter pickup,
-            ItemUseAdapter use, ItemDropAdapter drop,
-            EntThinkAdapter weaponthink) {
-    }
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    public gitem_t(String classname, EntInteractAdapter pickup,
-            ItemUseAdapter use, ItemDropAdapter drop,
-            EntThinkAdapter weaponthink, String pickup_sound,
-            String world_model, int world_model_flags, String view_model,
-            String icon, String pickup_name, int count_width, int quantity,
-            String ammo, int flags, int weapmodel, gitem_armor_t info, int tag,
-            String precaches) {
-        this.classname = classname;
-        this.pickup = pickup;
-        this.use = use;
-        this.drop = drop;
-        this.weaponthink = weaponthink;
-        this.pickup_sound = pickup_sound;
-        this.world_model = world_model;
-        this.world_model_flags = world_model_flags;
-        this.view_model = view_model;
-        this.icon = icon;
-        this.pickup_name = pickup_name;
-        this.count_width = count_width;
-        this.quantity = quantity;
-        this.ammo = ammo;
-        this.flags = flags;
-        this.weapmodel = weapmodel;
-        this.info = info;
-        this.tag = tag;
-        this.precaches = precaches;
+*/
 
-        this.index = id++;
-    }
+namespace Quake2Sharp.game
+{
+	public class gitem_t
+	{
+		private static int id;
 
-    String classname; // spawning name
+		public gitem_t(int xxx)
+		{
+			this.index = xxx;
+		}
 
-    EntInteractAdapter pickup;
+		public gitem_t(string classname, EntInteractAdapter pickup, ItemUseAdapter use, ItemDropAdapter drop, EntThinkAdapter weaponthink)
+		{
+		}
 
-    ItemUseAdapter use;
+		public gitem_t(
+			string classname,
+			EntInteractAdapter pickup,
+			ItemUseAdapter use,
+			ItemDropAdapter drop,
+			EntThinkAdapter weaponthink,
+			string pickup_sound,
+			string world_model,
+			int world_model_flags,
+			string view_model,
+			string icon,
+			string pickup_name,
+			int count_width,
+			int quantity,
+			string ammo,
+			int flags,
+			int weapmodel,
+			gitem_armor_t info,
+			int tag,
+			string precaches
+		)
+		{
+			this.classname = classname;
+			this.pickup = pickup;
+			this.use = use;
+			this.drop = drop;
+			this.weaponthink = weaponthink;
+			this.pickup_sound = pickup_sound;
+			this.world_model = world_model;
+			this.world_model_flags = world_model_flags;
+			this.view_model = view_model;
+			this.icon = icon;
+			this.pickup_name = pickup_name;
+			this.count_width = count_width;
+			this.quantity = quantity;
+			this.ammo = ammo;
+			this.flags = flags;
+			this.weapmodel = weapmodel;
+			this.info = info;
+			this.tag = tag;
+			this.precaches = precaches;
 
-    ItemDropAdapter drop;
+			this.index = gitem_t.id++;
+		}
 
-    EntThinkAdapter weaponthink;
+		public string classname; // spawning name
 
-    String pickup_sound;
+		public EntInteractAdapter pickup;
 
-    String world_model;
+		public ItemUseAdapter use;
 
-    int world_model_flags;
+		public ItemDropAdapter drop;
 
-    String view_model;
+		public EntThinkAdapter weaponthink;
 
-    // client side info
-    String icon;
+		public string pickup_sound;
 
-    String pickup_name; // for printing on pickup
+		public string world_model;
 
-    int count_width; // number of digits to display by icon
+		public int world_model_flags;
 
-    int quantity; // for ammo how much, for weapons how much is used per shot
+		public string view_model;
 
-    String ammo; // for weapons
+		// client side info
+		public string icon;
 
-    int flags; // IT_* flags
+		public string pickup_name; // for printing on pickup
 
-    int weapmodel; // weapon model index (for weapons)
+		private int count_width; // number of digits to display by icon
 
-    gitem_armor_t info;
+		public int quantity; // for ammo how much, for weapons how much is used per shot
 
-    int tag;
+		public string ammo; // for weapons
 
-    String precaches; // string of all models, sounds, and images this item will
-                      // use
+		public int flags; // IT_* flags
 
-    public int index;
+		public int weapmodel; // weapon model index (for weapons)
+
+		public gitem_armor_t info;
+
+		public int tag;
+
+		public string precaches; // string of all models, sounds, and images this item will
+
+		// use
+
+		public int index;
+	}
 }

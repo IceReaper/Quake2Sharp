@@ -1,129 +1,106 @@
 /*
- * Renderer.java
- * Copyright (C) 2003
- *
- * $Id: Renderer.java,v 1.13 2008-03-02 16:01:27 cawe Exp $
- */
-/*
- Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software, Inc.
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
- See the GNU General Public License for more details.
+See the GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- */
-package jake2.render;
+*/
 
-import jake2.client.refexport_t;
+namespace Quake2Sharp.render
+{
+	using opengl;
+	using client;
+	using opentk;
+	using System;
+	using System.Collections.Generic;
+	using Console = System.Console;
 
-import java.util.Vector;
+	public class Renderer
+	{
+		private static readonly RenderAPI basicRenderer = new Basic();
 
-/**
- * Renderer
- * 
- * @author cwei
- */
-public class Renderer {
+		private static readonly List<Ref> drivers = new();
 
-    static RenderAPI fastRenderer = new jake2.render.fast.Misc();
-    static RenderAPI basicRenderer = new jake2.render.basic.Misc();
+		static Renderer()
+		{
+			try
+			{
+				try
+				{
+					// TODO move to plugin system!
+					System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(OpenTkRenderer).TypeHandle);
+				}
+				catch (Exception)
+				{
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
+		}
 
-    static Vector drivers = new Vector(3);
+		public static void register(Ref impl)
+		{
+			if (impl == null)
+				throw new Exception("Ref implementation can't be null");
 
-    static {
-        try {
-            try {
-                Class.forName("net.java.games.jogl.GL");
-                Class.forName("jake2.render.JoglRenderer");
-            } catch (ClassNotFoundException e) {
-                // ignore the old jogl driver if runtime not in classpath
-            }
-            try {
-                Class.forName("org.lwjgl.opengl.GL11");
-                Class.forName("jake2.render.LwjglRenderer");
-            } catch (ClassNotFoundException e) {
-                // ignore the lwjgl driver if runtime not in classpath
-            }
-            try {
-                Class.forName("javax.media.opengl.GL");
-                Class.forName("jake2.render.Jsr231Renderer");
-            } catch (ClassNotFoundException e) {
-                // ignore the new jogl driver if runtime not in classpath
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    };
+			if (!Renderer.drivers.Contains(impl))
+				Renderer.drivers.Add(impl);
+		}
 
-    public static void register(Ref impl) {
-        if (impl == null) {
-            throw new IllegalArgumentException(
-                    "Ref implementation can't be null");
-        }
-        if (!drivers.contains(impl)) {
-            drivers.add(impl);
-        }
-    }
+		public static refexport_t getDriver(string driverName)
+		{
+			Ref driver = null;
+			var count = Renderer.drivers.Count;
 
-    /**
-     * Factory method to get the Renderer implementation.
-     * 
-     * @return refexport_t (Renderer singleton)
-     */
-    public static refexport_t getDriver(String driverName) {
-        return getDriver(driverName, true);
-    }
+			for (var i = 0; i < count; i++)
+			{
+				driver = Renderer.drivers[i];
 
-    /**
-     * Factory method to get the Renderer implementation.
-     * 
-     * @return refexport_t (Renderer singleton)
-     */
-    public static refexport_t getDriver(String driverName, boolean fast) {
-        // find a driver
-        Ref driver = null;
-        int count = drivers.size();
-        for (int i = 0; i < count; i++) {
-            driver = (Ref) drivers.get(i);
-            if (driver.getName().equals(driverName)) {
-                return driver.GetRefAPI((fast) ? fastRenderer : basicRenderer);
-            }
-        }
-        // null if driver not found
-        return null;
-    }
+				if (driver.getName().Equals(driverName))
+					return driver.GetRefAPI(Renderer.basicRenderer);
+			}
 
-    public static String getDefaultName() {
-        return (drivers.isEmpty()) ? null : ((Ref) drivers.firstElement())
-                .getName();
-    }
+			return null;
+		}
 
-    public static String getPreferedName() {
-        return (drivers.isEmpty()) ? null : ((Ref) drivers.lastElement())
-                .getName();
-    }
+		public static string getDefaultName()
+		{
+			return Renderer.drivers.Count == 0 ? null : Renderer.drivers[0].getName();
+		}
 
-    public static String[] getDriverNames() {
-        if (drivers.isEmpty())
-            return null;
+		public static string getPreferedName()
+		{
+			return Renderer.drivers.Count == 0 ? null : Renderer.drivers[0].getName();
+		}
 
-        int count = drivers.size();
-        String[] names = new String[count];
-        for (int i = 0; i < count; i++) {
-            names[i] = ((Ref) drivers.get(i)).getName();
-        }
-        return names;
-    }
+		public static string[] getDriverNames()
+		{
+			if (Renderer.drivers.Count == 0)
+				return null;
 
+			var count = Renderer.drivers.Count;
+			var names = new string[count];
+
+			for (var i = 0; i < count; i++)
+			{
+				names[i] = Renderer.drivers[i].getName();
+			}
+
+			return names;
+		}
+	}
 }

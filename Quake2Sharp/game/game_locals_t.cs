@@ -1,108 +1,111 @@
 /*
- * Copyright (C) 1997-2001 Id Software, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *  
- */
+Copyright (C) 1997-2001 Id Software, Inc.
 
-// Created on 31.10.2003 by RST.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-package jake2.game;
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-import jake2.Defines;
-import jake2.qcommon.Com;
-import jake2.util.QuakeFile;
+See the GNU General Public License for more details.
 
-import java.io.IOException;
-import java.util.Date;
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-public class game_locals_t {
-    //
-    //	this structure is left intact through an entire game
-    //	it should be initialized at dll load time, and read/written to
-    //	the server.ssv file for savegames
-    //
+*/
 
-    public String helpmessage1 = "";
+namespace Quake2Sharp.game
+{
+	using Quake2Sharp;
+	using qcommon;
+	using util;
+	using System;
+	using System.IO;
 
-    public String helpmessage2 = "";
+	public class game_locals_t
+	{
+		//
+		//	this structure is left intact through an entire game
+		//	it should be initialized at dll load time, and read/written to
+		//	the server.ssv file for savegames
+		//
 
-    public int helpchanged; // flash F1 icon if non 0, play sound
+		public string helpmessage1 = "";
 
-    // and increment only if 1, 2, or 3
+		public string helpmessage2 = "";
 
-    public gclient_t clients[] = new gclient_t[Defines.MAX_CLIENTS];
+		public int helpchanged; // flash F1 icon if non 0, play sound
 
-    // can't store spawnpoint in level, because
-    // it would get overwritten by the savegame restore
-    public String spawnpoint = ""; // needed for coop respawns
+		// and increment only if 1, 2, or 3
 
-    // store latched cvars here that we want to get at often
-    public int maxclients;
+		public gclient_t[] clients = new gclient_t[Defines.MAX_CLIENTS];
 
-    public int maxentities;
+		// can't store spawnpoint in level, because
+		// it would get overwritten by the savegame restore
+		public string spawnpoint = ""; // needed for coop respawns
 
-    // cross level triggers
-    public int serverflags;
+		// store latched cvars here that we want to get at often
+		public int maxclients;
 
-    // items
-    public int num_items;
+		public int maxentities;
 
-    public boolean autosaved;
+		// cross level triggers
+		public int serverflags;
 
-    /** Reads the game locals from a file. */
-    public void load(QuakeFile f) throws IOException {
-        String date = f.readString();
+		// items
+		public int num_items;
 
-        helpmessage1 = f.readString();
-        helpmessage2 = f.readString();
+		public bool autosaved;
 
-        helpchanged = f.readInt();
-        // gclient_t*
+		/** Reads the game locals from a file. */
+		public void load(BinaryReader f)
+		{
+			var date = f.ReadStringQ();
 
-        spawnpoint = f.readString();
-        maxclients = f.readInt();
-        maxentities = f.readInt();
-        serverflags = f.readInt();
-        num_items = f.readInt();
-        autosaved = f.readInt() != 0;
+			this.helpmessage1 = f.ReadStringQ();
+			this.helpmessage2 = f.ReadStringQ();
 
-        // rst's checker :-)
-        if (f.readInt() != 1928)
-            Com.DPrintf("error in loading game_locals, 1928\n");
+			this.helpchanged = f.ReadInt32();
 
-    }
+			// gclient_t*
 
-    /** Writes the game locals to a file. */
-    public void write(QuakeFile f) throws IOException {
-        f.writeString(new Date().toString());
+			this.spawnpoint = f.ReadStringQ();
+			this.maxclients = f.ReadInt32();
+			this.maxentities = f.ReadInt32();
+			this.serverflags = f.ReadInt32();
+			this.num_items = f.ReadInt32();
+			this.autosaved = f.ReadInt32() != 0;
 
-        f.writeString(helpmessage1);
-        f.writeString(helpmessage2);
+			// rst's checker :-)
+			if (f.ReadInt32() != 1928)
+				Com.DPrintf("error in loading game_locals, 1928\n");
+		}
 
-        f.writeInt(helpchanged);
-        // gclient_t*
+		/** Writes the game locals to a file. */
+		public void write(BinaryWriter f)
+		{
+			f.WriteQ(DateTime.Now.ToString());
 
-        f.writeString(spawnpoint);
-        f.writeInt(maxclients);
-        f.writeInt(maxentities);
-        f.writeInt(serverflags);
-        f.writeInt(num_items);
-        f.writeInt(autosaved ? 1 : 0);
-        // rst's checker :-)
-        f.writeInt(1928);
-    }
+			f.WriteQ(this.helpmessage1);
+			f.WriteQ(this.helpmessage2);
+
+			f.Write(this.helpchanged);
+
+			// gclient_t*
+
+			f.WriteQ(this.spawnpoint);
+			f.Write(this.maxclients);
+			f.Write(this.maxentities);
+			f.Write(this.serverflags);
+			f.Write(this.num_items);
+			f.Write(this.autosaved ? 1 : 0);
+
+			// rst's checker :-)
+			f.Write(1928);
+		}
+	}
 }

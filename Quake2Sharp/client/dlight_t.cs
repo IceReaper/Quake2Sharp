@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,14 +18,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 20.11.2003 by RST.
-// $Id: dlight_t.java,v 1.1 2004-07-07 19:58:52 hzi Exp $
-
-package jake2.client;
-
-public class dlight_t
+namespace Quake2Sharp.client
 {
-	public float origin[] = { 0, 0, 0 };
-	public float color[] = { 0, 0, 0 };
-	public float intensity;
+	public class dlight_t
+	{
+		public float[] origin = {0, 0, 0};
+		public float[] color = {0, 0, 0};
+		public float intensity;
+	}
 }

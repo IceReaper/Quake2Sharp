@@ -1,10 +1,4 @@
 /*
- * console_t.java
- * Copyright (C) 2003
- * 
- * $Id: console_t.java,v 1.1 2004-07-07 19:58:52 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,29 +17,31 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.client;
 
-import jake2.Defines;
+namespace Quake2Sharp.client
+{
+	using Quake2Sharp;
 
-/**
+	/**
  * console_t
  */
-public final class console_t {
-	boolean initialized;
-	byte[] text = new byte[Defines.CON_TEXTSIZE];
-	int current;	// line where next message will be printed
-	int x;			// offset in current line for next print
-	int display;	// bottom of console displays this line
+	public sealed class console_t
+	{
+		public bool initialized;
+		public byte[] text = new byte[Defines.CON_TEXTSIZE];
+		public int current; // line where next message will be printed
+		public int x; // offset in current line for next print
+		public int display; // bottom of console displays this line
 
-	int ormask;		// high bit mask for colored characters
+		public int ormask; // high bit mask for colored characters
 
-	int linewidth;	// characters across screen
-	int totallines;	// total lines in console scrollback
+		public int linewidth; // characters across screen
+		public int totallines; // total lines in console scrollback
 
-	float cursorspeed;
+		public int vislines;
 
-	int vislines;
+		public float[] times = new float[Defines.NUM_CON_TIMES]; // cls.realtime time the line was generated
 
-	float[] times = new float[Defines.NUM_CON_TIMES];	// cls.realtime time the line was generated
-										// for transparent notify lines	
+		// for transparent notify lines	
+	}
 }

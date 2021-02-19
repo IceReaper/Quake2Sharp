@@ -1,10 +1,4 @@
 /*
- * cl_sustain_t.java
- * Copyright (C) 2004
- * 
- * $Id: cl_sustain_t.java,v 1.1 2004-07-07 19:58:52 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,33 +17,35 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.client;
 
-/**
+namespace Quake2Sharp.client
+{
+	using System;
+
+	/**
  * cl_sustain_t
  */
-public class cl_sustain_t {
-	static abstract class ThinkAdapter {
-		abstract void think(cl_sustain_t self);
-	}
-	
-	int id;
-	int type;
-	int endtime;
-	int nextthink;
-	int thinkinterval;
-	float[] org = new float[3];
-	float[] dir = new float[3];
-	int color;
-	int count;
-	int magnitude;
-	
-	ThinkAdapter think;
-	
-	void clear() { 
-		org[0] = org[1] = org[2] = 
-		dir[0] = dir[1] = dir[2] = 
-		id = type = endtime = nextthink = thinkinterval = color = count = magnitude = 0;
-		think = null;
+	public class cl_sustain_t
+	{
+		public int id;
+		private int type;
+		public int endtime;
+		public int nextthink;
+		public int thinkinterval;
+		public float[] org = new float[3];
+		public float[] dir = new float[3];
+		public int color;
+		public int count;
+		public int magnitude;
+
+		public Action<cl_sustain_t> think;
+
+		public void clear()
+		{
+			this.org[0] = this.org[1] = this.org[2] = this.dir[0] = this.dir[1] = this.dir[2] =
+				this.id = this.type = this.endtime = this.nextthink = this.thinkinterval = this.color = this.count = this.magnitude = 0;
+
+			this.think = null;
+		}
 	}
 }

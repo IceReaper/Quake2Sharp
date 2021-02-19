@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,18 +18,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 02.01.2004 by RST.
-// $Id: lump_t.java,v 1.1 2004-07-07 19:59:34 hzi Exp $
-
-package jake2.qcommon;
-
-public class lump_t
+namespace Quake2Sharp.qcommon
 {
-	public lump_t(int offset, int len)
+	public class lump_t
 	{
-		this.fileofs = offset;
-		this.filelen = len;
-	}
+		public lump_t(int offset, int len)
+		{
+			this.fileofs = offset;
+			this.filelen = len;
+		}
 
-	public int fileofs, filelen;
+		public int fileofs, filelen;
+	}
 }

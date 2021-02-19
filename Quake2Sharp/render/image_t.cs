@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,61 +18,64 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 20.11.2003 by RST.
-// $Id: image_t.java,v 1.1 2004-07-07 19:59:35 hzi Exp $
+namespace Quake2Sharp.render
+{
+	using Quake2Sharp;
 
-package jake2.render;
+	public class image_t
+	{
+		public static readonly int MAX_NAME_SIZE = Defines.MAX_QPATH;
 
-import jake2.Defines;
+		// used to get the pos in array
+		// added by cwei
+		private readonly int id;
 
-public class image_t {
-	
-	public static final int MAX_NAME_SIZE = Defines.MAX_QPATH;
-	
-	// used to get the pos in array
-	// added by cwei
-	private int id;
-	
-	// quake 2 variables
-	public String name=""; // game path, including extension
-	// enum imagetype_t
-	public int type;
-	public int width, height; // source image
-	public int upload_width, upload_height; // after power of two and picmip
-	public int registration_sequence; // 0 = free
-	public msurface_t texturechain; // for sort-by-texture world drawing
-	public int texnum; // gl texture binding
-	public float sl, tl, sh, th; // 0,0 - 1,1 unless part of the scrap
-	public boolean scrap;
-	public boolean has_alpha;
+		// quake 2 variables
+		public string name = ""; // game path, including extension
 
-	public boolean paletted;
-	
-	public image_t(int id) {
-		this.id = id;
-	}
-	
-	public void clear() {
-		// don't clear the id
-		// wichtig !!!
-		name = "";
-		type = 0;
-		width = height = 0;
-		upload_width = upload_height = 0;
-		registration_sequence = 0; // 0 = free
-		texturechain = null;
-		texnum = 0; // gl texture binding
-		sl =  tl = sh = th = 0;
-		scrap = false;
-		has_alpha = false;
-		paletted = false;
-	}
+		// enum imagetype_t
+		public int type;
+		public int width, height; // source image
+		public int upload_width, upload_height; // after power of two and picmip
+		public int registration_sequence; // 0 = free
+		public msurface_t texturechain; // for sort-by-texture world drawing
+		public int texnum; // gl texture binding
+		public float sl, tl, sh, th; // 0,0 - 1,1 unless part of the scrap
+		public bool scrap;
+		public bool has_alpha;
 
-	public int getId() {
-		return id;
-	}
-	
-	public String toString() {
-		return name + ":" + texnum;
+		public bool paletted;
+
+		public image_t(int id)
+		{
+			this.id = id;
+		}
+
+		public void clear()
+		{
+			// don't clear the id
+			// wichtig !!!
+			this.name = "";
+			this.type = 0;
+			this.width = this.height = 0;
+			this.upload_width = this.upload_height = 0;
+			this.registration_sequence = 0; // 0 = free
+			this.texturechain = null;
+			this.texnum = 0; // gl texture binding
+			this.sl = this.tl = this.sh = this.th = 0;
+			this.scrap = false;
+			this.has_alpha = false;
+			this.paletted = false;
+		}
+
+		public int getId()
+		{
+			return this.id;
+		}
+
+		public string toString()
+		{
+			return this.name + ":" + this.texnum;
+		}
 	}
 }

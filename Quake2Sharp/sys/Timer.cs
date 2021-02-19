@@ -1,32 +1,40 @@
 /*
- * Timer.java
- * Copyright (C) 2005
- */
-package jake2.sys;
+Copyright (C) 1997-2001 Id Software, Inc.
 
-import jake2.Globals;
-import jake2.qcommon.Com;
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-public abstract class Timer {
+See the GNU General Public License for more details.
 
-	abstract public long currentTimeMillis();
-	static Timer t;
-	
-	static {
-		try {
-			t = new NanoTimer();
-		} catch (Throwable e) {
-			try {
-				t = new HighPrecisionTimer();
-			} catch (Throwable e1) {
-				t = new StandardTimer();
-			}
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+*/
+
+namespace Quake2Sharp.sys
+{
+	using System.Diagnostics;
+
+	public abstract class Timer
+	{
+		private static readonly Stopwatch stopwatch;
+
+		static Timer()
+		{
+			Timer.stopwatch = new Stopwatch();
+			Timer.stopwatch.Start();
 		}
-		Com.Println("using " + t.getClass().getName());
-	}
-	
-	public static int Milliseconds() {
-		return Globals.curtime = (int)(t.currentTimeMillis());
+
+		public static int Milliseconds()
+		{
+			return Globals.curtime = (int) (Timer.stopwatch.ElapsedMilliseconds);
+		}
 	}
 }

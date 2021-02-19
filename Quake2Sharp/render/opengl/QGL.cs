@@ -1,162 +1,168 @@
-package jake2.render.opengl;
+/*
+Copyright (C) 1997-2001 Id Software, Inc.
 
-import java.nio.*;
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-public interface QGL extends QGLConst {
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-    /*
-     * a sub set of OpenGL for Jake2
-     */
+See the GNU General Public License for more details.
 
-    void glActiveTextureARB(int texture);
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    void glAlphaFunc(int func, float ref);
+*/
 
-    void glArrayElement(int index);
+namespace Quake2Sharp.render.opengl
+{
+	public interface QGL
+	{
+		void glActiveTextureARB(int texture);
 
-    void glBegin(int mode);
+		void glAlphaFunc(int func, float @ref);
 
-    void glBindTexture(int target, int texture);
+		void glArrayElement(int index);
 
-    void glBlendFunc(int sfactor, int dfactor);
+		void glBegin(int mode);
 
-    void glClear(int mask);
+		void glBindTexture(int target, int texture);
 
-    void glClearColor(float red, float green, float blue, float alpha);
+		void glBlendFunc(int sfactor, int dfactor);
 
-    void glClientActiveTextureARB(int texture);
+		void glClear(int mask);
 
-    void glColor3f(float red, float green, float blue);
+		void glClearColor(float red, float green, float blue, float alpha);
 
-    void glColor3ub(byte red, byte green, byte blue);
+		void glClientActiveTextureARB(int texture);
 
-    void glColor4f(float red, float green, float blue, float alpha);
+		void glColor3f(float red, float green, float blue);
 
-    void glColor4ub(byte red, byte green, byte blue, byte alpha);
+		void glColor3ub(byte red, byte green, byte blue);
 
-    void glColorPointer(int size, boolean unsigned, int stride,
-            ByteBuffer pointer);
+		void glColor4f(float red, float green, float blue, float alpha);
 
-    void glColorPointer(int size, int stride, FloatBuffer pointer);
+		void glColor4ub(byte red, byte green, byte blue, byte alpha);
 
-    void glColorTable(int target, int internalFormat, int width, int format,
-            int type, ByteBuffer data);
+		void glColorPointer(int size, bool unsigned, int stride, int[] pointer);
 
-    void glCullFace(int mode);
+		void glColorPointer(int size, int stride, float[] pointer);
 
-    void glDeleteTextures(IntBuffer textures);
+		void glColorTable(int target, int internalFormat, int width, int format, int type, byte[] data);
 
-    void glDepthFunc(int func);
+		void glCullFace(int mode);
 
-    void glDepthMask(boolean flag);
+		void glDeleteTextures(int[] textures);
 
-    void glDepthRange(double zNear, double zFar);
+		void glDepthFunc(int func);
 
-    void glDisable(int cap);
+		void glDepthMask(bool flag);
 
-    void glDisableClientState(int cap);
+		void glDepthRange(double zNear, double zFar);
 
-    void glDrawArrays(int mode, int first, int count);
+		void glDisable(int cap);
 
-    void glDrawBuffer(int mode);
+		void glDisableClientState(int cap);
 
-    void glDrawElements(int mode, IntBuffer indices);
+		void glDrawArrays(int mode, int first, int count);
 
-    void glEnable(int cap);
+		void glDrawBuffer(int mode);
 
-    void glEnableClientState(int cap);
+		void glDrawElements(int mode, int[] indices);
 
-    void glEnd();
+		void glEnable(int cap);
 
-    void glFinish();
+		void glEnableClientState(int cap);
 
-    void glFlush();
+		void glEnd();
 
-    void glFrustum(double left, double right, double bottom, double top,
-            double zNear, double zFar);
+		void glFinish();
 
-    int glGetError();
+		void glFlush();
 
-    void glGetFloat(int pname, FloatBuffer params);
+		void glFrustum(double left, double right, double bottom, double top, double zNear, double zFar);
 
-    String glGetString(int name);
-    
-    void glHint(int target, int mode);
+		int glGetError();
 
-    void glInterleavedArrays(int format, int stride, FloatBuffer pointer);
+		void glGetFloat(int pname, float[] @params);
 
-    void glLockArraysEXT(int first, int count);
+		string glGetString(int name);
 
-    void glLoadIdentity();
+		void glHint(int target, int mode);
 
-    void glLoadMatrix(FloatBuffer m);
+		void glInterleavedArrays(int format, int stride, float[] pointer);
 
-    void glMatrixMode(int mode);
+		void glLockArraysEXT(int first, int count);
 
-    void glMultiTexCoord2f(int target, float s, float t);
+		void glLoadIdentity();
 
-    void glOrtho(double left, double right, double bottom, double top,
-            double zNear, double zFar);
+		void glLoadMatrix(float[] m);
 
-    void glPixelStorei(int pname, int param);
+		void glMatrixMode(int mode);
 
-    void glPointParameterEXT(int pname, FloatBuffer pfParams);
+		void glMultiTexCoord2f(int target, float s, float t);
 
-    void glPointParameterfEXT(int pname, float param);
+		void glOrtho(double left, double right, double bottom, double top, double zNear, double zFar);
 
-    void glPointSize(float size);
+		void glPixelStorei(int pname, int param);
 
-    void glPolygonMode(int face, int mode);
+		void glPointParameterEXT(int pname, float[] pfParams);
 
-    void glPopMatrix();
+		void glPointParameterfEXT(int pname, float param);
 
-    void glPushMatrix();
+		void glPointSize(float size);
 
-    void glReadPixels(int x, int y, int width, int height, int format,
-            int type, ByteBuffer pixels);
+		void glPolygonMode(int face, int mode);
 
-    void glRotatef(float angle, float x, float y, float z);
+		void glPopMatrix();
 
-    void glScalef(float x, float y, float z);
+		void glPushMatrix();
 
-    void glScissor(int x, int y, int width, int height);
+		void glReadPixels(int x, int y, int width, int height, int format, int type, byte[] pixels);
 
-    void glShadeModel(int mode);
+		void glRotatef(float angle, float x, float y, float z);
 
-    void glTexCoord2f(float s, float t);
+		void glScalef(float x, float y, float z);
 
-    void glTexCoordPointer(int size, int stride, FloatBuffer pointer);
+		void glScissor(int x, int y, int width, int height);
 
-    void glTexEnvi(int target, int pname, int param);
+		void glShadeModel(int mode);
 
-    void glTexImage2D(int target, int level, int internalformat, int width,
-            int height, int border, int format, int type, ByteBuffer pixels);
+		void glTexCoord2f(float s, float t);
 
-    void glTexImage2D(int target, int level, int internalformat, int width,
-            int height, int border, int format, int type, IntBuffer pixels);
+		void glTexCoordPointer(int size, int stride, float[] pointer);
 
-    void glTexParameterf(int target, int pname, float param);
+		void glTexEnvi(int target, int pname, int param);
 
-    void glTexParameteri(int target, int pname, int param);
+		void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, byte[] pixels);
 
-    void glTexSubImage2D(int target, int level, int xoffset, int yoffset,
-            int width, int height, int format, int type, IntBuffer pixels);
+		void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, int[] pixels);
 
-    void glTranslatef(float x, float y, float z);
+		void glTexParameterf(int target, int pname, float param);
 
-    void glUnlockArraysEXT();
+		void glTexParameteri(int target, int pname, int param);
 
-    void glVertex2f(float x, float y);
+		void glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, int[] pixels);
 
-    void glVertex3f(float x, float y, float z);
+		void glTranslatef(float x, float y, float z);
 
-    void glVertexPointer(int size, int stride, FloatBuffer pointer);
+		void glUnlockArraysEXT();
 
-    void glViewport(int x, int y, int width, int height);
-    
-    /*
-     * util extensions
-     */
-    void setSwapInterval(int interval);
+		void glVertex2f(float x, float y);
 
+		void glVertex3f(float x, float y, float z);
+
+		void glVertexPointer(int size, int stride, float[] pointer);
+
+		void glViewport(int x, int y, int width, int height);
+
+		/*
+		 * util extensions
+		 */
+		void setSwapInterval(int interval);
+	}
 }

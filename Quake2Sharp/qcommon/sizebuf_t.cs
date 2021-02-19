@@ -1,10 +1,4 @@
 /*
- * sizebuf_t.java
- * Copyright (C) 2003
- * 
- * $Id: sizebuf_t.java,v 1.1 2004-07-07 19:59:34 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,26 +17,30 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.qcommon;
 
-import java.util.Arrays;
+namespace Quake2Sharp.qcommon
+{
+	using System;
 
-/**
+	/**
  * sizebuf_t
  */
-public final class sizebuf_t {
-	public boolean allowoverflow = false;
-	public boolean overflowed = false;
-	public byte[] data = null;
-	public int maxsize = 0;
-	public int cursize = 0;
-	public int readcount = 0;
-	
-	public void clear()
+	public sealed class sizebuf_t
 	{
-		if (data!=null)		
-			Arrays.fill(data,(byte)0);
-		cursize = 0;
-		overflowed = false;
+		public bool allowoverflow = false;
+		public bool overflowed;
+		public byte[] data = null;
+		public int maxsize = 0;
+		public int cursize;
+		public int readcount = 0;
+
+		public void clear()
+		{
+			if (this.data != null)
+				Array.Fill(this.data, (byte) 0);
+
+			this.cursize = 0;
+			this.overflowed = false;
+		}
 	}
 }

@@ -1,10 +1,4 @@
 /*
- * vidmode_t.java
- * Copyright (C) 2003
- *
- * $Id: vidmode_t.java,v 1.1 2004-07-07 19:58:52 hzi Exp $
- */ 
- /*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,22 +17,27 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.client;
 
-/**
+namespace Quake2Sharp.client
+{
+	/**
  * vidmode_t
  * 
  * @author cwei
  */
-public class vidmode_t {
-	String description;
-	int width, height;
-	int mode;
-	
-	vidmode_t (String description, int width, int height, int mode) {
-		this.description = description;
-		this.width = width;
-		this.height = height;
-		this.mode = mode;
+	public class vidmode_t
+	{
+		private string description;
+		public int width;
+		public int height;
+		private int mode;
+
+		public vidmode_t(string description, int width, int height, int mode)
+		{
+			this.description = description;
+			this.width = width;
+			this.height = height;
+			this.mode = mode;
+		}
 	}
 }

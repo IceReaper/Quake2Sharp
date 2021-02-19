@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,20 +18,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 28.11.2003 by RST.
-// $Id: sfxcache_t.java,v 1.1 2004-07-08 20:56:49 hzi Exp $
+namespace Quake2Sharp.sound
+{
+	public class sfxcache_t
+	{
+		public int length;
+		public int loopstart;
+		public int speed; // not needed, because converted on load?
+		public int width;
+		public int stereo;
+		public byte[] data; // variable sized
 
-package jake2.sound;
-
-public class sfxcache_t {
-	public int length;
-	public int loopstart;
-	public int speed;			// not needed, because converted on load?
-	public int width;
-	public int stereo;
-	public byte data[];		// variable sized
-	
-	public sfxcache_t(int size) {
-		data = new byte[size];
+		public sfxcache_t(int size)
+		{
+			this.data = new byte[size];
+		}
 	}
 }

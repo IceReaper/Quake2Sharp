@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,43 +18,46 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 20.11.2003 by RST.
-// $Id: mleaf_t.java,v 1.1 2004-07-07 19:59:35 hzi Exp $
+namespace Quake2Sharp.render
+{
+	using System;
 
-package jake2.render;
-
-public class mleaf_t extends mnode_t {
-
-	//	common with node
-	/*
-	public int contents; // wil be a negative contents number
-	public int visframe; // node needs to be traversed if current
-
-	public float minmaxs[] = new float[6]; // for bounding box culling
-
-	public mnode_t parent;
-	*/
-
-	//	leaf specific
-	public int cluster;
-	public int area;
-
-	//public msurface_t firstmarksurface;
-	public int nummarksurfaces;
+	public class mleaf_t : mnode_t
+	{
+		//	common with node
+		/*
+		public int contents; // wil be a negative contents number
+		public int visframe; // node needs to be traversed if current
 	
-	// added by cwei
-	int markIndex;
-	msurface_t[] markSurfaces;
+		public float minmaxs[] = new float[6]; // for bounding box culling
 	
-	public void setMarkSurface(int markIndex, msurface_t[] markSurfaces) {
-		this.markIndex = markIndex;
-		this.markSurfaces = markSurfaces;
-	}
+		public mnode_t parent;
+		*/
 
-	public msurface_t getMarkSurface(int index) {
-		assert (index >= 0 && index <= nummarksurfaces) : "mleaf: markSurface bug (index = " + index +"; num = " + nummarksurfaces + ")";
-		// TODO code in Surf.R_RecursiveWorldNode aendern (der Pointer wird wie in C zu weit gezaehlt)
-		return (index < nummarksurfaces) ? markSurfaces[markIndex + index] : null;
-	}
+		//	leaf specific
+		public int cluster;
+		public int area;
 
+		//public msurface_t firstmarksurface;
+		public int nummarksurfaces;
+
+		// added by cwei
+		private int markIndex;
+		private msurface_t[] markSurfaces;
+
+		public void setMarkSurface(int markIndex, msurface_t[] markSurfaces)
+		{
+			this.markIndex = markIndex;
+			this.markSurfaces = markSurfaces;
+		}
+
+		public msurface_t getMarkSurface(int index)
+		{
+			if (!(index >= 0 && index <= this.nummarksurfaces))
+				throw new Exception("mleaf: markSurface bug (index = " + index + "; num = " + this.nummarksurfaces + ")");
+
+			// TODO code in Surf.R_RecursiveWorldNode aendern (der Pointer wird wie in C zu weit gezaehlt)
+			return (index < this.nummarksurfaces) ? this.markSurfaces[this.markIndex + index] : null;
+		}
+	}
 }

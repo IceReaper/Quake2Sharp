@@ -1,10 +1,4 @@
 /*
- * vrect_t.java
- * Copyright (C) 2003
- *
- * $Id: vrect_t.java,v 1.1 2004-07-07 19:58:52 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,17 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.client;
 
-/**
+namespace Quake2Sharp.client
+{
+	/**
  * vrect_t
  *  
  * @author cwei
  */
-public class vrect_t {
-	public int x;
-	public int y;
-	public int width;
-	public int height;
-	vrect_t pnext;
+	public class vrect_t
+	{
+		public int x;
+		public int y;
+		public int width;
+		public int height;
+	}
 }

@@ -1,162 +1,172 @@
 /*
- Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software, Inc.
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
- See the GNU General Public License for more details.
+See the GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- */
+*/
 
-// Created on 24.07.2004 by RST.
+namespace Quake2Sharp.util
+{
+	using game;
+	using qcommon;
+	using System.IO;
+	using System.Text;
 
-// $Id: QuakeFile.java,v 1.6 2005-11-20 22:18:34 salomo Exp $
+	public static class QuakeFile
+	{
+		/** Writes a Vector to a RandomAccessFile. */
+		public static void Write(this BinaryWriter binaryWriter, float[] v)
+		{
+			for (var n = 0; n < 3; n++)
+				binaryWriter.Write(v[n]);
+		}
 
-package jake2.util;
+		/** Writes a Vector to a RandomAccessFile. */
+		public static float[] ReadVector(this BinaryReader binaryReader)
+		{
+			float[] res = {0, 0, 0};
 
-import jake2.game.*;
-import jake2.qcommon.Com;
+			for (var n = 0; n < 3; n++)
+				res[n] = binaryReader.ReadSingle();
 
-import java.io.*;
+			return res;
+		}
 
-/**
- * RandomAccessFile, but handles readString/WriteString specially and offers
- * other helper functions
- */
-public class QuakeFile extends RandomAccessFile {
+		/** Reads a length specified string from a file. */
+		public static string ReadStringQ(this BinaryReader binaryReader)
+		{
+			var len = binaryReader.ReadInt32();
 
-    /** Standard Constructor. */
-    public QuakeFile(String filename, String mode) throws FileNotFoundException {
-        super(filename, mode);
-    }
+			if (len == -1)
+				return null;
 
-    /** Writes a Vector to a RandomAccessFile. */
-    public void writeVector(float v[]) throws IOException {
-        for (int n = 0; n < 3; n++)
-            writeFloat(v[n]);
-    }
+			if (len == 0)
+				return "";
 
-    /** Writes a Vector to a RandomAccessFile. */
-    public float[] readVector() throws IOException {
-        float res[] = { 0, 0, 0 };
-        for (int n = 0; n < 3; n++)
-            res[n] = readFloat();
+			var bb = new byte[len];
 
-        return res;
-    }
+			binaryReader.Read(bb, 0, len);
 
-    /** Reads a length specified string from a file. */
-    public String readString() throws IOException {
-        int len = readInt();
+			return Encoding.ASCII.GetString(bb, 0, len);
+		}
 
-        if (len == -1)
-            return null;
+		/** Writes a length specified string to a file. */
+		public static void WriteQ(this BinaryWriter binaryWriter, string s)
+		{
+			if (s == null)
+			{
+				binaryWriter.Write(-1);
 
-        if (len == 0)
-            return "";
+				return;
+			}
 
-        byte bb[] = new byte[len];
+			binaryWriter.Write(s.Length);
 
-        super.read(bb, 0, len);
+			if (s.Length != 0)
+				binaryWriter.Write(Encoding.ASCII.GetBytes(s));
+		}
 
-        return new String(bb, 0, len);
-    }
+		/** Writes the edict reference. */
+		public static void Write(this BinaryWriter binaryWriter, edict_t ent)
+		{
+			if (ent == null)
+				binaryWriter.Write(-1);
+			else
+			{
+				binaryWriter.Write(ent.s.number);
+			}
+		}
 
-    /** Writes a length specified string to a file. */
-    public void writeString(String s) throws IOException {
-        if (s == null) {
-            writeInt(-1);
-            return;
-        }
-
-        writeInt(s.length());
-        if (s.length() != 0)
-            writeBytes(s);
-    }
-
-    /** Writes the edict reference. */
-    public void writeEdictRef(edict_t ent) throws IOException {
-        if (ent == null)
-            writeInt(-1);
-        else {
-            writeInt(ent.s.number);
-        }
-    }
-
-    /**
+		/**
      * Reads an edict index from a file and returns the edict.
      */
+		public static edict_t ReadEdictRef(this BinaryReader binaryReader)
+		{
+			var i = binaryReader.ReadInt32();
 
-    public edict_t readEdictRef() throws IOException {
-        int i = readInt();
+			// handle -1
+			if (i < 0)
+				return null;
 
-        // handle -1
-        if (i < 0)
-            return null;
+			if (i > GameBase.g_edicts.Length)
+			{
+				Com.DPrintf("illegal edict num:" + i + "\n");
 
-        if (i > GameBase.g_edicts.length) {
-            Com.DPrintf("jake2: illegal edict num:" + i + "\n");
-            return null;
-        }
+				return null;
+			}
 
-        // valid edict.
-        return GameBase.g_edicts[i];
-    }
+			// valid edict.
+			return GameBase.g_edicts[i];
+		}
 
-    /** Writes the Adapter-ID to the file. */
-    public void writeAdapter(SuperAdapter a) throws IOException {
-        writeInt(3988);
-        if (a == null)
-            writeString(null);
-        else {
-            String str = a.getID();
-            if (a == null) {
-                Com.DPrintf("writeAdapter: invalid Adapter id for " + a + "\n");
-            }
-            writeString(str);
-        }
-    }
+		/** Writes the Adapter-ID to the file. */
+		public static void Write(this BinaryWriter binaryWriter, SuperAdapter a)
+		{
+			binaryWriter.Write(3988);
 
-    /** Reads the adapter id and returns the adapter. */
-    public SuperAdapter readAdapter() throws IOException {
-        if (readInt() != 3988)
-            Com.DPrintf("wrong read position: readadapter 3988 \n");
+			if (a == null)
+				binaryWriter.WriteQ(null);
+			else
+			{
+				var str = a.getID();
 
-        String id = readString();
+				if (a == null)
+				{
+					Com.DPrintf("writeAdapter: invalid Adapter id for " + a + "\n");
+				}
 
-        if (id == null) {
-            // null adapter. :-)
-            return null;
-        }
+				binaryWriter.WriteQ(str);
+			}
+		}
 
-        return SuperAdapter.getFromID(id);
-    }
+		/** Reads the adapter id and returns the adapter. */
+		public static SuperAdapter ReadAdapter(this BinaryReader binaryReader)
+		{
+			if (binaryReader.ReadInt32() != 3988)
+				Com.DPrintf("wrong read position: readadapter 3988 \n");
 
-    /** Writes an item reference. */
-    public void writeItem(gitem_t item) throws IOException {
-        if (item == null)
-            writeInt(-1);
-        else
-            writeInt(item.index);
-    }
+			var id = binaryReader.ReadStringQ();
 
-    /** Reads the item index and returns the game item. */
-    public gitem_t readItem() throws IOException {
-        int ndx = readInt();
-        if (ndx == -1)
-            return null;
-        else
-            return GameItemList.itemlist[ndx];
-    }
+			if (id == null)
+			{
+				// null adapter. :-)
+				return null;
+			}
 
+			return SuperAdapter.getFromID(id);
+		}
+
+		/** Writes an item reference. */
+		public static void Write(this BinaryWriter binaryWriter, gitem_t item)
+		{
+			if (item == null)
+				binaryWriter.Write(-1);
+			else
+				binaryWriter.Write(item.index);
+		}
+
+		/** Reads the item index and returns the game item. */
+		public static gitem_t ReadItem(this BinaryReader binaryReader)
+		{
+			var ndx = binaryReader.ReadInt32();
+
+			if (ndx == -1)
+				return null;
+			else
+				return GameItemList.itemlist[ndx];
+		}
+	}
 }

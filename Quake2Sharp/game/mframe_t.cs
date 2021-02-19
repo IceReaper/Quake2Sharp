@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,42 +18,41 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 11.11.2003 by RST.
-
-package jake2.game;
-
-import jake2.util.QuakeFile;
-
-import java.io.IOException;
-
-public class mframe_t
+namespace Quake2Sharp.game
 {
-	public mframe_t(AIAdapter ai, float dist, EntThinkAdapter think)
-	{
-		this.ai= ai;
-		this.dist= dist;
-		this.think= think;
-	}
-	
-	/** Empty constructor. */	
-	public mframe_t()
-	{}
+	using util;
+	using System.IO;
 
-	public AIAdapter ai;
-	public float dist;
-	public EntThinkAdapter think;
-
-	public void write(QuakeFile f) throws IOException
+	public class mframe_t
 	{
-		f.writeAdapter(ai);
-		f.writeFloat(dist);
-		f.writeAdapter(think);
-	}
+		public mframe_t(AIAdapter ai, float dist, EntThinkAdapter think)
+		{
+			this.ai = ai;
+			this.dist = dist;
+			this.think = think;
+		}
 
-	public void read(QuakeFile f) throws IOException
-	{
-		ai= (AIAdapter) f.readAdapter();
-		dist= f.readFloat();
-		think= (EntThinkAdapter) f.readAdapter();
+		/** Empty constructor. */
+		public mframe_t()
+		{
+		}
+
+		public AIAdapter ai;
+		public float dist;
+		public EntThinkAdapter think;
+
+		public void write(BinaryWriter f)
+		{
+			f.Write(this.ai);
+			f.Write(this.dist);
+			f.Write(this.think);
+		}
+
+		public void read(BinaryReader f)
+		{
+			this.ai = (AIAdapter) f.ReadAdapter();
+			this.dist = f.ReadSingle();
+			this.think = (EntThinkAdapter) f.ReadAdapter();
+		}
 	}
 }

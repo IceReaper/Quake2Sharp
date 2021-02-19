@@ -1,72 +1,70 @@
 /*
- * Copyright (C) 1997-2001 Id Software, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *  
- */
+Copyright (C) 1997-2001 Id Software, Inc.
 
-// Created on 14.01.2004 by RST.
-// $Id: server_t.java,v 1.2 2004-09-22 19:22:12 salomo Exp $
-package jake2.server;
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-import jake2.Defines;
-import jake2.game.cmodel_t;
-import jake2.game.entity_state_t;
-import jake2.qcommon.sizebuf_t;
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-import java.io.RandomAccessFile;
+See the GNU General Public License for more details.
 
-public class server_t {
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    public server_t() {
-        models = new cmodel_t[Defines.MAX_MODELS];
-        for (int n = 0; n < Defines.MAX_MODELS; n++)
-            models[n] = new cmodel_t();
+*/
 
-        for (int n = 0; n < Defines.MAX_EDICTS; n++)
-            baselines[n] = new entity_state_t(null);
-    }
+namespace Quake2Sharp.server
+{
+	using Quake2Sharp;
+	using game;
+	using qcommon;
+	using System.IO;
 
-    int state; // precache commands are only valid during load
+	public class server_t
+	{
+		public server_t()
+		{
+			this.models = new cmodel_t[Defines.MAX_MODELS];
 
-    boolean attractloop; // running cinematics and demos for the local system
-                         // only
+			for (var n = 0; n < Defines.MAX_MODELS; n++)
+				this.models[n] = new cmodel_t();
 
-    boolean loadgame; // client begins should reuse existing entity
+			for (var n = 0; n < Defines.MAX_EDICTS; n++)
+				this.baselines[n] = new entity_state_t(null);
+		}
 
-    int time; // always sv.framenum * 100 msec
+		public int state; // precache commands are only valid during load
 
-    int framenum;
+		public bool attractloop; // running cinematics and demos for the local system
 
-    String name = ""; // map name, or cinematic name
+		// only
 
-    cmodel_t models[];
+		public bool loadgame; // client begins should reuse existing entity
 
-    String configstrings[] = new String[Defines.MAX_CONFIGSTRINGS];
+		public int time; // always sv.framenum * 100 msec
 
-    entity_state_t baselines[] = new entity_state_t[Defines.MAX_EDICTS];
+		public int framenum;
 
-    // the multicast buffer is used to send a message to a set of clients
-    // it is only used to marshall data until SV_Multicast is called
-    sizebuf_t multicast = new sizebuf_t();
+		public string name = ""; // map name, or cinematic name
 
-    byte multicast_buf[] = new byte[Defines.MAX_MSGLEN];
+		public cmodel_t[] models;
 
-    // demo server information
-    RandomAccessFile demofile;
+		public string[] configstrings = new string[Defines.MAX_CONFIGSTRINGS];
 
-    boolean timedemo; // don't time sync
+		public entity_state_t[] baselines = new entity_state_t[Defines.MAX_EDICTS];
+
+		// the multicast buffer is used to send a message to a set of clients
+		// it is only used to marshall data until SV_Multicast is called
+		public sizebuf_t multicast = new();
+
+		public byte[] multicast_buf = new byte[Defines.MAX_MSGLEN];
+
+		// demo server information
+		public BinaryReader demofile;
+	}
 }

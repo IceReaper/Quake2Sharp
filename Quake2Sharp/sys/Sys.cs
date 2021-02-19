@@ -1,247 +1,143 @@
 /*
- * Sys.java
- * Copyright (C) 2003
- * 
- * $Id: Sys.java,v 1.12 2008-03-02 20:21:15 kbrussel Exp $
- */
-/*
- Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software, Inc.
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
- See the GNU General Public License for more details.
+See the GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- */
-package jake2.sys;
+*/
 
-import jake2.Defines;
-import jake2.Globals;
-import jake2.client.CL;
-import jake2.qcommon.Com;
+namespace Quake2Sharp.sys
+{
+	using Quake2Sharp;
+	using client;
+	using System;
+	using System.IO;
+	using System.Linq;
+	using Console = System.Console;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
-/**
+	/**
  * Sys
  */
-public final class Sys extends Defines {
+	public sealed class Sys
+	{
+		public static void Error(string error)
+		{
+			Cl.Shutdown();
 
-    public static void Error(String error) {
+			//StackTrace();
+			Console.WriteLine(new Exception(error));
+			Environment.Exit(1);
+		}
 
-        CL.Shutdown();
-        //StackTrace();
-        new Exception(error).printStackTrace();
-        if (!Globals.appletMode) {
-            System.exit(1);
-        }
-    }
+		public static void Quit()
+		{
+			Cl.Shutdown();
+			Environment.Exit(0);
+		}
 
-    public static void Quit() {
-        CL.Shutdown();
+		//ok!
+		public static string[] FindAll(string path, int musthave, int canthave)
+		{
+			var index = path.LastIndexOf('/');
 
-        if (!Globals.appletMode) {
-            System.exit(0);
-        }
-    }
+			if (index != -1)
+			{
+				Sys.findbase = path.Substring(0, index);
+				Sys.findpattern = path.Substring(index + 1);
+			}
+			else
+			{
+				Sys.findbase = path;
+				Sys.findpattern = "*";
+			}
 
-    //ok!
-    public static File[] FindAll(String path, int musthave, int canthave) {
+			if (Sys.findpattern.Equals("*.*"))
+			{
+				Sys.findpattern = "*";
+			}
 
-        int index = path.lastIndexOf('/');
+			if (!Directory.Exists(Sys.findbase))
+				return null;
 
-        if (index != -1) {
-            findbase = path.substring(0, index);
-            findpattern = path.substring(index + 1, path.length());
-        } else {
-            findbase = path;
-            findpattern = "*";
-        }
+			var filter = (canthave & Defines.SFF_SUBDIR) == 0 ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+			var files = Directory.GetFiles(Sys.findbase, Sys.findpattern, filter);
+			var folders = Directory.GetDirectories(Sys.findbase, Sys.findpattern, filter);
 
-        if (findpattern.equals("*.*")) {
-            findpattern = "*";
-        }
+			return folders.Concat(files).Select(s => s.Replace("\\", "/")).ToArray();
+		}
 
-        File fdir = new File(findbase);
+		//============================================
 
-        if (!fdir.exists())
-            return null;
+		private static string[] fdir;
 
-        FilenameFilter filter = new FileFilter(findpattern, musthave, canthave);
+		private static int fileindex;
 
-        return fdir.listFiles(filter);
-    }
+		private static string findbase;
 
-    /**
-     * Match the pattern findpattern against the filename.
-     * 
-     * In the pattern string, `*' matches any sequence of characters, `?'
-     * matches any character, [SET] matches any character in the specified set,
-     * [!SET] matches any character not in the specified set. A set is composed
-     * of characters or ranges; a range looks like character hyphen character
-     * (as in 0-9 or A-Z). [0-9a-zA-Z_] is the set of characters allowed in C
-     * identifiers. Any other character in the pattern must be matched exactly.
-     * To suppress the special syntactic significance of any of `[]*?!-\', and
-     * match the character exactly, precede it with a `\'.
-     */
-    static class FileFilter implements FilenameFilter {
+		private static string findpattern;
 
-        String regexpr;
+		// ok.
+		public static string FindFirst(string path, int musthave, int canthave)
+		{
+			if (Sys.fdir != null)
+				Sys.Error("Sys_BeginFind without close");
 
-        int musthave, canthave;
+			//	COM_FilePath (path, findbase);
 
-        FileFilter(String findpattern, int musthave, int canthave) {
-            this.regexpr = convert2regexpr(findpattern);
-            this.musthave = musthave;
-            this.canthave = canthave;
+			Sys.fdir = Sys.FindAll(path, canthave, musthave);
+			Sys.fileindex = 0;
 
-        }
+			if (Sys.fdir == null)
+				return null;
 
-        /*
-         * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
-         */
-        public boolean accept(File dir, String name) {
-            if (name.matches(regexpr)) {
-                return CompareAttributes(dir, musthave, canthave);
-            }
-            return false;
-        }
+			return Sys.FindNext();
+		}
 
-        String convert2regexpr(String pattern) {
+		public static string FindNext()
+		{
+			if (Sys.fileindex >= Sys.fdir.Length)
+				return null;
 
-            StringBuffer sb = new StringBuffer();
+			return Sys.fdir[Sys.fileindex++];
+		}
 
-            char c;
-            boolean escape = false;
+		public static void FindClose()
+		{
+			Sys.fdir = null;
+		}
 
-            String subst;
+		public static void SendKeyEvents()
+		{
+			Globals.re.getKeyboardHandler().Update();
 
-            // convert pattern
-            for (int i = 0; i < pattern.length(); i++) {
-                c = pattern.charAt(i);
-                subst = null;
-                switch (c) {
-                case '*':
-                    subst = (!escape) ? ".*" : "*";
-                    break;
-                case '.':
-                    subst = (!escape) ? "\\." : ".";
-                    break;
-                case '!':
-                    subst = (!escape) ? "^" : "!";
-                    break;
-                case '?':
-                    subst = (!escape) ? "." : "?";
-                    break;
-                case '\\':
-                    escape = !escape;
-                    break;
-                default:
-                    escape = false;
-                }
-                if (subst != null) {
-                    sb.append(subst);
-                    escape = false;
-                } else
-                    sb.append(c);
-            }
+			// grab frame time
+			Globals.sys_frame_time = Timer.Milliseconds();
+		}
 
-            // the converted pattern
-            String regexpr = sb.toString();
+		public static string GetClipboardData()
+		{
+			// TODO: implement GetClipboardData
+			return null;
+		}
 
-            //Com.DPrintf("pattern: " + pattern + " regexpr: " + regexpr +
-            // '\n');
-            try {
-                Pattern.compile(regexpr);
-            } catch (PatternSyntaxException e) {
-                Com.Printf("invalid file pattern ( *.* is used instead )\n");
-                return ".*"; // the default
-            }
-            return regexpr;
-        }
+		public static void ConsoleOutput(string msg)
+		{
+			if (Globals.nostdout != null && Globals.nostdout.value != 0)
+				return;
 
-        boolean CompareAttributes(File dir, int musthave, int canthave) {
-            // . and .. never match
-            String name = dir.getName();
-
-            if (name.equals(".") || name.equals(".."))
-                return false;
-
-            return true;
-        }
-
-    }
-
-
-    //============================================
-
-    static File[] fdir;
-
-    static int fileindex;
-
-    static String findbase;
-
-    static String findpattern;
-
-    // ok.
-    public static File FindFirst(String path, int musthave, int canthave) {
-
-        if (fdir != null)
-            Sys.Error("Sys_BeginFind without close");
-
-        //	COM_FilePath (path, findbase);
-
-        fdir = FindAll(path, canthave, musthave);
-        fileindex = 0;
-
-        if (fdir == null)
-            return null;
-
-        return FindNext();
-    }
-
-    public static File FindNext() {
-
-        if (fileindex >= fdir.length)
-            return null;
-
-        return fdir[fileindex++];
-    }
-
-    public static void FindClose() {
-        fdir = null;
-    }
-
-    public static void SendKeyEvents() {
-		Globals.re.getKeyboardHandler().Update();
-
-        // grab frame time
-        Globals.sys_frame_time = Timer.Milliseconds();
-    }
-
-    public static String GetClipboardData() {
-        // TODO: implement GetClipboardData
-        return null;
-    }
-
-    public static void ConsoleOutput(String msg) {
-        if (Globals.nostdout != null && Globals.nostdout.value != 0)
-            return;
-
-        System.out.print(msg);
-    }
-
+			Console.Write(msg);
+		}
+	}
 }

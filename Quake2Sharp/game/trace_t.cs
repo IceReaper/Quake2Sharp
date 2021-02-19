@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,46 +18,52 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 31.10.2003 by RST.
-// $Id: trace_t.java,v 1.5 2005-01-14 16:09:42 cawe Exp $
+namespace Quake2Sharp.game
+{
+	using util;
 
-package jake2.game;
+	//a trace is returned when a box is swept through the world
+	public class trace_t
+	{
+		public bool allsolid; // if true, plane is not valid
+		public bool startsolid; // if true, the initial point was in a solid area
+		public float fraction; // time completed, 1.0 = didn't hit anything
 
-import jake2.util.Math3D;
+		public float[] endpos = {0, 0, 0}; // final position
 
-//a trace is returned when a box is swept through the world
-public class trace_t {
-	public boolean allsolid; // if true, plane is not valid
-	public boolean startsolid; // if true, the initial point was in a solid area
-	public float fraction; // time completed, 1.0 = didn't hit anything
-	public float[] endpos = { 0, 0, 0 }; // final position
-	// memory
-	public cplane_t plane = new cplane_t(); // surface normal at impact
-	// pointer
-	public csurface_t surface; // surface hit
-	public int contents; // contents on other side of surface hit
-	// pointer
-	public edict_t ent; // not set by CM_*() functions
-	
-	public void set(trace_t from) {
-		allsolid = from.allsolid;
-		startsolid = from.allsolid;
-		fraction = from.fraction;
-		Math3D.VectorCopy(from.endpos, endpos);
-		plane.set(from.plane);
-		surface = from.surface;
-		contents = from.contents;
-		ent = from.ent;
-	}
+		// memory
+		public cplane_t plane = new(); // surface normal at impact
 
-	public void clear() {
-		allsolid = false;
-		startsolid = false;
-		fraction = 0;
-		Math3D.VectorClear(endpos);
-		plane.clear();
-		surface = null;
-		contents = 0;
-		ent = null;
+		// pointer
+		public csurface_t surface; // surface hit
+
+		public int contents; // contents on other side of surface hit
+
+		// pointer
+		public edict_t ent; // not set by CM_*() functions
+
+		public void set(trace_t from)
+		{
+			this.allsolid = from.allsolid;
+			this.startsolid = from.allsolid;
+			this.fraction = from.fraction;
+			Math3D.VectorCopy(from.endpos, this.endpos);
+			this.plane.set(from.plane);
+			this.surface = from.surface;
+			this.contents = from.contents;
+			this.ent = from.ent;
+		}
+
+		public void clear()
+		{
+			this.allsolid = false;
+			this.startsolid = false;
+			this.fraction = 0;
+			Math3D.VectorClear(this.endpos);
+			this.plane.clear();
+			this.surface = null;
+			this.contents = 0;
+			this.ent = null;
+		}
 	}
 }

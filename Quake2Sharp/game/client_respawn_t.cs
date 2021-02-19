@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -17,76 +17,73 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-// Created on 31.10.2003 by RST.
 
-package jake2.game;
-
-import jake2.util.Math3D;
-import jake2.util.QuakeFile;
-
-import java.io.IOException;
-
-/** Client data that stays across deathmatch respawns.*/
-public class client_respawn_t
-
+namespace Quake2Sharp.game
 {
-	/** What to set client->pers to on a respawn */
-	protected client_persistant_t coop_respawn = new client_persistant_t();
-	 
-	/** Level.framenum the client entered the game. */
-	protected int enterframe;
-	 		
-	/** frags, etc. */
-	protected int score; 
-	
-	/** angles sent over in the last command. */
-	protected float cmd_angles[] = { 0, 0, 0 };
-	 
-	/** client is a spectator. */
-	protected boolean spectator; 
+	using util;
+	using System.IO;
 
-	
-	/** Copies the client respawn data. */
-	public void set(client_respawn_t from)
-	{
-		coop_respawn.set(from.coop_respawn);
-		enterframe = from.enterframe;
-		score = from.score;
-		Math3D.VectorCopy(from.cmd_angles, cmd_angles);
-		spectator = from.spectator;
-	}
+	/** Client data that stays across deathmatch respawns.*/
+	public class client_respawn_t
 
-	/** Clears the client reaspawn informations. */
-	public void clear()
 	{
-		coop_respawn = new client_persistant_t();
-		enterframe = 0;
-		score = 0;
-		Math3D.VectorClear(cmd_angles);
-		spectator = false;
-	}
+		/** What to set client->pers to on a respawn */
+		public client_persistant_t coop_respawn = new();
 
-	/** Reads a client_respawn from a file. */
-	public void read(QuakeFile f) throws IOException
-	{
-		coop_respawn.read(f);
-		enterframe = f.readInt();
-		score = f.readInt();
-		cmd_angles[0] = f.readFloat();
-		cmd_angles[1] = f.readFloat();
-		cmd_angles[2] = f.readFloat();
-		spectator = f.readInt() != 0;
-	}
-	
-	/** Writes a client_respawn to a file. */
-	public void write(QuakeFile f) throws IOException
-	{
-		coop_respawn.write(f);
-		f.writeInt(enterframe);
-		f.writeInt(score);
-		f.writeFloat(cmd_angles[0]);
-		f.writeFloat(cmd_angles[1]);
-		f.writeFloat(cmd_angles[2]);
-		f.writeInt(spectator?1:0);
+		/** Level.framenum the client entered the game. */
+		public int enterframe;
+
+		/** frags, etc. */
+		public int score;
+
+		/** angles sent over in the last command. */
+		public float[] cmd_angles = {0, 0, 0};
+
+		/** client is a spectator. */
+		public bool spectator;
+
+		/** Copies the client respawn data. */
+		public void set(client_respawn_t from)
+		{
+			this.coop_respawn.set(from.coop_respawn);
+			this.enterframe = from.enterframe;
+			this.score = from.score;
+			Math3D.VectorCopy(from.cmd_angles, this.cmd_angles);
+			this.spectator = from.spectator;
+		}
+
+		/** Clears the client reaspawn informations. */
+		public void clear()
+		{
+			this.coop_respawn = new client_persistant_t();
+			this.enterframe = 0;
+			this.score = 0;
+			Math3D.VectorClear(this.cmd_angles);
+			this.spectator = false;
+		}
+
+		/** Reads a client_respawn from a file. */
+		public void read(BinaryReader f)
+		{
+			this.coop_respawn.read(f);
+			this.enterframe = f.ReadInt32();
+			this.score = f.ReadInt32();
+			this.cmd_angles[0] = f.ReadSingle();
+			this.cmd_angles[1] = f.ReadSingle();
+			this.cmd_angles[2] = f.ReadSingle();
+			this.spectator = f.ReadInt32() != 0;
+		}
+
+		/** Writes a client_respawn to a file. */
+		public void write(BinaryWriter f)
+		{
+			this.coop_respawn.write(f);
+			f.Write(this.enterframe);
+			f.Write(this.score);
+			f.Write(this.cmd_angles[0]);
+			f.Write(this.cmd_angles[1]);
+			f.Write(this.cmd_angles[2]);
+			f.Write(this.spectator ? 1 : 0);
+		}
 	}
 }

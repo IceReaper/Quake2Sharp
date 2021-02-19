@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,407 +18,402 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 31.10.2003 by RST.
-
-package jake2.game;
-
-import jake2.util.QuakeFile;
-
-import java.io.IOException;
-
-public class gclient_t
+namespace Quake2Sharp.game
 {
+	using util;
+	using System.IO;
 
-	public gclient_t(int index)
+	public class gclient_t
 	{
-		this.index = index;
-	}
-	//	this structure is cleared on each PutClientInServer(),
-	//	except for 'client->pers'
+		public gclient_t(int index)
+		{
+			this.index = index;
+		}
 
-	// known to server
-	public player_state_t ps = new player_state_t(); // communicated by server to clients
-	public int ping;
+		//	this structure is cleared on each PutClientInServer(),
+		//	except for 'client->pers'
 
-	// private to game
-	public client_persistant_t pers = new client_persistant_t();
-	public client_respawn_t resp = new client_respawn_t();
-	public pmove_state_t old_pmove = new pmove_state_t(); // for detecting out-of-pmove changes
+		// known to server
+		public player_state_t ps = new(); // communicated by server to clients
+		public int ping;
 
-	public boolean showscores; // set layout stat
-	public boolean showinventory; // set layout stat
-	public boolean showhelp;
-	public boolean showhelpicon;
+		// private to game
+		public client_persistant_t pers = new();
+		public client_respawn_t resp = new();
+		public pmove_state_t old_pmove = new(); // for detecting out-of-pmove changes
 
-	public int ammo_index;
+		public bool showscores; // set layout stat
+		public bool showinventory; // set layout stat
+		public bool showhelp;
+		public bool showhelpicon;
 
-	public int buttons;
-	public int oldbuttons;
-	public int latched_buttons;
+		public int ammo_index;
 
-	public boolean weapon_thunk;
+		public int buttons;
+		public int oldbuttons;
+		public int latched_buttons;
 
-	public gitem_t newweapon;
+		public bool weapon_thunk;
 
-	// sum up damage over an entire frame, so
-	// shotgun blasts give a single big kick
-	public int damage_armor; // damage absorbed by armor
-	public int damage_parmor; // damage absorbed by power armor
-	public int damage_blood; // damage taken out of health
-	public int damage_knockback; // impact damage
-	public float[] damage_from = { 0, 0, 0 }; // origin for vector calculation
+		public gitem_t newweapon;
 
-	public float killer_yaw; // when dead, look at killer
+		// sum up damage over an entire frame, so
+		// shotgun blasts give a single big kick
+		public int damage_armor; // damage absorbed by armor
+		public int damage_parmor; // damage absorbed by power armor
+		public int damage_blood; // damage taken out of health
+		public int damage_knockback; // impact damage
+		public float[] damage_from = {0, 0, 0}; // origin for vector calculation
 
-	public int weaponstate;
-	public float[] kick_angles = { 0, 0, 0 }; // weapon kicks
-	public float[] kick_origin = { 0, 0, 0 };
-	public float v_dmg_roll, v_dmg_pitch, v_dmg_time; // damage kicks
-	public float fall_time, fall_value; // for view drop on fall
-	public float damage_alpha;
-	public float bonus_alpha;
-	public float[] damage_blend = { 0, 0, 0 };
-	public float[] v_angle = { 0, 0, 0 }; // aiming direction
-	public float bobtime; // so off-ground doesn't change it
-	public float[] oldviewangles = { 0, 0, 0 };
-	public float[] oldvelocity = { 0, 0, 0 };
+		public float killer_yaw; // when dead, look at killer
 
-	public float next_drown_time;
-	public int old_waterlevel;
-	public int breather_sound;
+		public int weaponstate;
+		public float[] kick_angles = {0, 0, 0}; // weapon kicks
+		public float[] kick_origin = {0, 0, 0};
+		public float v_dmg_roll, v_dmg_pitch, v_dmg_time; // damage kicks
+		public float fall_time, fall_value; // for view drop on fall
+		public float damage_alpha;
+		public float bonus_alpha;
+		public float[] damage_blend = {0, 0, 0};
+		public float[] v_angle = {0, 0, 0}; // aiming direction
+		public float bobtime; // so off-ground doesn't change it
+		public float[] oldviewangles = {0, 0, 0};
+		public float[] oldvelocity = {0, 0, 0};
 
-	public int machinegun_shots; // for weapon raising
+		public float next_drown_time;
+		public int old_waterlevel;
+		public int breather_sound;
 
-	// animation vars
-	public int anim_end;
-	public int anim_priority;
-	public boolean anim_duck;
-	public boolean anim_run;
+		public int machinegun_shots; // for weapon raising
 
-	// powerup timers
-	public float quad_framenum;
-	public float invincible_framenum;
-	public float breather_framenum;
-	public float enviro_framenum;
+		// animation vars
+		public int anim_end;
+		public int anim_priority;
+		public bool anim_duck;
+		public bool anim_run;
 
-	public boolean grenade_blew_up;
-	public float grenade_time;
-	public int silencer_shots;
-	public int weapon_sound;
-
-	public float pickup_msg_time;
-
-	public float flood_locktill; // locked from talking
-	public float flood_when[] = new float[10]; // when messages were said
-	public int flood_whenhead; // head pointer for when said
-
-	public float respawn_time; // can respawn when time > this
-
-	public edict_t chase_target; // player we are chasing
-	public boolean update_chase; // need to update chase info?
-
-	public int index;
-
-	/** Clears the game client structure. */
-	public void clear()
-	{
-		ping =0;
-	
-		pers = new client_persistant_t();
-		resp = new client_respawn_t();
-		old_pmove = new pmove_state_t();
-		
-		showscores = false; // set layout stat
-		showinventory = false; // set layout stat
-		showhelp = false;
-		showhelpicon = false;
-
-		ammo_index = 0;
-		
-		buttons = oldbuttons = latched_buttons = 0;
-		weapon_thunk = false;
-		newweapon = null;
-		damage_armor = 0;
-		damage_parmor = 0;
-		damage_blood = 0;
-		damage_knockback = 0;
-		
-		killer_yaw = 0;
-		damage_from = new float[3];
-		weaponstate = 0;
-		kick_angles = new float[3];
-		kick_origin = new float[3];
-		v_dmg_roll = v_dmg_pitch = v_dmg_time = 0;
-		fall_time = fall_value = 0;
-		damage_alpha = 0;
-		bonus_alpha = 0;
-		damage_blend = new float[3];
-		v_angle = new float[3];
-		bobtime = 0;
-
-		oldviewangles = new float[3];
-
-		oldvelocity = new float[3];
-
-		next_drown_time = 0;
-
-		old_waterlevel = 0;
-		
-		breather_sound = 0;
-		machinegun_shots = 0;
-		
-		anim_end = 0;
-		anim_priority = 0;
-		anim_duck = false;
-		anim_run = false;
-		
 		// powerup timers
-		quad_framenum = 0;
-		invincible_framenum = 0;
-		breather_framenum = 0;
-		enviro_framenum = 0;
+		public float quad_framenum;
+		public float invincible_framenum;
+		public float breather_framenum;
+		public float enviro_framenum;
 
-		grenade_blew_up = false;
-		grenade_time = 0;
-		silencer_shots = 0;
-		weapon_sound = 0;
+		public bool grenade_blew_up;
+		public float grenade_time;
+		public int silencer_shots;
+		public int weapon_sound;
 
-		pickup_msg_time = 0;
+		public float pickup_msg_time;
 
-		flood_locktill = 0; // locked from talking
-		flood_when  = new float[10]; // when messages were said
-		flood_whenhead = 0; // head pointer for when said
+		public float flood_locktill; // locked from talking
+		public float[] flood_when = new float[10]; // when messages were said
+		public int flood_whenhead; // head pointer for when said
 
-		respawn_time = 0; // can respawn when time > this
+		public float respawn_time; // can respawn when time > this
 
-		chase_target = null; // player we are chasing
-		update_chase = false; // need to update chase info?
-	}
+		public edict_t chase_target; // player we are chasing
+		public bool update_chase; // need to update chase info?
 
-	/** Reads a game client from the file. */
-	public void read(QuakeFile f) throws IOException
-	{
+		public int index;
 
-		ps.load(f);
+		/** Clears the game client structure. */
+		public void clear()
+		{
+			this.ping = 0;
 
-		ping = f.readInt();
+			this.pers = new client_persistant_t();
+			this.resp = new client_respawn_t();
+			this.old_pmove = new pmove_state_t();
 
-		pers.read(f);
-		resp.read(f);
+			this.showscores = false; // set layout stat
+			this.showinventory = false; // set layout stat
+			this.showhelp = false;
+			this.showhelpicon = false;
 
-		old_pmove.load(f);
+			this.ammo_index = 0;
 
-		showscores = f.readInt() != 0;
-		showinventory = f.readInt() != 0;
-		showhelp = f.readInt() != 0;
-		showhelpicon = f.readInt() != 0;
-		ammo_index = f.readInt();
+			this.buttons = this.oldbuttons = this.latched_buttons = 0;
+			this.weapon_thunk = false;
+			this.newweapon = null;
+			this.damage_armor = 0;
+			this.damage_parmor = 0;
+			this.damage_blood = 0;
+			this.damage_knockback = 0;
 
-		buttons = f.readInt();
-		oldbuttons = f.readInt();
-		latched_buttons = f.readInt();
+			this.killer_yaw = 0;
+			this.damage_from = new float[3];
+			this.weaponstate = 0;
+			this.kick_angles = new float[3];
+			this.kick_origin = new float[3];
+			this.v_dmg_roll = this.v_dmg_pitch = this.v_dmg_time = 0;
+			this.fall_time = this.fall_value = 0;
+			this.damage_alpha = 0;
+			this.bonus_alpha = 0;
+			this.damage_blend = new float[3];
+			this.v_angle = new float[3];
+			this.bobtime = 0;
 
-		weapon_thunk=f.readInt()!=0;
-		
-		newweapon=f.readItem();
-		
+			this.oldviewangles = new float[3];
 
-		damage_armor = f.readInt();
-		damage_parmor = f.readInt();
-		damage_blood = f.readInt();
-		damage_knockback = f.readInt();
+			this.oldvelocity = new float[3];
 
-		damage_from[0] = f.readFloat();
-		damage_from[1] = f.readFloat();
-		damage_from[2] = f.readFloat();
+			this.next_drown_time = 0;
 
-		killer_yaw = f.readFloat();
+			this.old_waterlevel = 0;
 
-		weaponstate = f.readInt();
+			this.breather_sound = 0;
+			this.machinegun_shots = 0;
 
-		kick_angles[0] = f.readFloat();
-		kick_angles[1] = f.readFloat();
-		kick_angles[2] = f.readFloat();
+			this.anim_end = 0;
+			this.anim_priority = 0;
+			this.anim_duck = false;
+			this.anim_run = false;
 
-		kick_origin[0] = f.readFloat();
-		kick_origin[1] = f.readFloat();
-		kick_origin[2] = f.readFloat();
+			// powerup timers
+			this.quad_framenum = 0;
+			this.invincible_framenum = 0;
+			this.breather_framenum = 0;
+			this.enviro_framenum = 0;
 
-		v_dmg_roll = f.readFloat();
-		v_dmg_pitch = f.readFloat();
-		v_dmg_time = f.readFloat();
-		fall_time = f.readFloat();
-		fall_value = f.readFloat();
-		damage_alpha = f.readFloat();
-		bonus_alpha = f.readFloat();
+			this.grenade_blew_up = false;
+			this.grenade_time = 0;
+			this.silencer_shots = 0;
+			this.weapon_sound = 0;
 
-		damage_blend[0] = f.readFloat();
-		damage_blend[1] = f.readFloat();
-		damage_blend[2] = f.readFloat();
+			this.pickup_msg_time = 0;
 
-		v_angle[0] = f.readFloat();
-		v_angle[1] = f.readFloat();
-		v_angle[2] = f.readFloat();
+			this.flood_locktill = 0; // locked from talking
+			this.flood_when = new float[10]; // when messages were said
+			this.flood_whenhead = 0; // head pointer for when said
 
-		bobtime = f.readFloat();
+			this.respawn_time = 0; // can respawn when time > this
 
-		oldviewangles[0] = f.readFloat();
-		oldviewangles[1] = f.readFloat();
-		oldviewangles[2] = f.readFloat();
+			this.chase_target = null; // player we are chasing
+			this.update_chase = false; // need to update chase info?
+		}
 
-		oldvelocity[0] = f.readFloat();
-		oldvelocity[1] = f.readFloat();
-		oldvelocity[2] = f.readFloat();
+		/** Reads a game client from the file. */
+		public void read(BinaryReader f)
+		{
+			this.ps.load(f);
 
-		next_drown_time = f.readFloat();
+			this.ping = f.ReadInt32();
 
-		old_waterlevel = f.readInt();
-		breather_sound = f.readInt();
-		machinegun_shots = f.readInt();
-		anim_end = f.readInt();
-		anim_priority = f.readInt();
-		anim_duck = f.readInt() != 0;
-		anim_run = f.readInt() != 0;
+			this.pers.read(f);
+			this.resp.read(f);
 
-		quad_framenum = f.readFloat();
-		invincible_framenum = f.readFloat();
-		breather_framenum = f.readFloat();
-		enviro_framenum = f.readFloat();
+			this.old_pmove.load(f);
 
-		grenade_blew_up = f.readInt() != 0;
-		grenade_time = f.readFloat();
-		silencer_shots = f.readInt();
-		weapon_sound = f.readInt();
-		pickup_msg_time = f.readFloat();
-		flood_locktill = f.readFloat();
-		flood_when[0] = f.readFloat();
-		flood_when[1] = f.readFloat();
-		flood_when[2] = f.readFloat();
-		flood_when[3] = f.readFloat();
-		flood_when[4] = f.readFloat();
-		flood_when[5] = f.readFloat();
-		flood_when[6] = f.readFloat();
-		flood_when[7] = f.readFloat();
-		flood_when[8] = f.readFloat();
-		flood_when[9] = f.readFloat();
-		flood_whenhead = f.readInt();
-		respawn_time = f.readFloat();
-		chase_target = f.readEdictRef();
-		update_chase = f.readInt() != 0;
-		
-		if (f.readInt() != 8765)
-			System.err.println("game client load failed for num=" + index);
-	}
-	
-	/** Writes a game_client_t (a player) to a file. */ 
-	public void write(QuakeFile f) throws IOException
-	{
-		ps.write(f);
+			this.showscores = f.ReadInt32() != 0;
+			this.showinventory = f.ReadInt32() != 0;
+			this.showhelp = f.ReadInt32() != 0;
+			this.showhelpicon = f.ReadInt32() != 0;
+			this.ammo_index = f.ReadInt32();
 
-		f.writeInt(ping);
+			this.buttons = f.ReadInt32();
+			this.oldbuttons = f.ReadInt32();
+			this.latched_buttons = f.ReadInt32();
 
-		pers.write(f);
-		resp.write(f);
+			this.weapon_thunk = f.ReadInt32() != 0;
 
-		old_pmove.write(f);
+			this.newweapon = f.ReadItem();
 
-		f.writeInt(showscores?1:0);
-		f.writeInt(showinventory?1:0);
-		f.writeInt(showhelp?1:0);
-		f.writeInt(showhelpicon?1:0);
-		f.writeInt(ammo_index);
+			this.damage_armor = f.ReadInt32();
+			this.damage_parmor = f.ReadInt32();
+			this.damage_blood = f.ReadInt32();
+			this.damage_knockback = f.ReadInt32();
 
-		f.writeInt(buttons);
-		f.writeInt(oldbuttons);
-		f.writeInt(latched_buttons);
+			this.damage_from[0] = f.ReadSingle();
+			this.damage_from[1] = f.ReadSingle();
+			this.damage_from[2] = f.ReadSingle();
 
-		f.writeInt(weapon_thunk?1:0);
-		f.writeItem(newweapon);
-		
+			this.killer_yaw = f.ReadSingle();
 
-		f.writeInt(damage_armor);
-		f.writeInt(damage_parmor);
-		f.writeInt(damage_blood);
-		f.writeInt(damage_knockback);
+			this.weaponstate = f.ReadInt32();
 
-		f.writeFloat(damage_from[0]);
-		f.writeFloat(damage_from[1]);
-		f.writeFloat(damage_from[2]);
+			this.kick_angles[0] = f.ReadSingle();
+			this.kick_angles[1] = f.ReadSingle();
+			this.kick_angles[2] = f.ReadSingle();
 
-		f.writeFloat(killer_yaw);
+			this.kick_origin[0] = f.ReadSingle();
+			this.kick_origin[1] = f.ReadSingle();
+			this.kick_origin[2] = f.ReadSingle();
 
-		f.writeInt(weaponstate);
+			this.v_dmg_roll = f.ReadSingle();
+			this.v_dmg_pitch = f.ReadSingle();
+			this.v_dmg_time = f.ReadSingle();
+			this.fall_time = f.ReadSingle();
+			this.fall_value = f.ReadSingle();
+			this.damage_alpha = f.ReadSingle();
+			this.bonus_alpha = f.ReadSingle();
 
-		f.writeFloat(kick_angles[0]);
-		f.writeFloat(kick_angles[1]);
-		f.writeFloat(kick_angles[2]);
+			this.damage_blend[0] = f.ReadSingle();
+			this.damage_blend[1] = f.ReadSingle();
+			this.damage_blend[2] = f.ReadSingle();
 
-		f.writeFloat(kick_origin[0]);
-		f.writeFloat(kick_origin[1]);
-		f.writeFloat(kick_origin[2]);
+			this.v_angle[0] = f.ReadSingle();
+			this.v_angle[1] = f.ReadSingle();
+			this.v_angle[2] = f.ReadSingle();
 
-		f.writeFloat(v_dmg_roll);
-		f.writeFloat(v_dmg_pitch);
-		f.writeFloat(v_dmg_time);
-		f.writeFloat(fall_time);
-		f.writeFloat(fall_value);
-		f.writeFloat(damage_alpha);
-		f.writeFloat(bonus_alpha);
+			this.bobtime = f.ReadSingle();
 
-		f.writeFloat(damage_blend[0]);
-		f.writeFloat(damage_blend[1]);
-		f.writeFloat(damage_blend[2]);
+			this.oldviewangles[0] = f.ReadSingle();
+			this.oldviewangles[1] = f.ReadSingle();
+			this.oldviewangles[2] = f.ReadSingle();
 
-		f.writeFloat(v_angle[0]);
-		f.writeFloat(v_angle[1]);
-		f.writeFloat(v_angle[2]);
+			this.oldvelocity[0] = f.ReadSingle();
+			this.oldvelocity[1] = f.ReadSingle();
+			this.oldvelocity[2] = f.ReadSingle();
 
-		f.writeFloat(bobtime);
+			this.next_drown_time = f.ReadSingle();
 
-		f.writeFloat(oldviewangles[0]);
-		f.writeFloat(oldviewangles[1]);
-		f.writeFloat(oldviewangles[2]);
+			this.old_waterlevel = f.ReadInt32();
+			this.breather_sound = f.ReadInt32();
+			this.machinegun_shots = f.ReadInt32();
+			this.anim_end = f.ReadInt32();
+			this.anim_priority = f.ReadInt32();
+			this.anim_duck = f.ReadInt32() != 0;
+			this.anim_run = f.ReadInt32() != 0;
 
-		f.writeFloat(oldvelocity[0]);
-		f.writeFloat(oldvelocity[1]);
-		f.writeFloat(oldvelocity[2]);
+			this.quad_framenum = f.ReadSingle();
+			this.invincible_framenum = f.ReadSingle();
+			this.breather_framenum = f.ReadSingle();
+			this.enviro_framenum = f.ReadSingle();
 
-		f.writeFloat(next_drown_time);
+			this.grenade_blew_up = f.ReadInt32() != 0;
+			this.grenade_time = f.ReadSingle();
+			this.silencer_shots = f.ReadInt32();
+			this.weapon_sound = f.ReadInt32();
+			this.pickup_msg_time = f.ReadSingle();
+			this.flood_locktill = f.ReadSingle();
+			this.flood_when[0] = f.ReadSingle();
+			this.flood_when[1] = f.ReadSingle();
+			this.flood_when[2] = f.ReadSingle();
+			this.flood_when[3] = f.ReadSingle();
+			this.flood_when[4] = f.ReadSingle();
+			this.flood_when[5] = f.ReadSingle();
+			this.flood_when[6] = f.ReadSingle();
+			this.flood_when[7] = f.ReadSingle();
+			this.flood_when[8] = f.ReadSingle();
+			this.flood_when[9] = f.ReadSingle();
+			this.flood_whenhead = f.ReadInt32();
+			this.respawn_time = f.ReadSingle();
+			this.chase_target = f.ReadEdictRef();
+			this.update_chase = f.ReadInt32() != 0;
 
-		f.writeInt(old_waterlevel);
-		f.writeInt(breather_sound);
-		f.writeInt(machinegun_shots);
-		f.writeInt(anim_end);
-		f.writeInt(anim_priority);
-		f.writeInt(anim_duck?1:0);
-		f.writeInt(anim_run?1:0);
+			if (f.ReadInt32() != 8765)
+				System.Console.Error.WriteLine("game client load failed for num=" + this.index);
+		}
 
-		f.writeFloat(quad_framenum);
-		f.writeFloat(invincible_framenum);
-		f.writeFloat(breather_framenum);
-		f.writeFloat(enviro_framenum);
+		/** Writes a game_client_t (a player) to a file. */
+		public void write(BinaryWriter f)
+		{
+			this.ps.write(f);
 
-		f.writeInt(grenade_blew_up?1:0);
-		f.writeFloat(grenade_time);
-		f.writeInt(silencer_shots);
-		f.writeInt(weapon_sound);
-		f.writeFloat(pickup_msg_time);
-		f.writeFloat(flood_locktill);
-		f.writeFloat(flood_when[0]);
-		f.writeFloat(flood_when[1]);
-		f.writeFloat(flood_when[2]);
-		f.writeFloat(flood_when[3]);
-		f.writeFloat(flood_when[4]);
-		f.writeFloat(flood_when[5]);
-		f.writeFloat(flood_when[6]);
-		f.writeFloat(flood_when[7]);
-		f.writeFloat(flood_when[8]);
-		f.writeFloat(flood_when[9]);
-		f.writeInt(flood_whenhead);
-		f.writeFloat(respawn_time);
-		f.writeEdictRef(chase_target);
-		f.writeInt(update_chase?1:0);
-		
-		f.writeInt(8765);
+			f.Write(this.ping);
+
+			this.pers.write(f);
+			this.resp.write(f);
+
+			this.old_pmove.write(f);
+
+			f.Write(this.showscores ? 1 : 0);
+			f.Write(this.showinventory ? 1 : 0);
+			f.Write(this.showhelp ? 1 : 0);
+			f.Write(this.showhelpicon ? 1 : 0);
+			f.Write(this.ammo_index);
+
+			f.Write(this.buttons);
+			f.Write(this.oldbuttons);
+			f.Write(this.latched_buttons);
+
+			f.Write(this.weapon_thunk ? 1 : 0);
+			f.Write(this.newweapon);
+
+			f.Write(this.damage_armor);
+			f.Write(this.damage_parmor);
+			f.Write(this.damage_blood);
+			f.Write(this.damage_knockback);
+
+			f.Write(this.damage_from[0]);
+			f.Write(this.damage_from[1]);
+			f.Write(this.damage_from[2]);
+
+			f.Write(this.killer_yaw);
+
+			f.Write(this.weaponstate);
+
+			f.Write(this.kick_angles[0]);
+			f.Write(this.kick_angles[1]);
+			f.Write(this.kick_angles[2]);
+
+			f.Write(this.kick_origin[0]);
+			f.Write(this.kick_origin[1]);
+			f.Write(this.kick_origin[2]);
+
+			f.Write(this.v_dmg_roll);
+			f.Write(this.v_dmg_pitch);
+			f.Write(this.v_dmg_time);
+			f.Write(this.fall_time);
+			f.Write(this.fall_value);
+			f.Write(this.damage_alpha);
+			f.Write(this.bonus_alpha);
+
+			f.Write(this.damage_blend[0]);
+			f.Write(this.damage_blend[1]);
+			f.Write(this.damage_blend[2]);
+
+			f.Write(this.v_angle[0]);
+			f.Write(this.v_angle[1]);
+			f.Write(this.v_angle[2]);
+
+			f.Write(this.bobtime);
+
+			f.Write(this.oldviewangles[0]);
+			f.Write(this.oldviewangles[1]);
+			f.Write(this.oldviewangles[2]);
+
+			f.Write(this.oldvelocity[0]);
+			f.Write(this.oldvelocity[1]);
+			f.Write(this.oldvelocity[2]);
+
+			f.Write(this.next_drown_time);
+
+			f.Write(this.old_waterlevel);
+			f.Write(this.breather_sound);
+			f.Write(this.machinegun_shots);
+			f.Write(this.anim_end);
+			f.Write(this.anim_priority);
+			f.Write(this.anim_duck ? 1 : 0);
+			f.Write(this.anim_run ? 1 : 0);
+
+			f.Write(this.quad_framenum);
+			f.Write(this.invincible_framenum);
+			f.Write(this.breather_framenum);
+			f.Write(this.enviro_framenum);
+
+			f.Write(this.grenade_blew_up ? 1 : 0);
+			f.Write(this.grenade_time);
+			f.Write(this.silencer_shots);
+			f.Write(this.weapon_sound);
+			f.Write(this.pickup_msg_time);
+			f.Write(this.flood_locktill);
+			f.Write(this.flood_when[0]);
+			f.Write(this.flood_when[1]);
+			f.Write(this.flood_when[2]);
+			f.Write(this.flood_when[3]);
+			f.Write(this.flood_when[4]);
+			f.Write(this.flood_when[5]);
+			f.Write(this.flood_when[6]);
+			f.Write(this.flood_when[7]);
+			f.Write(this.flood_when[8]);
+			f.Write(this.flood_when[9]);
+			f.Write(this.flood_whenhead);
+			f.Write(this.respawn_time);
+			f.Write(this.chase_target);
+			f.Write(this.update_chase ? 1 : 0);
+
+			f.Write(8765);
+		}
 	}
 }

@@ -1,10 +1,4 @@
 /*
- * Vargs.java
- * Copyright (C) 2003
- *
- * $Id: Vargs.java,v 1.1 2004-07-07 19:59:56 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,99 +17,130 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.util;
 
-import java.util.Vector;
+namespace Quake2Sharp.util
+{
+	using System.Collections.Generic;
+	using System.Linq;
 
-/**
+	/**
  * Vargs is a helper class to encapsulate printf arguments.
  * 
  * @author cwei
  */
-public class Vargs {
+	public class Vargs
+	{
+		// initial capacity
+		private static readonly int SIZE = 5;
 
-	// initial capacity
-	static final int SIZE = 5;
+		private readonly List<object> v;
 
-	Vector v;
+		public Vargs()
+			: this(Vargs.SIZE)
+		{
+		}
 
-	public Vargs() {
-		this(SIZE);
-	}
+		public Vargs(int initialSize)
+		{
+			if (this.v != null)
+				this.v.Clear(); // clear previous list for GC
 
-	public Vargs(int initialSize) {
-		if (v != null)
-			v.clear(); // clear previous list for GC
-		v = new Vector(initialSize);
-	}
+			this.v = new List<object>();
+		}
 
-	public Vargs add(boolean value) {
-		v.add(new Boolean(value));
-		return this;
-	}
+		public Vargs add(bool value)
+		{
+			this.v.Add(value);
 
-	public Vargs add(byte value) {
-		v.add(new Byte(value));
-		return this;
-	}
+			return this;
+		}
 
-	public Vargs add(char value) {
-		v.add(new Character(value));
-		return this;
-	}
+		public Vargs add(byte value)
+		{
+			this.v.Add(value);
 
-	public Vargs add(short value) {
-		v.add(new Short(value));
-		return this;
-	}
+			return this;
+		}
 
-	public Vargs add(int value) {
-		v.add(new Integer(value));
-		return this;
-	}
+		public Vargs add(char value)
+		{
+			this.v.Add(value);
 
-	public Vargs add(long value) {
-		v.add(new Long(value));
-		return this;
-	}
+			return this;
+		}
 
-	public Vargs add(float value) {
-		v.add(new Float(value));
-		return this;
-	}
+		public Vargs add(short value)
+		{
+			this.v.Add(value);
 
-	public Vargs add(double value) {
-		v.add(new Double(value));
-		return this;
-	}
+			return this;
+		}
 
-	public Vargs add(String value) {
-		v.add(value);
-		return this;
-	}
+		public Vargs add(int value)
+		{
+			this.v.Add(value);
 
-	public Vargs add(Object value) {
-		v.add(value);
-		return this;
-	}
+			return this;
+		}
 
-	public Vargs clear() {
-		v.clear();
-		return this;
-	}
+		public Vargs add(long value)
+		{
+			this.v.Add(value);
 
-	public Vector toVector() {
-		//		Vector tmp = v;
-		//		v = null;
-		//		return tmp;
-		return (Vector) v.clone();
-	}
+			return this;
+		}
 
-	public Object[] toArray() {
-		return v.toArray();
-	}
+		public Vargs add(float value)
+		{
+			this.v.Add(value);
 
-	public int size() {
-		return v.size();
+			return this;
+		}
+
+		public Vargs add(double value)
+		{
+			this.v.Add(value);
+
+			return this;
+		}
+
+		public Vargs add(string value)
+		{
+			this.v.Add(value);
+
+			return this;
+		}
+
+		public Vargs add(object value)
+		{
+			this.v.Add(value);
+
+			return this;
+		}
+
+		public Vargs clear()
+		{
+			this.v.Clear();
+
+			return this;
+		}
+
+		public List<object> toVector()
+		{
+			//		Vector tmp = v;
+			//		v = null;
+			//		return tmp;
+			return this.v.ToList();
+		}
+
+		public object[] toArray()
+		{
+			return this.v.ToArray();
+		}
+
+		public int size()
+		{
+			return this.v.Count;
+		}
 	}
 }

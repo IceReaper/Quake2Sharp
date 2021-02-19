@@ -1,71 +1,73 @@
 /*
- * Copyright (C) 1997-2001 Id Software, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *  
- */
+Copyright (C) 1997-2001 Id Software, Inc.
 
-// Created on 14.01.2004 by RST.
-// $Id: server_static_t.java,v 1.2 2004-09-22 19:22:12 salomo Exp $
-package jake2.server;
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-import jake2.Defines;
-import jake2.game.entity_state_t;
-import jake2.qcommon.sizebuf_t;
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-import java.io.RandomAccessFile;
+See the GNU General Public License for more details.
 
-public class server_static_t {
-    public server_static_t() {
-        for (int n = 0; n < Defines.MAX_CHALLENGES; n++) {
-            challenges[n] = new challenge_t();
-        }
-    }
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    boolean initialized; // sv_init has completed
+*/
 
-    int realtime; // always increasing, no clamping, etc
+namespace Quake2Sharp.server
+{
+	using Quake2Sharp;
+	using game;
+	using qcommon;
+	using System.IO;
 
-    String mapcmd = ""; // ie: *intro.cin+base
+	public class server_static_t
+	{
+		public server_static_t()
+		{
+			for (var n = 0; n < Defines.MAX_CHALLENGES; n++)
+			{
+				this.challenges[n] = new challenge_t();
+			}
+		}
 
-    int spawncount; // incremented each server start
+		public bool initialized; // sv_init has completed
 
-    // used to check late spawns
+		public int realtime; // always increasing, no clamping, etc
 
-    client_t clients[]; // [maxclients->value];
+		public string mapcmd = ""; // ie: *intro.cin+base
 
-    int num_client_entities; // maxclients->value*UPDATE_BACKUP*MAX_PACKET_ENTITIES
+		public int spawncount; // incremented each server start
 
-    int next_client_entities; // next client_entity to use
+		// used to check late spawns
 
-    entity_state_t client_entities[]; // [num_client_entities]
+		public client_t[] clients; // [maxclients->value];
 
-    int last_heartbeat;
+		public int num_client_entities; // maxclients->value*UPDATE_BACKUP*MAX_PACKET_ENTITIES
 
-    challenge_t challenges[] = new challenge_t[Defines.MAX_CHALLENGES]; // to
-                                                                        // prevent
-                                                                        // invalid
-                                                                        // IPs
-                                                                        // from
-                                                                        // connecting
+		public int next_client_entities; // next client_entity to use
 
-    // serverrecord values
-    RandomAccessFile demofile;
+		public entity_state_t[] client_entities; // [num_client_entities]
 
-    sizebuf_t demo_multicast = new sizebuf_t();
+		public int last_heartbeat;
 
-    byte demo_multicast_buf[] = new byte[Defines.MAX_MSGLEN];
+		public challenge_t[] challenges = new challenge_t[Defines.MAX_CHALLENGES]; // to
+
+		// prevent
+		// invalid
+		// IPs
+		// from
+		// connecting
+
+		// serverrecord values
+		public BinaryWriter demofile;
+
+		public sizebuf_t demo_multicast = new();
+
+		public byte[] demo_multicast_buf = new byte[Defines.MAX_MSGLEN];
+	}
 }

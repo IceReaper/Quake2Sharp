@@ -1,148 +1,159 @@
 /*
- * Copyright (C) 1997-2001 Id Software, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *  
- */
+Copyright (C) 1997-2001 Id Software, Inc.
 
-// Created on 13.11.2003 by RST.
-// $Id: PlayerTrail.java,v 1.2 2004-09-22 19:22:04 salomo Exp $
-package jake2.game;
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-import jake2.util.Math3D;
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-public class PlayerTrail {
+See the GNU General Public License for more details.
 
-    /*
-     * ==============================================================================
-     * 
-     * PLAYER TRAIL
-     * 
-     * ==============================================================================
-     * 
-     * This is a circular list containing the a list of points of where the
-     * player has been recently. It is used by monsters for pursuit.
-     * 
-     * .origin the spot .owner forward link .aiment backward link
-     */
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    static int TRAIL_LENGTH = 8;
+*/
 
-    static edict_t trail[] = new edict_t[TRAIL_LENGTH];
+namespace Quake2Sharp.game
+{
+	using util;
 
-    static int trail_head;
+	public class PlayerTrail
+	{
+		/*
+		 * ==============================================================================
+		 * 
+		 * PLAYER TRAIL
+		 * 
+		 * ==============================================================================
+		 * 
+		 * This is a circular list containing the a list of points of where the
+		 * player has been recently. It is used by monsters for pursuit.
+		 * 
+		 * .origin the spot .owner forward link .aiment backward link
+		 */
 
-    static boolean trail_active = false;
-    static {
-        //TODO: potential error
-        for (int n = 0; n < TRAIL_LENGTH; n++)
-            trail[n] = new edict_t(n);
-    }
+		private static readonly int TRAIL_LENGTH = 8;
 
-    static int NEXT(int n) {
-        return (n + 1) % PlayerTrail.TRAIL_LENGTH;
-    }
+		private static readonly edict_t[] trail = new edict_t[PlayerTrail.TRAIL_LENGTH];
 
-    static int PREV(int n) {
-        return (n + PlayerTrail.TRAIL_LENGTH - 1) % PlayerTrail.TRAIL_LENGTH;
-    }
+		private static int trail_head;
 
-    static void Init() {
+		private static bool trail_active;
 
-        // FIXME || coop
-        if (GameBase.deathmatch.value != 0)
-            return;
+		static PlayerTrail()
+		{
+			//TODO: potential error
+			for (var n = 0; n < PlayerTrail.TRAIL_LENGTH; n++)
+				PlayerTrail.trail[n] = new edict_t(n);
+		}
 
-        for (int n = 0; n < PlayerTrail.TRAIL_LENGTH; n++) {
-            PlayerTrail.trail[n] = GameUtil.G_Spawn();
-            PlayerTrail.trail[n].classname = "player_trail";
-        }
+		private static int NEXT(int n)
+		{
+			return (n + 1) % PlayerTrail.TRAIL_LENGTH;
+		}
 
-        trail_head = 0;
-        trail_active = true;
-    }
+		private static int PREV(int n)
+		{
+			return (n + PlayerTrail.TRAIL_LENGTH - 1) % PlayerTrail.TRAIL_LENGTH;
+		}
 
-    static void Add(float[] spot) {
-        float[] temp = { 0, 0, 0 };
+		public static void Init()
+		{
+			// FIXME || coop
+			if (GameBase.deathmatch.value != 0)
+				return;
 
-        if (!trail_active)
-            return;
+			for (var n = 0; n < PlayerTrail.TRAIL_LENGTH; n++)
+			{
+				PlayerTrail.trail[n] = GameUtil.G_Spawn();
+				PlayerTrail.trail[n].classname = "player_trail";
+			}
 
-        Math3D.VectorCopy(spot, PlayerTrail.trail[trail_head].s.origin);
+			PlayerTrail.trail_head = 0;
+			PlayerTrail.trail_active = true;
+		}
 
-        PlayerTrail.trail[trail_head].timestamp = GameBase.level.time;
+		public static void Add(float[] spot)
+		{
+			float[] temp = {0, 0, 0};
 
-        Math3D.VectorSubtract(spot,
-                PlayerTrail.trail[PREV(trail_head)].s.origin, temp);
-        PlayerTrail.trail[trail_head].s.angles[1] = Math3D.vectoyaw(temp);
+			if (!PlayerTrail.trail_active)
+				return;
 
-        trail_head = NEXT(trail_head);
-    }
+			Math3D.VectorCopy(spot, PlayerTrail.trail[PlayerTrail.trail_head].s.origin);
 
-    static void New(float[] spot) {
-        if (!trail_active)
-            return;
+			PlayerTrail.trail[PlayerTrail.trail_head].timestamp = GameBase.level.time;
 
-        Init();
-        Add(spot);
-    }
+			Math3D.VectorSubtract(spot, PlayerTrail.trail[PlayerTrail.PREV(PlayerTrail.trail_head)].s.origin, temp);
+			PlayerTrail.trail[PlayerTrail.trail_head].s.angles[1] = Math3D.vectoyaw(temp);
 
-    static edict_t PickFirst(edict_t self) {
+			PlayerTrail.trail_head = PlayerTrail.NEXT(PlayerTrail.trail_head);
+		}
 
-        if (!trail_active)
-            return null;
+		private static void New(float[] spot)
+		{
+			if (!PlayerTrail.trail_active)
+				return;
 
-        int marker = trail_head;
+			PlayerTrail.Init();
+			PlayerTrail.Add(spot);
+		}
 
-        for (int n = PlayerTrail.TRAIL_LENGTH; n > 0; n--) {
-            if (PlayerTrail.trail[marker].timestamp <= self.monsterinfo.trail_time)
-                marker = NEXT(marker);
-            else
-                break;
-        }
+		public static edict_t PickFirst(edict_t self)
+		{
+			if (!PlayerTrail.trail_active)
+				return null;
 
-        if (GameUtil.visible(self, PlayerTrail.trail[marker])) {
-            return PlayerTrail.trail[marker];
-        }
+			var marker = PlayerTrail.trail_head;
 
-        if (GameUtil.visible(self, PlayerTrail.trail[PREV(marker)])) {
-            return PlayerTrail.trail[PREV(marker)];
-        }
+			for (var n = PlayerTrail.TRAIL_LENGTH; n > 0; n--)
+			{
+				if (PlayerTrail.trail[marker].timestamp <= self.monsterinfo.trail_time)
+					marker = PlayerTrail.NEXT(marker);
+				else
+					break;
+			}
 
-        return PlayerTrail.trail[marker];
-    }
+			if (GameUtil.visible(self, PlayerTrail.trail[marker]))
+			{
+				return PlayerTrail.trail[marker];
+			}
 
-    static edict_t PickNext(edict_t self) {
-        int marker;
-        int n;
+			if (GameUtil.visible(self, PlayerTrail.trail[PlayerTrail.PREV(marker)]))
+			{
+				return PlayerTrail.trail[PlayerTrail.PREV(marker)];
+			}
 
-        if (!trail_active)
-            return null;
+			return PlayerTrail.trail[marker];
+		}
 
-        for (marker = trail_head, n = PlayerTrail.TRAIL_LENGTH; n > 0; n--) {
-            if (PlayerTrail.trail[marker].timestamp <= self.monsterinfo.trail_time)
-                marker = NEXT(marker);
-            else
-                break;
-        }
+		public static edict_t PickNext(edict_t self)
+		{
+			int marker;
+			int n;
 
-        return PlayerTrail.trail[marker];
-    }
+			if (!PlayerTrail.trail_active)
+				return null;
 
-    static edict_t LastSpot() {
-        return PlayerTrail.trail[PREV(trail_head)];
-    }
+			for (marker = PlayerTrail.trail_head, n = PlayerTrail.TRAIL_LENGTH; n > 0; n--)
+			{
+				if (PlayerTrail.trail[marker].timestamp <= self.monsterinfo.trail_time)
+					marker = PlayerTrail.NEXT(marker);
+				else
+					break;
+			}
+
+			return PlayerTrail.trail[marker];
+		}
+
+		public static edict_t LastSpot()
+		{
+			return PlayerTrail.trail[PlayerTrail.PREV(PlayerTrail.trail_head)];
+		}
+	}
 }

@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,187 +18,189 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 31.10.2003 by RST.
+namespace Quake2Sharp.game
+{
+	using Quake2Sharp;
+	using qcommon;
+	using util;
+	using System;
+	using System.IO;
 
-package jake2.game;
-
-import jake2.Defines;
-import jake2.qcommon.Com;
-import jake2.util.Lib;
-import jake2.util.Math3D;
-
-import java.io.IOException;
-import java.io.RandomAccessFile;
-
-/** 
+	/** 
  	Player_state_t is the information needed in addition to pmove_state_t
 	to rendered a view.  There will only be 10 player_state_t sent each second,
 	but the number of pmove_state_t changes will be relative to client
 	frame rates.
 */
+	public class player_state_t
+	{
+		public pmove_state_t pmove = new(); // for prediction
 
-public class player_state_t {
+		// these fields do not need to be communicated bit-precise
+		public float[] viewangles = {0, 0, 0}; // for fixed views
+		public float[] viewoffset = {0, 0, 0}; // add to pmovestate->origin
+		public float[] kick_angles = {0, 0, 0}; // add to view direction to get render angles
 
-	public pmove_state_t pmove= new pmove_state_t(); // for prediction
+		// set by weapon kicks, pain effects, etc
+		public float[] gunangles = {0, 0, 0};
+		public float[] gunoffset = {0, 0, 0};
+		public int gunindex;
+		public int gunframe;
 
-	// these fields do not need to be communicated bit-precise
-	public float[] viewangles= { 0, 0, 0 }; // for fixed views
-	public float[] viewoffset= { 0, 0, 0 }; // add to pmovestate->origin
-	public float[] kick_angles= { 0, 0, 0 }; // add to view direction to get render angles
+		public float[] blend = new float[4]; // rgba full screen effect
 
-	// set by weapon kicks, pain effects, etc
-	public float[] gunangles= { 0, 0, 0 };
-	public float[] gunoffset= { 0, 0, 0 };
-	public int gunindex;
-	public int gunframe;
+		public float fov; // horizontal field of view
 
-	public float blend[]= new float[4]; // rgba full screen effect
+		public int rdflags; // refdef flags
 
-	public float fov; // horizontal field of view
+		public short[] stats = new short[Defines.MAX_STATS];
 
-	public int rdflags; // refdef flags
+		/** Lets cleverly reset the structure. */
+		private static readonly player_state_t prototype = new();
 
-	public short stats[]= new short[Defines.MAX_STATS];
+		/** Clears the player_state.*/
+		public void clear()
+		{
+			this.set(player_state_t.prototype);
+		}
 
-	/** Lets cleverly reset the structure. */
-	private static player_state_t prototype= new player_state_t();
+		/** Clones the object.*/
+		public player_state_t getClone()
+		{
+			return new player_state_t().set(this);
+		}
 
-	/** Clears the player_state.*/
-	public void clear() {
-		this.set(prototype);
-	}
+		/** Copies the player state data. */
+		public player_state_t set(player_state_t from)
+		{
+			this.pmove.set(from.pmove);
+			Math3D.VectorCopy(from.viewangles, this.viewangles);
+			Math3D.VectorCopy(from.viewoffset, this.viewoffset);
+			Math3D.VectorCopy(from.kick_angles, this.kick_angles);
 
-	/** Clones the object.*/
-	public player_state_t getClone() {
-		return new player_state_t().set(this);
-	}
+			Math3D.VectorCopy(from.gunangles, this.gunangles);
+			Math3D.VectorCopy(from.gunoffset, this.gunoffset);
 
-	/** Copies the player state data. */
-	public player_state_t set(player_state_t from) {
-		pmove.set(from.pmove);
-		Math3D.VectorCopy(from.viewangles, viewangles);
-		Math3D.VectorCopy(from.viewoffset, viewoffset);
-		Math3D.VectorCopy(from.kick_angles, kick_angles);
+			this.gunindex = from.gunindex;
+			this.gunframe = from.gunframe;
 
-		Math3D.VectorCopy(from.gunangles, gunangles);
-		Math3D.VectorCopy(from.gunoffset, gunoffset);
+			this.blend[0] = from.blend[0];
+			this.blend[1] = from.blend[1];
+			this.blend[2] = from.blend[2];
+			this.blend[3] = from.blend[3];
 
-		gunindex= from.gunindex;
-		gunframe= from.gunframe;
+			this.fov = from.fov;
+			this.rdflags = from.rdflags;
 
-		blend[0]= from.blend[0];
-		blend[1]= from.blend[1];
-		blend[2]= from.blend[2];
-		blend[3]= from.blend[3];
+			Array.Copy(from.stats, 0, this.stats, 0, Defines.MAX_STATS);
 
-		fov= from.fov;
-		rdflags= from.rdflags;
+			return this;
+		}
 
-		System.arraycopy(from.stats, 0, stats, 0, Defines.MAX_STATS);
+		/** Reads a player_state from a file.*/
+		public void load(BinaryReader f)
+		{
+			this.pmove.load(f);
 
-		return this;
-	}
+			this.viewangles[0] = f.ReadSingle();
+			this.viewangles[1] = f.ReadSingle();
+			this.viewangles[2] = f.ReadSingle();
 
-	/** Reads a player_state from a file.*/
-	public void load(RandomAccessFile f) throws IOException {
-		pmove.load(f);
+			this.viewoffset[0] = f.ReadSingle();
+			this.viewoffset[1] = f.ReadSingle();
+			this.viewoffset[2] = f.ReadSingle();
 
-		viewangles[0]= f.readFloat();
-		viewangles[1]= f.readFloat();
-		viewangles[2]= f.readFloat();
+			this.kick_angles[0] = f.ReadSingle();
+			this.kick_angles[1] = f.ReadSingle();
+			this.kick_angles[2] = f.ReadSingle();
 
-		viewoffset[0]= f.readFloat();
-		viewoffset[1]= f.readFloat();
-		viewoffset[2]= f.readFloat();
+			this.gunangles[0] = f.ReadSingle();
+			this.gunangles[1] = f.ReadSingle();
+			this.gunangles[2] = f.ReadSingle();
 
-		kick_angles[0]= f.readFloat();
-		kick_angles[1]= f.readFloat();
-		kick_angles[2]= f.readFloat();
+			this.gunoffset[0] = f.ReadSingle();
+			this.gunoffset[1] = f.ReadSingle();
+			this.gunoffset[2] = f.ReadSingle();
 
-		gunangles[0]= f.readFloat();
-		gunangles[1]= f.readFloat();
-		gunangles[2]= f.readFloat();
+			this.gunindex = f.ReadInt32();
+			this.gunframe = f.ReadInt32();
 
-		gunoffset[0]= f.readFloat();
-		gunoffset[1]= f.readFloat();
-		gunoffset[2]= f.readFloat();
+			this.blend[0] = f.ReadSingle();
+			this.blend[1] = f.ReadSingle();
+			this.blend[2] = f.ReadSingle();
+			this.blend[3] = f.ReadSingle();
 
-		gunindex= f.readInt();
-		gunframe= f.readInt();
+			this.fov = f.ReadSingle();
 
-		blend[0]= f.readFloat();
-		blend[1]= f.readFloat();
-		blend[2]= f.readFloat();
-		blend[3]= f.readFloat();
+			this.rdflags = f.ReadInt32();
 
-		fov= f.readFloat();
+			for (var n = 0; n < Defines.MAX_STATS; n++)
+				this.stats[n] = f.ReadInt16();
+		}
 
-		rdflags= f.readInt();
+		/** Writes a player_state to a file.*/
+		public void write(BinaryWriter f)
+		{
+			this.pmove.write(f);
 
-		for (int n= 0; n < Defines.MAX_STATS; n++)
-			stats[n]= f.readShort();
-	}
+			f.Write(this.viewangles[0]);
+			f.Write(this.viewangles[1]);
+			f.Write(this.viewangles[2]);
 
-	/** Writes a player_state to a file.*/
-	public void write(RandomAccessFile f) throws IOException {
-		pmove.write(f);
+			f.Write(this.viewoffset[0]);
+			f.Write(this.viewoffset[1]);
+			f.Write(this.viewoffset[2]);
 
-		f.writeFloat(viewangles[0]);
-		f.writeFloat(viewangles[1]);
-		f.writeFloat(viewangles[2]);
+			f.Write(this.kick_angles[0]);
+			f.Write(this.kick_angles[1]);
+			f.Write(this.kick_angles[2]);
 
-		f.writeFloat(viewoffset[0]);
-		f.writeFloat(viewoffset[1]);
-		f.writeFloat(viewoffset[2]);
+			f.Write(this.gunangles[0]);
+			f.Write(this.gunangles[1]);
+			f.Write(this.gunangles[2]);
 
-		f.writeFloat(kick_angles[0]);
-		f.writeFloat(kick_angles[1]);
-		f.writeFloat(kick_angles[2]);
+			f.Write(this.gunoffset[0]);
+			f.Write(this.gunoffset[1]);
+			f.Write(this.gunoffset[2]);
 
-		f.writeFloat(gunangles[0]);
-		f.writeFloat(gunangles[1]);
-		f.writeFloat(gunangles[2]);
+			f.Write(this.gunindex);
+			f.Write(this.gunframe);
 
-		f.writeFloat(gunoffset[0]);
-		f.writeFloat(gunoffset[1]);
-		f.writeFloat(gunoffset[2]);
+			f.Write(this.blend[0]);
+			f.Write(this.blend[1]);
+			f.Write(this.blend[2]);
+			f.Write(this.blend[3]);
 
-		f.writeInt(gunindex);
-		f.writeInt(gunframe);
+			f.Write(this.fov);
 
-		f.writeFloat(blend[0]);
-		f.writeFloat(blend[1]);
-		f.writeFloat(blend[2]);
-		f.writeFloat(blend[3]);
+			f.Write(this.rdflags);
 
-		f.writeFloat(fov);
+			for (var n = 0; n < Defines.MAX_STATS; n++)
+				f.Write(this.stats[n]);
+		}
 
-		f.writeInt(rdflags);
+		/** Prints the player state. */
+		public void dump()
+		{
+			this.pmove.dump();
 
-		for (int n= 0; n < Defines.MAX_STATS; n++)
-			f.writeShort(stats[n]);
-	}
+			Lib.printv("viewangles", this.viewangles);
+			Lib.printv("viewoffset", this.viewoffset);
+			Lib.printv("kick_angles", this.kick_angles);
+			Lib.printv("gunangles", this.gunangles);
+			Lib.printv("gunoffset", this.gunoffset);
 
-	/** Prints the player state. */
-	public void dump() {
-		pmove.dump();
+			Com.Println("gunindex: " + this.gunindex);
+			Com.Println("gunframe: " + this.gunframe);
 
-		Lib.printv("viewangles", viewangles);
-		Lib.printv("viewoffset", viewoffset);
-		Lib.printv("kick_angles", kick_angles);
-		Lib.printv("gunangles", gunangles);
-		Lib.printv("gunoffset", gunoffset);
+			Lib.printv("blend", this.blend);
 
-		Com.Println("gunindex: " + gunindex);
-		Com.Println("gunframe: " + gunframe);
+			Com.Println("fov: " + this.fov);
 
-		Lib.printv("blend", blend);
+			Com.Println("rdflags: " + this.rdflags);
 
-		Com.Println("fov: " + fov);
-
-		Com.Println("rdflags: " + rdflags);
-
-		for (int n= 0; n < Defines.MAX_STATS; n++)
-			System.out.println("stats[" + n + "]: " + stats[n]);
+			for (var n = 0; n < Defines.MAX_STATS; n++)
+				Console.WriteLine("stats[" + n + "]: " + this.stats[n]);
+		}
 	}
 }

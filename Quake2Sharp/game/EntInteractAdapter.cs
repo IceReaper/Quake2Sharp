@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,12 +18,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 08.11.2003 by RST.
-// $Id: EntInteractAdapter.java,v 1.2 2004-07-08 15:58:44 hzi Exp $
-
-package jake2.game;
-
-public abstract class EntInteractAdapter extends SuperAdapter
+namespace Quake2Sharp.game
 {
-	public abstract boolean interact(edict_t self, edict_t other);
+	using System;
+
+	public class EntInteractAdapter : SuperAdapter
+	{
+		public Func<edict_t, edict_t, bool> interact;
+
+		public EntInteractAdapter(string id, Func<edict_t, edict_t, bool> interact)
+			: base(id)
+		{
+			this.interact = interact;
+		}
+	}
 }

@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,85 +18,90 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 20.11.2003 by RST.
-
-package jake2.render;
-
-import jake2.Defines;
-import jake2.game.cplane_t;
-
-import java.nio.ByteBuffer;
-
-public class msurface_t
+namespace Quake2Sharp.render
 {
+	using Quake2Sharp;
+	using game;
 
-	public int visframe; // should be drawn when node is crossed
+	public class msurface_t
+	{
+		public int visframe; // should be drawn when node is crossed
 
-	public cplane_t plane;
-	public int flags;
+		public cplane_t plane;
+		public int flags;
 
-	public int firstedge; // look up in model->surfedges[], negative numbers
-	public int numedges; // are backwards edges
+		public int firstedge; // look up in model->surfedges[], negative numbers
+		public int numedges; // are backwards edges
 
-	public short texturemins[] = { 0, 0 };
-	public short extents[] = { 0, 0 };
+		public short[] texturemins = {0, 0};
+		public short[] extents = {0, 0};
 
-	public int light_s, light_t; // gl lightmap coordinates
-	public int dlight_s, dlight_t;
-	// gl lightmap coordinates for dynamic lightmaps
+		public int light_s, light_t; // gl lightmap coordinates
 
-	public glpoly_t polys; // multiple if warped
-	public msurface_t texturechain;
-	public msurface_t lightmapchain;
+		public int dlight_s, dlight_t;
 
-	// TODO check this
-	public mtexinfo_t texinfo = new mtexinfo_t();
+		// gl lightmap coordinates for dynamic lightmaps
 
-	// lighting info
-	public int dlightframe;
-	public int dlightbits;
+		public glpoly_t polys; // multiple if warped
+		public msurface_t texturechain;
+		public msurface_t lightmapchain;
 
-	public int lightmaptexturenum;
-	public byte styles[] = new byte[Defines.MAXLIGHTMAPS];
-	public float cached_light[] = new float[Defines.MAXLIGHTMAPS];
-	// values currently used in lightmap
-	//public byte samples[]; // [numstyles*surfsize]
-	public ByteBuffer samples; // [numstyles*surfsize]
-	
-	public void clear() {
-		visframe = 0;
-		plane.clear();
-		flags = 0;
+		// TODO check this
+		public mtexinfo_t texinfo = new();
 
-		firstedge = 0;
-		numedges = 0;
+		// lighting info
+		public int dlightframe;
+		public int dlightbits;
 
-		texturemins[0] = texturemins[1] = -1;
-		extents[0] = extents[1] = 0;
+		public int lightmaptexturenum;
+		public byte[] styles = new byte[Defines.MAXLIGHTMAPS];
 
-		light_s = light_t = 0;
-		dlight_s = dlight_t = 0;
+		public float[] cached_light = new float[Defines.MAXLIGHTMAPS];
 
-		polys = null;
-		texturechain = null;
-		lightmapchain = null;
+		// values currently used in lightmap
+		//public byte samples[]; // [numstyles*surfsize]
+		public byte[] samples; // [numstyles*surfsize]
+		public int samplesOffset;
 
-		//texinfo = new mtexinfo_t();
-		texinfo.clear();
-
-		dlightframe = 0;
-		dlightbits = 0;
-
-		lightmaptexturenum = 0;
-		
-		for (int i = 0; i < styles.length; i++)
+		public void clear()
 		{
-			styles[i] = 0;
+			this.visframe = 0;
+			this.plane.clear();
+			this.flags = 0;
+
+			this.firstedge = 0;
+			this.numedges = 0;
+
+			this.texturemins[0] = this.texturemins[1] = -1;
+			this.extents[0] = this.extents[1] = 0;
+
+			this.light_s = this.light_t = 0;
+			this.dlight_s = this.dlight_t = 0;
+
+			this.polys = null;
+			this.texturechain = null;
+			this.lightmapchain = null;
+
+			//texinfo = new mtexinfo_t();
+			this.texinfo.clear();
+
+			this.dlightframe = 0;
+			this.dlightbits = 0;
+
+			this.lightmaptexturenum = 0;
+
+			for (var i = 0; i < this.styles.Length; i++)
+			{
+				this.styles[i] = 0;
+			}
+
+			for (var i = 0; i < this.cached_light.Length; i++)
+			{
+				this.cached_light[i] = 0;
+			}
+
+			this.samples = null;
+			this.samplesOffset = 0;
 		}
-		for (int i = 0; i < cached_light.length; i++)
-		{
-			cached_light[i] = 0;
-		}
-		if (samples != null) samples.clear();
 	}
 }

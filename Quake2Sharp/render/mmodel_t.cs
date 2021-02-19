@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,18 +18,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 20.11.2003 by RST.
-// $Id: mmodel_t.java,v 1.2 2006-08-20 21:47:36 salomo Exp $
-
-package jake2.render;
-
-public class mmodel_t
+namespace Quake2Sharp.render
 {
-	public float[] mins = { 0, 0, 0 };
-	public float[] maxs = { 0, 0, 0 };
-	public float[] origin = { 0, 0, 0 }; // for sounds or lights
-	public float radius;
-	public int headnode;
-	public int visleafs; // not including the solid leaf 0
-	public int firstface, numfaces;
+	public class mmodel_t
+	{
+		public float[] mins = {0, 0, 0};
+		public float[] maxs = {0, 0, 0};
+		public float[] origin = {0, 0, 0}; // for sounds or lights
+		public float radius;
+		public int headnode;
+		public int visleafs; // not including the solid leaf 0
+		public int firstface, numfaces;
+	}
 }

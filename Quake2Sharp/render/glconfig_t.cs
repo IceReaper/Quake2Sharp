@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,32 +18,38 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 20.11.2003 by RST.
-// $Id: glconfig_t.java,v 1.3 2006-11-21 00:51:22 cawe Exp $
+namespace Quake2Sharp.render
+{
+	using System;
+	using System.Globalization;
 
-package jake2.render;
+	public class glconfig_t
+	{
+		public int renderer;
+		public string renderer_string;
+		public string vendor_string;
+		public string version_string;
+		public string extensions_string;
 
-public class glconfig_t {
-    
-	public int renderer;
-	public String renderer_string;
-	public String vendor_string;
-	public String version_string;
-	public String extensions_string;
+		public bool allow_cds;
 
-	public boolean allow_cds;
-	
-	private float version = 1.1f;
+		private float version = 1.1f;
 
-	public void parseOpenGLVersion() {
-	    try {
-		version = Float.parseFloat(version_string.substring(0, 3));
-	    } catch (Exception e) {
-		version = 1.1f;
-	    }
-	}
-	
-	public float getOpenGLVersion() {
-	    return version;
+		public void parseOpenGLVersion()
+		{
+			try
+			{
+				this.version = float.Parse(this.version_string.Substring(0, 3), CultureInfo.InvariantCulture);
+			}
+			catch (Exception)
+			{
+				this.version = 1.1f;
+			}
+		}
+
+		public float getOpenGLVersion()
+		{
+			return this.version;
+		}
 	}
 }

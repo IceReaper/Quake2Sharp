@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,138 +18,142 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 31.10.2003 by RST.
+namespace Quake2Sharp.game
+{
+	using qcommon;
+	using util;
+	using System.IO;
 
-package jake2.game;
-
-import jake2.qcommon.Com;
-import jake2.util.Math3D;
-
-import java.io.IOException;
-import java.io.RandomAccessFile;
-
-public class pmove_state_t {
-	//	this structure needs to be communicated bit-accurate
-	//	from the server to the client to guarantee that
-	//	prediction stays in sync, so no floats are used.
-	//	if any part of the game code modifies this struct, it
-	//	will result in a prediction error of some degree.
-
-	public int pm_type;
-
-	public short origin[] = { 0, 0, 0 }; // 12.3
-	public short velocity[] = { 0, 0, 0 }; // 12.3
-	/** ducked, jump_held, etc. */
-	public byte pm_flags;
-	/** each unit = 8 ms. */
-	public byte pm_time; 
-	public short gravity;
-	/** add to command angles to get view direction. */
-	public short delta_angles[] = { 0, 0, 0 }; 
-	/** changed by spawns, rotating objects, and teleporters.*/
-	
-	private static pmove_state_t prototype = new pmove_state_t();
-	
-	public void clear()
+	public class pmove_state_t
 	{
-		this.set(prototype);
-	}
-	 
-	public void set(pmove_state_t from) {
-		pm_type = from.pm_type;
-		Math3D.VectorCopy(from.origin, origin);
-		Math3D.VectorCopy(from.velocity, velocity);
-		pm_flags = from.pm_flags;
-		pm_time = from.pm_time;
-		gravity = from.gravity;
-		Math3D.VectorCopy(from.delta_angles, delta_angles);
-	}
-	
-	public boolean equals(pmove_state_t p2) {
-		if (pm_type == p2.pm_type
-			&& origin[0] == p2.origin[0]
-			&& origin[1] == p2.origin[1]
-			&& origin[2] == p2.origin[2]
-			&& velocity[0] == p2.velocity[0]
-			&& velocity[1] == p2.velocity[1]
-			&& velocity[2] == p2.origin[2]
-			&& pm_flags == p2.pm_flags
-			&& pm_time == p2.pm_time
-			&& gravity == gravity
-			&& delta_angles[0] == p2.delta_angles[0]
-			&& delta_angles[1] == p2.delta_angles[1]
-			&& delta_angles[2] == p2.origin[2])
-			return true;
+		//	this structure needs to be communicated bit-accurate
+		//	from the server to the client to guarantee that
+		//	prediction stays in sync, so no floats are used.
+		//	if any part of the game code modifies this struct, it
+		//	will result in a prediction error of some degree.
 
-		return false;
-	}
+		public int pm_type;
 
-	/** Reads the playermove from the file.*/
-	public void load(RandomAccessFile f) throws IOException {
+		public short[] origin = {0, 0, 0}; // 12.3
+		public short[] velocity = {0, 0, 0}; // 12.3
 
-		pm_type = f.readInt();
+		/** ducked, jump_held, etc. */
+		public byte pm_flags;
 
-		origin[0] = f.readShort();
-		origin[1] = f.readShort();
-		origin[2] = f.readShort();
+		/** each unit = 8 ms. */
+		public byte pm_time;
 
-		velocity[0] = f.readShort();
-		velocity[1] = f.readShort();
-		velocity[2] = f.readShort();
+		public short gravity;
 
-		pm_flags = f.readByte();
-		pm_time = f.readByte();
-		gravity = f.readShort();
+		/** add to command angles to get view direction. */
+		public short[] delta_angles = {0, 0, 0};
 
-		f.readShort();
+		/** changed by spawns, rotating objects, and teleporters.*/
+		private static readonly pmove_state_t prototype = new();
 
-		delta_angles[0] = f.readShort();
-		delta_angles[1] = f.readShort();
-		delta_angles[2] = f.readShort();
+		public void clear()
+		{
+			this.set(pmove_state_t.prototype);
+		}
 
-	}
-	
-	/** Writes the playermove to the file. */
-	public void write (RandomAccessFile f) throws IOException {
+		public void set(pmove_state_t from)
+		{
+			this.pm_type = from.pm_type;
+			Math3D.VectorCopy(from.origin, this.origin);
+			Math3D.VectorCopy(from.velocity, this.velocity);
+			this.pm_flags = from.pm_flags;
+			this.pm_time = from.pm_time;
+			this.gravity = from.gravity;
+			Math3D.VectorCopy(from.delta_angles, this.delta_angles);
+		}
 
-		f.writeInt(pm_type);
+		public bool equals(pmove_state_t p2)
+		{
+			if (this.pm_type == p2.pm_type
+				&& this.origin[0] == p2.origin[0]
+				&& this.origin[1] == p2.origin[1]
+				&& this.origin[2] == p2.origin[2]
+				&& this.velocity[0] == p2.velocity[0]
+				&& this.velocity[1] == p2.velocity[1]
+				&& this.velocity[2] == p2.origin[2]
+				&& this.pm_flags == p2.pm_flags
+				&& this.pm_time == p2.pm_time
+				&& this.gravity == p2.gravity
+				&& this.delta_angles[0] == p2.delta_angles[0]
+				&& this.delta_angles[1] == p2.delta_angles[1]
+				&& this.delta_angles[2] == p2.origin[2])
+				return true;
 
-		f.writeShort(origin[0]);
-		f.writeShort(origin[1]);
-		f.writeShort(origin[2]);
+			return false;
+		}
 
-		f.writeShort(velocity[0]);
-		f.writeShort(velocity[1]);
-		f.writeShort(velocity[2]);
+		/** Reads the playermove from the file.*/
+		public void load(BinaryReader f)
+		{
+			this.pm_type = f.ReadInt32();
 
-		f.writeByte(pm_flags);
-		f.writeByte(pm_time);
-		f.writeShort(gravity);
+			this.origin[0] = f.ReadInt16();
+			this.origin[1] = f.ReadInt16();
+			this.origin[2] = f.ReadInt16();
 
-		f.writeShort(0);
+			this.velocity[0] = f.ReadInt16();
+			this.velocity[1] = f.ReadInt16();
+			this.velocity[2] = f.ReadInt16();
 
-		f.writeShort(delta_angles[0]);
-		f.writeShort(delta_angles[1]);
-		f.writeShort(delta_angles[2]);
-	}
+			this.pm_flags = f.ReadByte();
+			this.pm_time = f.ReadByte();
+			this.gravity = f.ReadInt16();
 
-	public void dump() {
-		Com.Println("pm_type: " + pm_type);
+			f.ReadInt16();
 
-		Com.Println("origin[0]: " + origin[0]);
-		Com.Println("origin[1]: " + origin[0]);
-		Com.Println("origin[2]: " + origin[0]);
+			this.delta_angles[0] = f.ReadInt16();
+			this.delta_angles[1] = f.ReadInt16();
+			this.delta_angles[2] = f.ReadInt16();
+		}
 
-		Com.Println("velocity[0]: " + velocity[0]);
-		Com.Println("velocity[1]: " + velocity[1]);
-		Com.Println("velocity[2]: " + velocity[2]);
+		/** Writes the playermove to the file. */
+		public void write(BinaryWriter f)
+		{
+			f.Write(this.pm_type);
 
-		Com.Println("pmflags: " + pm_flags);
-		Com.Println("pmtime: " + pm_time);
-		Com.Println("gravity: " + gravity);
+			f.Write(this.origin[0]);
+			f.Write(this.origin[1]);
+			f.Write(this.origin[2]);
 
-		Com.Println("delta-angle[0]: " + delta_angles[0]);
-		Com.Println("delta-angle[1]: " + delta_angles[0]);
-		Com.Println("delta-angle[2]: " + delta_angles[0]);
+			f.Write(this.velocity[0]);
+			f.Write(this.velocity[1]);
+			f.Write(this.velocity[2]);
+
+			f.Write(this.pm_flags);
+			f.Write(this.pm_time);
+			f.Write(this.gravity);
+
+			f.Write((short) 0);
+
+			f.Write(this.delta_angles[0]);
+			f.Write(this.delta_angles[1]);
+			f.Write(this.delta_angles[2]);
+		}
+
+		public void dump()
+		{
+			Com.Println("pm_type: " + this.pm_type);
+
+			Com.Println("origin[0]: " + this.origin[0]);
+			Com.Println("origin[1]: " + this.origin[0]);
+			Com.Println("origin[2]: " + this.origin[0]);
+
+			Com.Println("velocity[0]: " + this.velocity[0]);
+			Com.Println("velocity[1]: " + this.velocity[1]);
+			Com.Println("velocity[2]: " + this.velocity[2]);
+
+			Com.Println("pmflags: " + this.pm_flags);
+			Com.Println("pmtime: " + this.pm_time);
+			Com.Println("gravity: " + this.gravity);
+
+			Com.Println("delta-angle[0]: " + this.delta_angles[0]);
+			Com.Println("delta-angle[1]: " + this.delta_angles[0]);
+			Com.Println("delta-angle[2]: " + this.delta_angles[0]);
+		}
 	}
 }

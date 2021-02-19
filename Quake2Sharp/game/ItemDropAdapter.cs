@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,12 +18,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 08.11.2003 by RST.
-// $Id: ItemDropAdapter.java,v 1.2 2005-11-20 22:18:33 salomo Exp $
+namespace Quake2Sharp.game
+{
+	using System;
 
-package jake2.game;
+	public class ItemDropAdapter : SuperAdapter
+	{
+		public Action<edict_t, gitem_t> drop;
 
-public abstract class ItemDropAdapter extends SuperAdapter {
-	public void drop(edict_t ent, gitem_t item) {
+		public ItemDropAdapter(string id, Action<edict_t, gitem_t> drop)
+			: base(id)
+		{
+			this.drop = drop;
+		}
 	}
 }

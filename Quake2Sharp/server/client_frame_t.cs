@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,19 +18,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 13.01.2004 by RST.
+namespace Quake2Sharp.server
+{
+	using Quake2Sharp;
+	using game;
 
-package jake2.server;
-
-import jake2.Defines;
-import jake2.game.player_state_t;
-
-public class client_frame_t {
-
-	int					areabytes;
-	byte				areabits[] = new byte[Defines.MAX_MAP_AREAS/8];		// portalarea visibility bits
-	player_state_t		ps = new player_state_t();
-	int					num_entities;
-	int					first_entity;		// into the circular sv_packet_entities[]
-	int					senttime;			// for ping calculations
+	public class client_frame_t
+	{
+		public int areabytes;
+		public byte[] areabits = new byte[Defines.MAX_MAP_AREAS / 8]; // portalarea visibility bits
+		public player_state_t ps = new();
+		public int num_entities;
+		public int first_entity; // into the circular sv_packet_entities[]
+		public int senttime; // for ping calculations
+	}
 }

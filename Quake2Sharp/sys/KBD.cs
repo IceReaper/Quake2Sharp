@@ -1,10 +1,4 @@
 /*
- * KBD.java
- * Copyright (C) 2004
- * 
- * $Id: KBD.java,v 1.7 2004-12-16 22:45:55 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,30 +17,32 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.sys;
 
-
-/**
+namespace Quake2Sharp.sys
+{
+	/**
  * KBD
  */
-abstract public class KBD {
-	
-	static int win_x = 0;
-	static int win_y = 0;
-		
-	// motion values
-	public static int mx = 0;
-	public static int my = 0;
-	
-	abstract public void Init();
+	public abstract class KBD
+	{
+		protected static int win_x = 0;
+		protected static int win_y = 0;
 
-	abstract public void Update();
+		// motion values
+		public static int mx = 0;
+		public static int my = 0;
 
-	abstract public void Close();
-	abstract public void Do_Key_Event(int key, boolean down);
+		public abstract void Init();
 
-	abstract public void installGrabs();
-	abstract public void uninstallGrabs();
-	//abstract public void centerMouse();
+		public abstract void Update();
+
+		public abstract void Close();
+		public abstract void Do_Key_Event(int key, bool down);
+
+		public abstract void installGrabs();
+
+		public abstract void uninstallGrabs();
+
+		//abstract public void centerMouse();
+	}
 }
-

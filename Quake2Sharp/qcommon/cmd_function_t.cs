@@ -1,10 +1,4 @@
 /*
- * cmd_function_t.java
- * Copyright (C) 2003
- * 
- * $Id: cmd_function_t.java,v 1.1 2004-07-07 19:59:34 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,13 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.qcommon;
 
-/**
+namespace Quake2Sharp.qcommon
+{
+	using System;
+
+	/**
  * cmd_function_t
  */
-public final class cmd_function_t {
-	public cmd_function_t next = null;
-	public String name = null;
-	public xcommand_t function;
+	public sealed class cmd_function_t
+	{
+		public cmd_function_t next = null;
+		public string name = null;
+		public Action function;
+	}
 }

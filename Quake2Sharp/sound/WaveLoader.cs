@@ -1,8 +1,4 @@
 /*
- * SND_MEM.java
- * Copyright (C) 2004
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -21,332 +17,373 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.sound;
 
-import jake2.Defines;
-import jake2.qcommon.Com;
-import jake2.qcommon.FS;
+namespace Quake2Sharp.sound
+{
+	using Quake2Sharp;
+	using qcommon;
+	using System.Text;
 
-/**
+	/**
  * SND_MEM
  */
-public class WaveLoader {
-
-	/** 
-	 * The ResampleSfx can squeeze and stretch samples to a default sample rate. 
-	 * Since Joal and lwjgl sound drivers support this, we don't need it and the samples
-	 * can keep their original sample rate. Use this switch for reactivating resampling.
-	 */
-	private static boolean DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL = true;
-	
-	/**
+	public class WaveLoader
+	{
+		/**
 	 * This is the maximum sample length in bytes which has to be replaced by 
 	 * a configurable variable.
 	 */
-	private static int maxsamplebytes = 2048 * 1024;
-	
-	/** 
+		private static readonly int maxsamplebytes = 2048 * 1024;
+
+		/** 
 	 * Loads a sound from a wav file. 
 	 */
-	public static sfxcache_t LoadSound(sfx_t s) {
-		if (s.name.charAt(0) == '*')
-			return null;
+		public static sfxcache_t LoadSound(sfx_t s)
+		{
+			if (s.name[0] == '*')
+				return null;
 
-		// see if still in memory
-		sfxcache_t sc = s.cache;
-		if (sc != null)
+			// see if still in memory
+			var sc = s.cache;
+
+			if (sc != null)
+				return sc;
+
+			string name;
+
+			// load it in
+			if (s.truename != null)
+				name = s.truename;
+			else
+				name = s.name;
+
+			string namebuffer;
+
+			if (name[0] == '#')
+				namebuffer = name.Substring(1);
+			else
+				namebuffer = "sound/" + name;
+
+			var data = FS.LoadFile(namebuffer);
+
+			if (data == null)
+			{
+				Com.DPrintf("Couldn't load " + namebuffer + "\n");
+
+				return null;
+			}
+
+			var size = data.Length;
+
+			var info = WaveLoader.GetWavinfo(s.name, data, size);
+
+			if (info.channels != 1)
+			{
+				Com.Printf(s.name + " is a stereo sample - ignoring\n");
+
+				return null;
+			}
+
+			float stepscale = 1;
+			var len = (int) (info.samples / stepscale);
+			len = len * info.width * info.channels;
+
+			// TODO: handle max sample bytes with a cvar
+			if (len >= WaveLoader.maxsamplebytes)
+			{
+				Com.Printf(s.name + " is too long: " + len + " bytes?! ignoring.\n");
+
+				return null;
+			}
+
+			sc = s.cache = new sfxcache_t(len);
+
+			sc.length = info.samples;
+			sc.loopstart = info.loopstart;
+			sc.speed = info.rate;
+			sc.width = info.width;
+			sc.stereo = info.channels;
+
+			WaveLoader.ResampleSfx(s, sc.speed, sc.width, data, info.dataofs);
+			data = null;
+
 			return sc;
-
-		String name;
-		// load it in
-		if (s.truename != null)
-			name = s.truename;
-		else
-			name = s.name;
-
-		String namebuffer;
-		if (name.charAt(0) == '#')
-			namebuffer = name.substring(1);
-		else
-			namebuffer = "sound/" + name;
-
-		byte[] data = FS.LoadFile(namebuffer);
-
-		if (data == null) {
-			Com.DPrintf("Couldn't load " + namebuffer + "\n");
-			return null;
 		}
-		
-		int size = data.length;
 
-		wavinfo_t info = GetWavinfo(s.name, data, size);
-
-		if (info.channels != 1)
+		public static void ResampleSfx(sfx_t sfx, int inrate, int inwidth, byte[] data, int offset)
 		{
-			Com.Printf(s.name + " is a stereo sample - ignoring\n");
-			return null;
+			int outcount;
+			int srcsample;
+			int i;
+			int sample, samplefrac, fracstep;
+			sfxcache_t sc;
+
+			sc = sfx.cache;
+
+			if (sc == null)
+				return;
+
+			// again calculate the stretching factor.
+			// this is usually 0.5, 1, or 2
+
+			float stepscale = 1;
+
+			outcount = (int) (sc.length / stepscale);
+			sc.length = outcount;
+
+			if (sc.loopstart != -1)
+				sc.loopstart = (int) (sc.loopstart / stepscale);
+
+			sc.width = inwidth;
+			sc.stereo = 0;
+			samplefrac = 0;
+			fracstep = (int) (stepscale * 256);
+
+			for (i = 0; i < outcount; i++)
+			{
+				srcsample = samplefrac >> 8;
+				samplefrac += fracstep;
+
+				if (inwidth == 2)
+				{
+					sample = (data[offset + srcsample * 2] & 0xff) + (data[offset + srcsample * 2 + 1] << 8);
+				}
+				else
+				{
+					sample = ((data[offset + srcsample] & 0xff) - 128) << 8;
+				}
+
+				if (sc.width == 2)
+				{
+					if (Defines.LITTLE_ENDIAN)
+					{
+						sc.data[i * 2] = (byte) (sample & 0xff);
+						sc.data[i * 2 + 1] = (byte) (((uint) sample >> 8) & 0xff);
+					}
+					else
+					{
+						sc.data[i * 2] = (byte) (((uint) sample >> 8) & 0xff);
+						sc.data[i * 2 + 1] = (byte) (sample & 0xff);
+					}
+				}
+				else
+				{
+					sc.data[i] = (byte) (sample >> 8);
+				}
+			}
 		}
 
-		float stepscale;
-		if (DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL)
-			stepscale = 1; 
-		else
-			stepscale = (float)info.rate / S.getDefaultSampleRate();
-		
-		int len = (int) (info.samples / stepscale);
-		len = len * info.width * info.channels;
+		private static byte[] data_b;
+		private static int data_p;
+		private static int iff_end;
+		private static int last_chunk;
+		private static int iff_data;
+		private static int iff_chunk_len;
 
-		// TODO: handle max sample bytes with a cvar
-		if (len >= maxsamplebytes)
+		private static short GetLittleShort()
 		{
-			Com.Printf(s.name + " is too long: " + len + " bytes?! ignoring.\n");
-			return null;
+			var val = 0;
+			val = WaveLoader.data_b[WaveLoader.data_p] & 0xFF;
+			WaveLoader.data_p++;
+			val |= ((WaveLoader.data_b[WaveLoader.data_p] & 0xFF) << 8);
+			WaveLoader.data_p++;
+
+			return (short) val;
 		}
 
-		sc = s.cache = new sfxcache_t(len);
-		         
-        sc.length = info.samples;
-        sc.loopstart = info.loopstart;
-        sc.speed = info.rate;
-        sc.width = info.width;
-        sc.stereo = info.channels;
+		private static int GetLittleLong()
+		{
+			var val = 0;
+			val = WaveLoader.data_b[WaveLoader.data_p] & 0xFF;
+			WaveLoader.data_p++;
+			val |= ((WaveLoader.data_b[WaveLoader.data_p] & 0xFF) << 8);
+			WaveLoader.data_p++;
+			val |= ((WaveLoader.data_b[WaveLoader.data_p] & 0xFF) << 16);
+			WaveLoader.data_p++;
+			val |= ((WaveLoader.data_b[WaveLoader.data_p] & 0xFF) << 24);
+			WaveLoader.data_p++;
 
-		ResampleSfx(s, sc.speed, sc.width, data, info.dataofs);
-		data = null;
+			return val;
+		}
 
-		return sc;
-	}
+		private static void FindNextChunk(string name)
+		{
+			while (true)
+			{
+				WaveLoader.data_p = WaveLoader.last_chunk;
 
+				if (WaveLoader.data_p >= WaveLoader.iff_end)
+				{
+					// didn't find the chunk
+					WaveLoader.data_p = 0;
 
-	/** 
-	 * Converts sample data with respect to the endianess and adjusts 
-	 * the sample rate of a loaded sample, see flag DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL.
-	 */
-	public static void ResampleSfx (sfx_t sfx, int inrate, int inwidth, byte data[], int offset)
-	{
-        int             outcount;
-        int             srcsample;
-        int             i;
-        int             sample, samplefrac, fracstep;
-        sfxcache_t      sc;
-        
-        sc = sfx.cache;
-        
-        if (sc == null)
-        	return;
+					return;
+				}
 
-        // again calculate the stretching factor.
-        // this is usually 0.5, 1, or 2
-        
-        float stepscale;
-        if (DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL)
-        	stepscale = 1;
-        else
-        	stepscale = (float)inrate / S.getDefaultSampleRate();  
-        outcount = (int) (sc.length/stepscale);
-        sc.length = outcount;
-        
-        if (sc.loopstart != -1)
-                sc.loopstart = (int) (sc.loopstart / stepscale);
+				WaveLoader.data_p += 4;
 
-        // if resampled, sample has now the default sample rate
-        if (DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL == false)
-        	sc.speed = S.getDefaultSampleRate();
+				WaveLoader.iff_chunk_len = WaveLoader.GetLittleLong();
 
-        sc.width = inwidth;
-        sc.stereo = 0;
-        samplefrac = 0;
-        fracstep = (int) (stepscale * 256);
-        
-        for (i = 0; i < outcount; i++) {
-            srcsample = samplefrac >> 8;
-            samplefrac += fracstep;
+				if (WaveLoader.iff_chunk_len < 0)
+				{
+					WaveLoader.data_p = 0;
 
-            if (inwidth == 2) {
-                sample = (data[offset + srcsample * 2] & 0xff)
-                        + (data[offset + srcsample * 2 + 1] << 8);
-            } else {
-                sample = ((data[offset + srcsample] & 0xff) - 128) << 8;
-            }
+					return;
+				}
 
-            if (sc.width == 2) {
-                if (Defines.LITTLE_ENDIAN) {
-                    sc.data[i * 2] = (byte) (sample & 0xff);
-                    sc.data[i * 2 + 1] = (byte) ((sample >>> 8) & 0xff);
-                } else {
-                    sc.data[i * 2] = (byte) ((sample >>> 8) & 0xff);
-                    sc.data[i * 2 + 1] = (byte) (sample & 0xff);
-                }
-            } else {
-                sc.data[i] = (byte) (sample >> 8);
-            }
-        }
-    }
+				if (WaveLoader.iff_chunk_len > 1024 * 1024)
+				{
+					Com.Println(" Warning: FindNextChunk: length is past the 1 meg sanity limit");
+				}
 
+				WaveLoader.data_p -= 8;
+				WaveLoader.last_chunk = WaveLoader.data_p + 8 + ((WaveLoader.iff_chunk_len + 1) & ~1);
+				var s = Encoding.ASCII.GetString(WaveLoader.data_b, WaveLoader.data_p, 4);
 
-	static byte[] data_b;
-	static int data_p;
-	static int iff_end;
-	static int last_chunk;
-	static int iff_data;
-	static int iff_chunk_len;
+				if (s.Equals(name))
+					return;
+			}
+		}
 
+		private static void FindChunk(string name)
+		{
+			WaveLoader.last_chunk = WaveLoader.iff_data;
+			WaveLoader.FindNextChunk(name);
+		}
 
-	static short GetLittleShort() {
-		int val = 0;
-		val = data_b[data_p] & 0xFF;
-		data_p++;
-		val |= ((data_b[data_p] & 0xFF) << 8);
-		data_p++;
-		return (short)val;
-	}
+		/*
+		============
+		GetWavinfo
+		============
+		*/
+		private static wavinfo_t GetWavinfo(string name, byte[] wav, int wavlength)
+		{
+			wavinfo_t info = new();
+			int i;
+			int format;
+			int samples;
 
-	static int GetLittleLong() {
-		int val = 0;
-		val = data_b[data_p] & 0xFF;
-		data_p++;
-		val |= ((data_b[data_p] & 0xFF) << 8);
-		data_p++;
-		val |= ((data_b[data_p] & 0xFF) << 16);
-		data_p++;
-		val |= ((data_b[data_p] & 0xFF) << 24);
-		data_p++;
-		return val;
-	}
+			if (wav == null)
+				return info;
 
-	static void FindNextChunk(String name) {
-		while (true) {
-			data_p = last_chunk;
+			WaveLoader.iff_data = 0;
+			WaveLoader.iff_end = wavlength;
+			WaveLoader.data_b = wav;
 
-			if (data_p >= iff_end) { // didn't find the chunk
-				data_p = 0;
-				return;
+			// find "RIFF" chunk
+			WaveLoader.FindChunk("RIFF");
+			var s = Encoding.ASCII.GetString(WaveLoader.data_b, WaveLoader.data_p + 8, 4);
+
+			if (!s.Equals("WAVE"))
+			{
+				Com.Printf("Missing RIFF/WAVE chunks\n");
+
+				return info;
 			}
 
-			data_p += 4;
+			//	   get "fmt " chunk
+			WaveLoader.iff_data = WaveLoader.data_p + 12;
 
-			iff_chunk_len = GetLittleLong();
-			
-			if (iff_chunk_len < 0) {
-				data_p = 0;
-				return;
+			//	   DumpChunks ();
+
+			WaveLoader.FindChunk("fmt ");
+
+			if (WaveLoader.data_p == 0)
+			{
+				Com.Printf("Missing fmt chunk\n");
+
+				return info;
 			}
-			if (iff_chunk_len > 1024*1024) {
-				Com.Println(" Warning: FindNextChunk: length is past the 1 meg sanity limit");
+
+			WaveLoader.data_p += 8;
+			format = WaveLoader.GetLittleShort();
+
+			if (format != 1)
+			{
+				Com.Printf("Microsoft PCM format only\n");
+
+				return info;
 			}
-			data_p -= 8;
-			last_chunk = data_p + 8 + ((iff_chunk_len + 1) & ~1);
-			String s = new String(data_b, data_p, 4);
-			if (s.equals(name))
-				return;
-		}
-	}
 
-	static void FindChunk(String name) {
-		last_chunk = iff_data;
-		FindNextChunk(name);
-	}
+			info.channels = WaveLoader.GetLittleShort();
+			info.rate = WaveLoader.GetLittleLong();
+			WaveLoader.data_p += 4 + 2;
+			info.width = WaveLoader.GetLittleShort() / 8;
 
-	/*
-	============
-	GetWavinfo
-	============
-	*/
-	static wavinfo_t GetWavinfo(String name, byte[] wav, int wavlength) {
-		wavinfo_t info = new wavinfo_t();
-		int i;
-		int format;
-		int samples;
+			//	   get cue chunk
+			WaveLoader.FindChunk("cue ");
 
-		if (wav == null)
-			return info;
+			if (WaveLoader.data_p != 0)
+			{
+				WaveLoader.data_p += 32;
+				info.loopstart = WaveLoader.GetLittleLong();
 
-		iff_data = 0;
-		iff_end = wavlength;
-		data_b = wav;
+				//			Com_Printf("loopstart=%d\n", sfx->loopstart);
 
-		// find "RIFF" chunk
-		FindChunk("RIFF");
-		String s = new String(data_b, data_p + 8, 4);
-		if (!s.equals("WAVE")) {
-			Com.Printf("Missing RIFF/WAVE chunks\n");
-			return info;
-		}
+				// if the next chunk is a LIST chunk, look for a cue length marker
+				WaveLoader.FindNextChunk("LIST");
 
-		//	   get "fmt " chunk
-		iff_data = data_p + 12;
-		//	   DumpChunks ();
+				if (WaveLoader.data_p != 0)
+				{
+					if (WaveLoader.data_b.Length >= WaveLoader.data_p + 32)
+					{
+						s = Encoding.ASCII.GetString(WaveLoader.data_b, WaveLoader.data_p + 28, 4);
 
-		FindChunk("fmt ");
-		if (data_p == 0) {
-			Com.Printf("Missing fmt chunk\n");
-			return info;
-		}
-		data_p += 8;
-		format = GetLittleShort();
-		if (format != 1) {
-			Com.Printf("Microsoft PCM format only\n");
-			return info;
-		}
+						if (s.Equals("MARK"))
+						{
+							// this is not a proper parse, but
+							// it works with cooledit...
+							WaveLoader.data_p += 24;
+							i = WaveLoader.GetLittleLong(); // samples in loop
+							info.samples = info.loopstart + i;
 
-		info.channels = GetLittleShort();
-		info.rate = GetLittleLong();
-		data_p += 4 + 2;
-		info.width = GetLittleShort() / 8;
-
-		//	   get cue chunk
-		FindChunk("cue ");
-		if (data_p != 0) {
-			data_p += 32;
-			info.loopstart = GetLittleLong();
-			//			Com_Printf("loopstart=%d\n", sfx->loopstart);
-
-			// if the next chunk is a LIST chunk, look for a cue length marker
-			FindNextChunk("LIST");
-			if (data_p != 0) {
-				if (data_b.length >= data_p + 32) {
-					s = new String(data_b, data_p + 28, 4);
-					if (s.equals("MARK")) { // this is not a proper parse, but
-											// it works with cooledit...
-						data_p += 24;
-						i = GetLittleLong(); // samples in loop
-						info.samples = info.loopstart + i;
-						//					Com_Printf("looped length: %i\n", i);
+							//					Com_Printf("looped length: %i\n", i);
+						}
 					}
 				}
 			}
-		} else
-			info.loopstart = -1;
+			else
+				info.loopstart = -1;
 
-		//	   find data chunk
-		FindChunk("data");
-		if (data_p == 0) {
-			Com.Printf("Missing data chunk\n");
+			//	   find data chunk
+			WaveLoader.FindChunk("data");
+
+			if (WaveLoader.data_p == 0)
+			{
+				Com.Printf("Missing data chunk\n");
+
+				return info;
+			}
+
+			WaveLoader.data_p += 4;
+			samples = WaveLoader.GetLittleLong() / info.width;
+
+			if (info.samples != 0)
+			{
+				if (samples < info.samples)
+					Com.Error(Defines.ERR_DROP, "Sound " + name + " has a bad loop length");
+			}
+			else
+			{
+				info.samples = samples;
+
+				if (info.loopstart > 0)
+					info.samples -= info.loopstart;
+			}
+
+			info.dataofs = WaveLoader.data_p;
+
 			return info;
 		}
 
-		data_p += 4;
-		samples = GetLittleLong() / info.width;
-
-		if (info.samples != 0) {
-			if (samples < info.samples)
-				Com.Error(Defines.ERR_DROP, "Sound " + name + " has a bad loop length");
-		} else {
-			info.samples = samples;
-			if (info.loopstart > 0) info.samples -= info.loopstart;
+		private class wavinfo_t
+		{
+			public int rate;
+			public int width;
+			public int channels;
+			public int loopstart;
+			public int samples;
+			public int dataofs; // chunk starts this many bytes from file start
 		}
-		
-		info.dataofs = data_p;
-
-		return info;
-	}
-
-	static class wavinfo_t {
-		int rate;
-		int width;
-		int channels;
-		int loopstart;
-		int samples;
-		int dataofs; // chunk starts this many bytes from file start
 	}
 }

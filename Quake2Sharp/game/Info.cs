@@ -1,167 +1,199 @@
 /*
- * Copyright (C) 1997-2001 Id Software, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *  
- */
+Copyright (C) 1997-2001 Id Software, Inc.
 
-// Created on 27.12.2003 by RST.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-// $Id: Info.java,v 1.7 2006-01-10 13:09:18 hzi Exp $
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-package jake2.game;
+See the GNU General Public License for more details.
 
-import jake2.Defines;
-import jake2.qcommon.Com;
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-import java.util.StringTokenizer;
+*/
 
-public class Info {
+namespace Quake2Sharp.game
+{
+	using Quake2Sharp;
+	using qcommon;
+	using System.Text;
 
-	/**
+	public class Info
+	{
+		/**
 	 * Returns a value for a key from an info string. 
 	 */
-    public static String Info_ValueForKey(String s, String key) {
+		public static string Info_ValueForKey(string s, string key)
+		{
+			var tk = s.Trim('\\').Split('\\');
 
-        StringTokenizer tk = new StringTokenizer(s, "\\");
+			if (tk.Length == 1 && tk[0] == "")
+				return "";
 
-        while (tk.hasMoreTokens()) {
-            String key1 = tk.nextToken();
+			for (var i = 0; i < tk.Length; i++)
+			{
+				var key1 = tk[i];
 
-            if (!tk.hasMoreTokens()) {
-                Com.Printf("MISSING VALUE\n");
-                return s;
-            }
-            String value1 = tk.nextToken();
+				if (i + 1 == tk.Length)
+				{
+					Com.Printf("MISSING VALUE\n");
 
-            if (key.equals(key1))
-                return value1;
-        }
+					return s;
+				}
 
-        return "";
-    }
+				var value1 = tk[++i];
 
-    /**
+				if (key.Equals(key1))
+					return value1;
+			}
+
+			return "";
+		}
+
+		/**
      * Sets a value for a key in the user info string.
      */
-    public static String Info_SetValueForKey(String s, String key, String value) {
+		public static string Info_SetValueForKey(string s, string key, string value)
+		{
+			if (value == null || value.Length == 0)
+				return s;
 
-        if (value == null || value.length() == 0)
-            return s;
+			if (key.IndexOf('\\') != -1 || value.IndexOf('\\') != -1)
+			{
+				Com.Printf("Can't use keys or values with a \\\n");
 
-        if (key.indexOf('\\') != -1 || value.indexOf('\\') != -1) {
-            Com.Printf("Can't use keys or values with a \\\n");
-            return s;
-        }
+				return s;
+			}
 
-        if (key.indexOf(';') != -1) {
-            Com.Printf("Can't use keys or values with a semicolon\n");
-            return s;
-        }
+			if (key.IndexOf(';') != -1)
+			{
+				Com.Printf("Can't use keys or values with a semicolon\n");
 
-        if (key.indexOf('"') != -1 || value.indexOf('"') != -1) {
-            Com.Printf("Can't use keys or values with a \"\n");
-            return s;
-        }
+				return s;
+			}
 
-        if (key.length() > Defines.MAX_INFO_KEY - 1
-                || value.length() > Defines.MAX_INFO_KEY - 1) {
-            Com.Printf("Keys and values must be < 64 characters.\n");
-            return s;
-        }
+			if (key.IndexOf('"') != -1 || value.IndexOf('"') != -1)
+			{
+				Com.Printf("Can't use keys or values with a \"\n");
 
-        StringBuffer sb = new StringBuffer(Info_RemoveKey(s, key));
+				return s;
+			}
 
-        if (sb.length() + 2 + key.length() + value.length() > Defines.MAX_INFO_STRING) {
+			if (key.Length > Defines.MAX_INFO_KEY - 1 || value.Length > Defines.MAX_INFO_KEY - 1)
+			{
+				Com.Printf("Keys and values must be < 64 characters.\n");
 
-            Com.Printf("Info string length exceeded\n");
-            return s;
-        }
+				return s;
+			}
 
-        sb.append('\\').append(key).append('\\').append(value);
+			StringBuilder sb = new(Info.Info_RemoveKey(s, key));
 
-        return sb.toString();
-    }
+			if (sb.Length + 2 + key.Length + value.Length > Defines.MAX_INFO_STRING)
+			{
+				Com.Printf("Info string length exceeded\n");
 
-    /** 
+				return s;
+			}
+
+			sb.Append('\\').Append(key).Append('\\').Append(value);
+
+			return sb.ToString();
+		}
+
+		/** 
      * Removes a key and value from an info string. 
      */
-    public static String Info_RemoveKey(String s, String key) {
+		public static string Info_RemoveKey(string s, string key)
+		{
+			StringBuilder sb = new(512);
 
-        StringBuffer sb = new StringBuffer(512);
+			if (key.IndexOf('\\') != -1)
+			{
+				Com.Printf("Can't use a key with a \\\n");
 
-        if (key.indexOf('\\') != -1) {
-            Com.Printf("Can't use a key with a \\\n");
-            return s;
-        }
+				return s;
+			}
 
-        StringTokenizer tk = new StringTokenizer(s, "\\");
+			var tk = s.Trim('\\').Split('\\');
 
-        while (tk.hasMoreTokens()) {
-            String key1 = tk.nextToken();
+			if (tk.Length == 1 && tk[0] == "")
+				return sb.ToString();
 
-            if (!tk.hasMoreTokens()) {
-                Com.Printf("MISSING VALUE\n");
-                return s;
-            }
-            String value1 = tk.nextToken();
+			for (var i = 0; i < tk.Length; i++)
+			{
+				var key1 = tk[i];
 
-            if (!key.equals(key1))
-                sb.append('\\').append(key1).append('\\').append(value1);
-        }
+				if (i + 1 == tk.Length)
+				{
+					Com.Printf("MISSING VALUE\n");
 
-        return sb.toString();
+					return s;
+				}
 
-    }
+				var value1 = tk[++i];
 
-    /**
+				if (!key.Equals(key1))
+					sb.Append('\\').Append(key1).Append('\\').Append(value1);
+			}
+
+			return sb.ToString();
+		}
+
+		/**
      * Some characters are illegal in info strings because they can mess up the
      * server's parsing.
      */
-    public static boolean Info_Validate(String s) {
-        return !((s.indexOf('"') != -1) || (s.indexOf(';') != -1));
-    }
+		public static bool Info_Validate(string s)
+		{
+			return !((s.IndexOf('"') != -1) || (s.IndexOf(';') != -1));
+		}
 
-    private static String fillspaces = "                     ";
+		private static readonly string fillspaces = "                     ";
 
-    public static void Print(String s) {
+		public static void Print(string s)
+		{
+			StringBuilder sb = new(512);
+			var tk = s.Trim('\\').Split('\\');
 
-        StringBuffer sb = new StringBuffer(512);
-        StringTokenizer tk = new StringTokenizer(s, "\\");
+			if (tk.Length == 1 && tk[0] == "")
+			{
+				Com.Printf(sb.ToString());
 
-        while (tk.hasMoreTokens()) {
+				return;
+			}
 
-            String key1 = tk.nextToken();
+			for (var i = 0; i < tk.Length; i++)
+			{
+				var key1 = tk[i];
 
-            if (!tk.hasMoreTokens()) {
-                Com.Printf("MISSING VALUE\n");
-                return;
-            }
+				if (i + 1 == tk.Length)
+				{
+					Com.Printf("MISSING VALUE\n");
 
-            String value1 = tk.nextToken();
+					return;
+				}
 
-            sb.append(key1);
+				var value1 = tk[++i];
 
-            int len = key1.length();
+				sb.Append(key1);
 
-            if (len < 20) {
-                sb.append(fillspaces.substring(len));
-            }
-            sb.append('=').append(value1).append('\n');
-        }
-        Com.Printf(sb.toString());
-    }
+				var len = key1.Length;
+
+				if (len < 20)
+				{
+					sb.Append(Info.fillspaces.Substring(len));
+				}
+
+				sb.Append('=').Append(value1).Append('\n');
+			}
+
+			Com.Printf(sb.ToString());
+		}
+	}
 }

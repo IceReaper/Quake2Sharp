@@ -1,777 +1,851 @@
 /*
- * Copyright (C) 1997-2001 Id Software, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *  
- */
+Copyright (C) 1997-2001 Id Software, Inc.
 
-// Created on 04.11.2003 by RST.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-package jake2.game;
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-import jake2.Defines;
-import jake2.qcommon.Com;
-import jake2.util.Lib;
-import jake2.util.QuakeFile;
+See the GNU General Public License for more details.
 
-import java.io.IOException;
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-public class edict_t {
+*/
 
-    /** Constructor. */
-    public edict_t(int i) {
-        s.number = i;
-        index = i;
-    }
+namespace Quake2Sharp.game
+{
+	using Quake2Sharp;
+	using qcommon;
+	using util;
+	using System;
+	using System.IO;
 
-    /** Used during level loading. */
-    public void cleararealinks() {
-        area = new link_t(this);
-    }
+	public class edict_t
+	{
+		/** Constructor. */
+		public edict_t(int i)
+		{
+			this.s = new entity_state_t(this);
+			this.s.number = i;
+			this.index = i;
+			this.area = new link_t(this);
+		}
 
-    /** Integrated entity state. */
-    public entity_state_t s = new entity_state_t(this);
+		/** Used during level loading. */
+		public void cleararealinks()
+		{
+			this.area = new link_t(this);
+		}
 
-    public boolean inuse;
+		/** Integrated entity state. */
+		public entity_state_t s;
 
-    public int linkcount;
+		public bool inuse;
 
-    /**
+		public int linkcount;
+
+		/**
      * FIXME: move these fields to a server private sv_entity_t. linked to a
      * division node or leaf.
      */
-    public link_t area = new link_t(this);
+		public link_t area;
 
-    /** if -1, use headnode instead. */
-    public int num_clusters;
+		/** if -1, use headnode instead. */
+		public int num_clusters;
 
-    public int clusternums[] = new int[Defines.MAX_ENT_CLUSTERS];
+		public int[] clusternums = new int[Defines.MAX_ENT_CLUSTERS];
 
-    /** unused if num_clusters != -1. */
-    public int headnode;
+		/** unused if num_clusters != -1. */
+		public int headnode;
 
-    public int areanum, areanum2;
+		public int areanum, areanum2;
 
-    //================================
+		//================================
 
-    /** SVF_NOCLIENT, SVF_DEADMONSTER, SVF_MONSTER, etc. */
-    public int svflags;
+		/** SVF_NOCLIENT, SVF_DEADMONSTER, SVF_MONSTER, etc. */
+		public int svflags;
 
-    public float[] mins = { 0, 0, 0 };
+		public float[] mins = {0, 0, 0};
 
-    public float[] maxs = { 0, 0, 0 };
+		public float[] maxs = {0, 0, 0};
 
-    public float[] absmin = { 0, 0, 0 };
+		public float[] absmin = {0, 0, 0};
 
-    public float[] absmax = { 0, 0, 0 };
+		public float[] absmax = {0, 0, 0};
 
-    public float[] size = { 0, 0, 0 };
+		public float[] size = {0, 0, 0};
 
-    public int solid;
+		public int solid;
 
-    public int clipmask;
+		public int clipmask;
 
-    //================================
-    public int movetype;
+		//================================
+		public int movetype;
 
-    public int flags;
+		public int flags;
 
-    public String model = null;
+		public string model;
 
-    /** sv.time when the object was freed. */
-    public float freetime;
+		/** sv.time when the object was freed. */
+		public float freetime;
 
-    //
-    // only used locally in game, not by server
-    //
-    public String message = null;
+		//
+		// only used locally in game, not by server
+		//
+		public string message;
 
-    public String classname = "";
+		public string classname = "";
 
-    public int spawnflags;
+		public int spawnflags;
 
-    public float timestamp;
+		public float timestamp;
 
-    /** set in qe3, -1 = up, -2 = down */
-    public float angle;
+		/** set in qe3, -1 = up, -2 = down */
+		public float angle;
 
-    public String target = null;
+		public string target;
 
-    public String targetname = null;
+		public string targetname;
 
-    public String killtarget = null;
+		public string killtarget;
 
-    public String team = null;
+		public string team;
 
-    public String pathtarget = null;
+		public string pathtarget;
 
-    public String deathtarget = null;
+		public string deathtarget;
 
-    public String combattarget = null;
+		public string combattarget;
 
-    public edict_t target_ent = null;
+		public edict_t target_ent;
 
-    public float speed, accel, decel;
+		public float speed, accel, decel;
 
-    public float[] movedir = { 0, 0, 0 };
+		public float[] movedir = {0, 0, 0};
 
-    public float[] pos1 = { 0, 0, 0 };
+		public float[] pos1 = {0, 0, 0};
 
-    public float[] pos2 = { 0, 0, 0 };
+		public float[] pos2 = {0, 0, 0};
 
-    public float[] velocity = { 0, 0, 0 };
+		public float[] velocity = {0, 0, 0};
 
-    public float[] avelocity = { 0, 0, 0 };
+		public float[] avelocity = {0, 0, 0};
 
-    public int mass;
+		public int mass;
 
-    public float air_finished;
+		public float air_finished;
 
-    /** per entity gravity multiplier (1.0 is normal). */
-    public float gravity;
+		/** per entity gravity multiplier (1.0 is normal). */
+		public float gravity;
 
-    /** use for lowgrav artifact, flares. */
+		/** use for lowgrav artifact, flares. */
+		public edict_t goalentity;
 
-    public edict_t goalentity = null;
+		public edict_t movetarget;
 
-    public edict_t movetarget = null;
+		public float yaw_speed;
 
-    public float yaw_speed;
+		public float ideal_yaw;
 
-    public float ideal_yaw;
+		public float nextthink;
 
-    public float nextthink;
+		public EntThinkAdapter prethink;
 
-    public EntThinkAdapter prethink = null;
+		public EntThinkAdapter think;
 
-    public EntThinkAdapter think = null;
+		public EntBlockedAdapter blocked;
 
-    public EntBlockedAdapter blocked = null;
+		public EntTouchAdapter touch;
 
-    public EntTouchAdapter touch = null;
+		public EntUseAdapter use;
 
-    public EntUseAdapter use = null;
+		public EntPainAdapter pain;
 
-    public EntPainAdapter pain = null;
+		public EntDieAdapter die;
 
-    public EntDieAdapter die = null;
+		/** Are all these legit? do we need more/less of them? */
+		public float touch_debounce_time;
 
-    /** Are all these legit? do we need more/less of them? */
-    public float touch_debounce_time;
+		public float pain_debounce_time;
 
-    public float pain_debounce_time;
+		public float damage_debounce_time;
 
-    public float damage_debounce_time;
+		/** Move to clientinfo. */
+		public float fly_sound_debounce_time;
 
-    /** Move to clientinfo. */
-    public float fly_sound_debounce_time;
+		public float last_move_time;
 
-    public float last_move_time;
+		public int health;
 
-    public int health;
+		public int max_health;
 
-    public int max_health;
+		public int gib_health;
 
-    public int gib_health;
+		public int deadflag;
 
-    public int deadflag;
+		public int show_hostile;
 
-    public int show_hostile;
+		public float powerarmor_time;
 
-    public float powerarmor_time;
+		/** target_changelevel. */
+		public string map;
 
-    /** target_changelevel. */
-    public String map = null;
+		/** Height above origin where eyesight is determined. */
+		public int viewheight;
 
-    /** Height above origin where eyesight is determined. */
-    public int viewheight;
+		public int takedamage;
 
-    public int takedamage;
+		public int dmg;
 
-    public int dmg;
+		public int radius_dmg;
 
-    public int radius_dmg;
+		public float dmg_radius;
 
-    public float dmg_radius;
+		/** make this a spawntemp var? */
+		public int sounds;
 
-    /** make this a spawntemp var? */
-    public int sounds;
+		public int count;
 
-    public int count;
+		public edict_t chain;
 
-    public edict_t chain = null;
+		public edict_t enemy;
 
-    public edict_t enemy = null;
+		public edict_t oldenemy;
 
-    public edict_t oldenemy = null;
+		public edict_t activator;
 
-    public edict_t activator = null;
+		public edict_t groundentity;
 
-    public edict_t groundentity = null;
+		public int groundentity_linkcount;
 
-    public int groundentity_linkcount;
+		public edict_t teamchain;
 
-    public edict_t teamchain = null;
+		public edict_t teammaster;
 
-    public edict_t teammaster = null;
+		/** can go in client only. */
+		public edict_t mynoise;
 
-    /** can go in client only. */
-    public edict_t mynoise = null;
+		public edict_t mynoise2;
 
-    public edict_t mynoise2 = null;
+		public int noise_index;
 
-    public int noise_index;
+		public int noise_index2;
 
-    public int noise_index2;
+		public float volume;
 
-    public float volume;
+		public float attenuation;
 
-    public float attenuation;
+		/** Timing variables. */
+		public float wait;
 
-    /** Timing variables. */
-    public float wait;
+		/** before firing targets... */
+		public float delay;
 
-    /** before firing targets... */
-    public float delay;
+		public float random;
 
-    public float random;
+		public float teleport_time;
 
-    public float teleport_time;
+		public int watertype;
 
-    public int watertype;
+		public int waterlevel;
 
-    public int waterlevel;
+		public float[] move_origin = {0, 0, 0};
 
-    public float[] move_origin = { 0, 0, 0 };
+		public float[] move_angles = {0, 0, 0};
 
-    public float[] move_angles = { 0, 0, 0 };
+		/** move this to clientinfo? . */
+		public int light_level;
 
-    /** move this to clientinfo? . */
-    public int light_level;
+		/** also used as areaportal number. */
+		public int style;
 
-    /** also used as areaportal number. */
-    public int style;
+		public gitem_t item; // for bonus items
 
-    public gitem_t item; // for bonus items
+		/** common integrated data blocks. */
+		public moveinfo_t moveinfo = new();
 
-    /** common integrated data blocks. */
-    public moveinfo_t moveinfo = new moveinfo_t();
+		public monsterinfo_t monsterinfo = new();
 
-    public monsterinfo_t monsterinfo = new monsterinfo_t();
+		public gclient_t client;
 
-    public gclient_t client;
+		public edict_t owner;
 
-    public edict_t owner;
+		/** Introduced by rst. */
+		public int index;
 
-    /** Introduced by rst. */
-    public int index;
+		/////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////
+		public bool setField(string key, string value)
+		{
+			if (key.Equals("classname"))
+			{
+				this.classname = GameSpawn.ED_NewString(value);
 
-    public boolean setField(String key, String value) {
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("classname")) {
-            classname = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+			if (key.Equals("model"))
+			{
+				this.model = GameSpawn.ED_NewString(value);
 
-        if (key.equals("model")) {
-            model = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("spawnflags")) {
-            spawnflags = Lib.atoi(value);
-            return true;
-        } // F_INT),
+			if (key.Equals("spawnflags"))
+			{
+				this.spawnflags = Lib.atoi(value);
 
-        if (key.equals("speed")) {
-            speed = Lib.atof(value);
-            return true;
-        } // F_FLOAT),
+				return true;
+			} // F_INT),
 
-        if (key.equals("accel")) {
-            accel = Lib.atof(value);
-            return true;
-        } // F_FLOAT),
+			if (key.Equals("speed"))
+			{
+				this.speed = Lib.atof(value);
 
-        if (key.equals("decel")) {
-            decel = Lib.atof(value);
-            return true;
-        } // F_FLOAT),
+				return true;
+			} // F_FLOAT),
 
-        if (key.equals("target")) {
-            target = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+			if (key.Equals("accel"))
+			{
+				this.accel = Lib.atof(value);
 
-        if (key.equals("targetname")) {
-            targetname = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+				return true;
+			} // F_FLOAT),
 
-        if (key.equals("pathtarget")) {
-            pathtarget = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+			if (key.Equals("decel"))
+			{
+				this.decel = Lib.atof(value);
 
-        if (key.equals("deathtarget")) {
-            deathtarget = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
-        if (key.equals("killtarget")) {
-            killtarget = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+				return true;
+			} // F_FLOAT),
 
-        if (key.equals("combattarget")) {
-            combattarget = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+			if (key.Equals("target"))
+			{
+				this.target = GameSpawn.ED_NewString(value);
 
-        if (key.equals("message")) {
-            message = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("team")) {
-            team = GameSpawn.ED_NewString(value);
-            Com.dprintln("Monster Team:" + team);
-            return true;
-        } // F_LSTRING),
+			if (key.Equals("targetname"))
+			{
+				this.targetname = GameSpawn.ED_NewString(value);
 
-        if (key.equals("wait")) {
-            wait = Lib.atof(value);
-            return true;
-        } // F_FLOAT),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("delay")) {
-            delay = Lib.atof(value);
-            return true;
-        } // F_FLOAT),
+			if (key.Equals("pathtarget"))
+			{
+				this.pathtarget = GameSpawn.ED_NewString(value);
 
-        if (key.equals("random")) {
-            random = Lib.atof(value);
-            return true;
-        } // F_FLOAT),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("move_origin")) {
-            move_origin = Lib.atov(value);
-            return true;
-        } // F_VECTOR),
+			if (key.Equals("deathtarget"))
+			{
+				this.deathtarget = GameSpawn.ED_NewString(value);
 
-        if (key.equals("move_angles")) {
-            move_angles = Lib.atov(value);
-            return true;
-        } // F_VECTOR),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("style")) {
-            style = Lib.atoi(value);
-            return true;
-        } // F_INT),
+			if (key.Equals("killtarget"))
+			{
+				this.killtarget = GameSpawn.ED_NewString(value);
 
-        if (key.equals("count")) {
-            count = Lib.atoi(value);
-            return true;
-        } // F_INT),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("health")) {
-            health = Lib.atoi(value);
-            return true;
-        } // F_INT),
+			if (key.Equals("combattarget"))
+			{
+				this.combattarget = GameSpawn.ED_NewString(value);
 
-        if (key.equals("sounds")) {
-            sounds = Lib.atoi(value);
-            return true;
-        } // F_INT),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("light")) {
-            return true;
-        } // F_IGNORE),
+			if (key.Equals("message"))
+			{
+				this.message = GameSpawn.ED_NewString(value);
 
-        if (key.equals("dmg")) {
-            dmg = Lib.atoi(value);
-            return true;
-        } // F_INT),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("mass")) {
-            mass = Lib.atoi(value);
-            return true;
-        } // F_INT),
+			if (key.Equals("team"))
+			{
+				this.team = GameSpawn.ED_NewString(value);
+				Com.dprintln("Monster Team:" + this.team);
 
-        if (key.equals("volume")) {
-            volume = Lib.atof(value);
-            return true;
-        } // F_FLOAT),
+				return true;
+			} // F_LSTRING),
 
-        if (key.equals("attenuation")) {
-            attenuation = Lib.atof(value);
-            return true;
-        } // F_FLOAT),
+			if (key.Equals("wait"))
+			{
+				this.wait = Lib.atof(value);
 
-        if (key.equals("map")) {
-            map = GameSpawn.ED_NewString(value);
-            return true;
-        } // F_LSTRING),
+				return true;
+			} // F_FLOAT),
 
-        if (key.equals("origin")) {
-            s.origin = Lib.atov(value);
-            return true;
-        } // F_VECTOR),
+			if (key.Equals("delay"))
+			{
+				this.delay = Lib.atof(value);
 
-        if (key.equals("angles")) {
-            s.angles = Lib.atov(value);
-            return true;
-        } // F_VECTOR),
+				return true;
+			} // F_FLOAT),
 
-        if (key.equals("angle")) {
-            s.angles = new float[] { 0, Lib.atof(value), 0 };
-            return true;
-        } // F_ANGLEHACK),
+			if (key.Equals("random"))
+			{
+				this.random = Lib.atof(value);
 
-        if (key.equals("item")) {
-            GameBase.gi.error("ent.set(\"item\") called.");
-            return true;
-        } // F_ITEM)
+				return true;
+			} // F_FLOAT),
 
-        return false;
-    }
+			if (key.Equals("move_origin"))
+			{
+				this.move_origin = Lib.atov(value);
 
-    /** Writes the entity to the file. */
-    public void write(QuakeFile f) throws IOException {
+				return true;
+			} // F_VECTOR),
 
-        s.write(f);
-        f.writeBoolean(inuse);
-        f.writeInt(linkcount);
-        f.writeInt(num_clusters);
+			if (key.Equals("move_angles"))
+			{
+				this.move_angles = Lib.atov(value);
 
-        f.writeInt(9999);
+				return true;
+			} // F_VECTOR),
 
-        if (clusternums == null)
-            f.writeInt(-1);
-        else {
-            f.writeInt(Defines.MAX_ENT_CLUSTERS);
-            for (int n = 0; n < Defines.MAX_ENT_CLUSTERS; n++)
-                f.writeInt(clusternums[n]);
+			if (key.Equals("style"))
+			{
+				this.style = Lib.atoi(value);
 
-        }
-        f.writeInt(headnode);
-        f.writeInt(areanum);
-        f.writeInt(areanum2);
-        f.writeInt(svflags);
-        f.writeVector(mins);
-        f.writeVector(maxs);
-        f.writeVector(absmin);
-        f.writeVector(absmax);
-        f.writeVector(size);
-        f.writeInt(solid);
-        f.writeInt(clipmask);
+				return true;
+			} // F_INT),
 
-        f.writeInt(movetype);
-        f.writeInt(flags);
+			if (key.Equals("count"))
+			{
+				this.count = Lib.atoi(value);
 
-        f.writeString(model);
-        f.writeFloat(freetime);
-        f.writeString(message);
-        f.writeString(classname);
-        f.writeInt(spawnflags);
-        f.writeFloat(timestamp);
+				return true;
+			} // F_INT),
 
-        f.writeFloat(angle);
+			if (key.Equals("health"))
+			{
+				this.health = Lib.atoi(value);
 
-        f.writeString(target);
-        f.writeString(targetname);
-        f.writeString(killtarget);
-        f.writeString(team);
-        f.writeString(pathtarget);
-        f.writeString(deathtarget);
-        f.writeString(combattarget);
+				return true;
+			} // F_INT),
 
-        f.writeEdictRef(target_ent);
+			if (key.Equals("sounds"))
+			{
+				this.sounds = Lib.atoi(value);
 
-        f.writeFloat(speed);
-        f.writeFloat(accel);
-        f.writeFloat(decel);
+				return true;
+			} // F_INT),
 
-        f.writeVector(movedir);
+			if (key.Equals("light"))
+			{
+				return true;
+			} // F_IGNORE),
 
-        f.writeVector(pos1);
-        f.writeVector(pos2);
+			if (key.Equals("dmg"))
+			{
+				this.dmg = Lib.atoi(value);
 
-        f.writeVector(velocity);
-        f.writeVector(avelocity);
+				return true;
+			} // F_INT),
 
-        f.writeInt(mass);
-        f.writeFloat(air_finished);
+			if (key.Equals("mass"))
+			{
+				this.mass = Lib.atoi(value);
 
-        f.writeFloat(gravity);
+				return true;
+			} // F_INT),
 
-        f.writeEdictRef(goalentity);
-        f.writeEdictRef(movetarget);
+			if (key.Equals("volume"))
+			{
+				this.volume = Lib.atof(value);
 
-        f.writeFloat(yaw_speed);
-        f.writeFloat(ideal_yaw);
+				return true;
+			} // F_FLOAT),
 
-        f.writeFloat(nextthink);
+			if (key.Equals("attenuation"))
+			{
+				this.attenuation = Lib.atof(value);
 
-        f.writeAdapter(prethink);
-        f.writeAdapter(think);
-        f.writeAdapter(blocked);
+				return true;
+			} // F_FLOAT),
 
-        f.writeAdapter(touch);
-        f.writeAdapter(use);
-        f.writeAdapter(pain);
-        f.writeAdapter(die);
+			if (key.Equals("map"))
+			{
+				this.map = GameSpawn.ED_NewString(value);
 
-        f.writeFloat(touch_debounce_time);
-        f.writeFloat(pain_debounce_time);
-        f.writeFloat(damage_debounce_time);
+				return true;
+			} // F_LSTRING),
 
-        f.writeFloat(fly_sound_debounce_time);
-        f.writeFloat(last_move_time);
+			if (key.Equals("origin"))
+			{
+				this.s.origin = Lib.atov(value);
 
-        f.writeInt(health);
-        f.writeInt(max_health);
+				return true;
+			} // F_VECTOR),
 
-        f.writeInt(gib_health);
-        f.writeInt(deadflag);
-        f.writeInt(show_hostile);
+			if (key.Equals("angles"))
+			{
+				this.s.angles = Lib.atov(value);
 
-        f.writeFloat(powerarmor_time);
+				return true;
+			} // F_VECTOR),
 
-        f.writeString(map);
+			if (key.Equals("angle"))
+			{
+				this.s.angles = new float[] {0, Lib.atof(value), 0};
 
-        f.writeInt(viewheight);
-        f.writeInt(takedamage);
-        f.writeInt(dmg);
-        f.writeInt(radius_dmg);
-        f.writeFloat(dmg_radius);
+				return true;
+			} // F_ANGLEHACK),
 
-        f.writeInt(sounds);
-        f.writeInt(count);
+			if (key.Equals("item"))
+			{
+				GameBase.gi.error("ent.set(\"item\") called.");
 
-        f.writeEdictRef(chain);
-        f.writeEdictRef(enemy);
-        f.writeEdictRef(oldenemy);
-        f.writeEdictRef(activator);
-        f.writeEdictRef(groundentity);
-        f.writeInt(groundentity_linkcount);
-        f.writeEdictRef(teamchain);
-        f.writeEdictRef(teammaster);
+				return true;
+			} // F_ITEM)
 
-        f.writeEdictRef(mynoise);
-        f.writeEdictRef(mynoise2);
+			return false;
+		}
 
-        f.writeInt(noise_index);
-        f.writeInt(noise_index2);
+		/** Writes the entity to the file. */
+		public void write(BinaryWriter f)
+		{
+			this.s.write(f);
+			f.Write(this.inuse);
+			f.Write(this.linkcount);
+			f.Write(this.num_clusters);
 
-        f.writeFloat(volume);
-        f.writeFloat(attenuation);
-        f.writeFloat(wait);
-        f.writeFloat(delay);
-        f.writeFloat(random);
+			f.Write(9999);
 
-        f.writeFloat(teleport_time);
+			if (this.clusternums == null)
+				f.Write(-1);
+			else
+			{
+				f.Write(Defines.MAX_ENT_CLUSTERS);
 
-        f.writeInt(watertype);
-        f.writeInt(waterlevel);
-        f.writeVector(move_origin);
-        f.writeVector(move_angles);
+				for (var n = 0; n < Defines.MAX_ENT_CLUSTERS; n++)
+					f.Write(this.clusternums[n]);
+			}
 
-        f.writeInt(light_level);
-        f.writeInt(style);
+			f.Write(this.headnode);
+			f.Write(this.areanum);
+			f.Write(this.areanum2);
+			f.Write(this.svflags);
+			f.Write(this.mins);
+			f.Write(this.maxs);
+			f.Write(this.absmin);
+			f.Write(this.absmax);
+			f.Write(this.size);
+			f.Write(this.solid);
+			f.Write(this.clipmask);
 
-        f.writeItem(item);
+			f.Write(this.movetype);
+			f.Write(this.flags);
 
-        moveinfo.write(f);
-        monsterinfo.write(f);
-        if (client == null)
-            f.writeInt(-1);
-        else
-            f.writeInt(client.index);
+			f.WriteQ(this.model);
+			f.Write(this.freetime);
+			f.WriteQ(this.message);
+			f.WriteQ(this.classname);
+			f.Write(this.spawnflags);
+			f.Write(this.timestamp);
 
-        f.writeEdictRef(owner);
+			f.Write(this.angle);
 
-        // rst's checker :-)
-        f.writeInt(9876);
-    }
+			f.WriteQ(this.target);
+			f.WriteQ(this.targetname);
+			f.WriteQ(this.killtarget);
+			f.WriteQ(this.team);
+			f.WriteQ(this.pathtarget);
+			f.WriteQ(this.deathtarget);
+			f.WriteQ(this.combattarget);
 
-    /** Reads the entity from the file. */
-    public void read(QuakeFile f) throws IOException {
-        s.read(f);
-        inuse = f.readBoolean();
-        linkcount = f.readInt();
-        num_clusters = f.readInt();
+			f.Write(this.target_ent);
 
-        if (f.readInt() != 9999)
-            new Throwable("wrong read pos!").printStackTrace();
+			f.Write(this.speed);
+			f.Write(this.accel);
+			f.Write(this.decel);
 
-        int len = f.readInt();
+			f.Write(this.movedir);
 
-        if (len == -1)
-            clusternums = null;
-        else {
-            clusternums = new int[Defines.MAX_ENT_CLUSTERS];
-            for (int n = 0; n < Defines.MAX_ENT_CLUSTERS; n++)
-                clusternums[n] = f.readInt();
-        }
+			f.Write(this.pos1);
+			f.Write(this.pos2);
 
-        headnode = f.readInt();
-        areanum = f.readInt();
-        areanum2 = f.readInt();
-        svflags = f.readInt();
-        mins = f.readVector();
-        maxs = f.readVector();
-        absmin = f.readVector();
-        absmax = f.readVector();
-        size = f.readVector();
-        solid = f.readInt();
-        clipmask = f.readInt();
+			f.Write(this.velocity);
+			f.Write(this.avelocity);
 
-        movetype = f.readInt();
-        flags = f.readInt();
+			f.Write(this.mass);
+			f.Write(this.air_finished);
 
-        model = f.readString();
-        freetime = f.readFloat();
-        message = f.readString();
-        classname = f.readString();
-        spawnflags = f.readInt();
-        timestamp = f.readFloat();
+			f.Write(this.gravity);
 
-        angle = f.readFloat();
+			f.Write(this.goalentity);
+			f.Write(this.movetarget);
 
-        target = f.readString();
-        targetname = f.readString();
-        killtarget = f.readString();
-        team = f.readString();
-        pathtarget = f.readString();
-        deathtarget = f.readString();
-        combattarget = f.readString();
+			f.Write(this.yaw_speed);
+			f.Write(this.ideal_yaw);
 
-        target_ent = f.readEdictRef();
+			f.Write(this.nextthink);
 
-        speed = f.readFloat();
-        accel = f.readFloat();
-        decel = f.readFloat();
+			f.Write(this.prethink);
+			f.Write(this.think);
+			f.Write(this.blocked);
 
-        movedir = f.readVector();
+			f.Write(this.touch);
+			f.Write(this.use);
+			f.Write(this.pain);
+			f.Write(this.die);
 
-        pos1 = f.readVector();
-        pos2 = f.readVector();
+			f.Write(this.touch_debounce_time);
+			f.Write(this.pain_debounce_time);
+			f.Write(this.damage_debounce_time);
 
-        velocity = f.readVector();
-        avelocity = f.readVector();
+			f.Write(this.fly_sound_debounce_time);
+			f.Write(this.last_move_time);
 
-        mass = f.readInt();
-        air_finished = f.readFloat();
+			f.Write(this.health);
+			f.Write(this.max_health);
 
-        gravity = f.readFloat();
+			f.Write(this.gib_health);
+			f.Write(this.deadflag);
+			f.Write(this.show_hostile);
 
-        goalentity = f.readEdictRef();
-        movetarget = f.readEdictRef();
+			f.Write(this.powerarmor_time);
 
-        yaw_speed = f.readFloat();
-        ideal_yaw = f.readFloat();
+			f.WriteQ(this.map);
 
-        nextthink = f.readFloat();
+			f.Write(this.viewheight);
+			f.Write(this.takedamage);
+			f.Write(this.dmg);
+			f.Write(this.radius_dmg);
+			f.Write(this.dmg_radius);
 
-        prethink = (EntThinkAdapter) f.readAdapter();
-        think = (EntThinkAdapter) f.readAdapter();
-        blocked = (EntBlockedAdapter) f.readAdapter();
+			f.Write(this.sounds);
+			f.Write(this.count);
 
-        touch = (EntTouchAdapter) f.readAdapter();
-        use = (EntUseAdapter) f.readAdapter();
-        pain = (EntPainAdapter) f.readAdapter();
-        die = (EntDieAdapter) f.readAdapter();
+			f.Write(this.chain);
+			f.Write(this.enemy);
+			f.Write(this.oldenemy);
+			f.Write(this.activator);
+			f.Write(this.groundentity);
+			f.Write(this.groundentity_linkcount);
+			f.Write(this.teamchain);
+			f.Write(this.teammaster);
 
-        touch_debounce_time = f.readFloat();
-        pain_debounce_time = f.readFloat();
-        damage_debounce_time = f.readFloat();
+			f.Write(this.mynoise);
+			f.Write(this.mynoise2);
 
-        fly_sound_debounce_time = f.readFloat();
-        last_move_time = f.readFloat();
+			f.Write(this.noise_index);
+			f.Write(this.noise_index2);
 
-        health = f.readInt();
-        max_health = f.readInt();
+			f.Write(this.volume);
+			f.Write(this.attenuation);
+			f.Write(this.wait);
+			f.Write(this.delay);
+			f.Write(this.random);
 
-        gib_health = f.readInt();
-        deadflag = f.readInt();
-        show_hostile = f.readInt();
+			f.Write(this.teleport_time);
 
-        powerarmor_time = f.readFloat();
+			f.Write(this.watertype);
+			f.Write(this.waterlevel);
+			f.Write(this.move_origin);
+			f.Write(this.move_angles);
 
-        map = f.readString();
+			f.Write(this.light_level);
+			f.Write(this.style);
 
-        viewheight = f.readInt();
-        takedamage = f.readInt();
-        dmg = f.readInt();
-        radius_dmg = f.readInt();
-        dmg_radius = f.readFloat();
+			f.Write(this.item);
 
-        sounds = f.readInt();
-        count = f.readInt();
+			this.moveinfo.write(f);
+			this.monsterinfo.write(f);
 
-        chain = f.readEdictRef();
-        enemy = f.readEdictRef();
+			if (this.client == null)
+				f.Write(-1);
+			else
+				f.Write(this.client.index);
 
-        oldenemy = f.readEdictRef();
-        activator = f.readEdictRef();
-        groundentity = f.readEdictRef();
+			f.Write(this.owner);
 
-        groundentity_linkcount = f.readInt();
-        teamchain = f.readEdictRef();
-        teammaster = f.readEdictRef();
+			// rst's checker :-)
+			f.Write(9876);
+		}
 
-        mynoise = f.readEdictRef();
-        mynoise2 = f.readEdictRef();
+		/** Reads the entity from the file. */
+		public void read(BinaryReader f)
+		{
+			this.s.read(f);
+			this.inuse = f.ReadBoolean();
+			this.linkcount = f.ReadInt32();
+			this.num_clusters = f.ReadInt32();
 
-        noise_index = f.readInt();
-        noise_index2 = f.readInt();
+			if (f.ReadInt32() != 9999)
+				Console.WriteLine(new Exception("wrong read pos!"));
 
-        volume = f.readFloat();
-        attenuation = f.readFloat();
-        wait = f.readFloat();
-        delay = f.readFloat();
-        random = f.readFloat();
+			var len = f.ReadInt32();
 
-        teleport_time = f.readFloat();
+			if (len == -1)
+				this.clusternums = null;
+			else
+			{
+				this.clusternums = new int[Defines.MAX_ENT_CLUSTERS];
 
-        watertype = f.readInt();
-        waterlevel = f.readInt();
-        move_origin = f.readVector();
-        move_angles = f.readVector();
+				for (var n = 0; n < Defines.MAX_ENT_CLUSTERS; n++)
+					this.clusternums[n] = f.ReadInt32();
+			}
 
-        light_level = f.readInt();
-        style = f.readInt();
+			this.headnode = f.ReadInt32();
+			this.areanum = f.ReadInt32();
+			this.areanum2 = f.ReadInt32();
+			this.svflags = f.ReadInt32();
+			this.mins = f.ReadVector();
+			this.maxs = f.ReadVector();
+			this.absmin = f.ReadVector();
+			this.absmax = f.ReadVector();
+			this.size = f.ReadVector();
+			this.solid = f.ReadInt32();
+			this.clipmask = f.ReadInt32();
 
-        item = f.readItem();
+			this.movetype = f.ReadInt32();
+			this.flags = f.ReadInt32();
 
-        moveinfo.read(f);
-        monsterinfo.read(f);
+			this.model = f.ReadStringQ();
+			this.freetime = f.ReadSingle();
+			this.message = f.ReadStringQ();
+			this.classname = f.ReadStringQ();
+			this.spawnflags = f.ReadInt32();
+			this.timestamp = f.ReadSingle();
 
-        int ndx = f.readInt();
-        if (ndx == -1)
-            client = null;
-        else
-            client = GameBase.game.clients[ndx];
+			this.angle = f.ReadSingle();
 
-        owner = f.readEdictRef();
+			this.target = f.ReadStringQ();
+			this.targetname = f.ReadStringQ();
+			this.killtarget = f.ReadStringQ();
+			this.team = f.ReadStringQ();
+			this.pathtarget = f.ReadStringQ();
+			this.deathtarget = f.ReadStringQ();
+			this.combattarget = f.ReadStringQ();
 
-        // rst's checker :-)
-        if (f.readInt() != 9876)
-            System.err.println("ent load check failed for num " + index);
-    }
+			this.target_ent = f.ReadEdictRef();
+
+			this.speed = f.ReadSingle();
+			this.accel = f.ReadSingle();
+			this.decel = f.ReadSingle();
+
+			this.movedir = f.ReadVector();
+
+			this.pos1 = f.ReadVector();
+			this.pos2 = f.ReadVector();
+
+			this.velocity = f.ReadVector();
+			this.avelocity = f.ReadVector();
+
+			this.mass = f.ReadInt32();
+			this.air_finished = f.ReadSingle();
+
+			this.gravity = f.ReadSingle();
+
+			this.goalentity = f.ReadEdictRef();
+			this.movetarget = f.ReadEdictRef();
+
+			this.yaw_speed = f.ReadSingle();
+			this.ideal_yaw = f.ReadSingle();
+
+			this.nextthink = f.ReadSingle();
+
+			this.prethink = (EntThinkAdapter) f.ReadAdapter();
+			this.think = (EntThinkAdapter) f.ReadAdapter();
+			this.blocked = (EntBlockedAdapter) f.ReadAdapter();
+
+			this.touch = (EntTouchAdapter) f.ReadAdapter();
+			this.use = (EntUseAdapter) f.ReadAdapter();
+			this.pain = (EntPainAdapter) f.ReadAdapter();
+			this.die = (EntDieAdapter) f.ReadAdapter();
+
+			this.touch_debounce_time = f.ReadSingle();
+			this.pain_debounce_time = f.ReadSingle();
+			this.damage_debounce_time = f.ReadSingle();
+
+			this.fly_sound_debounce_time = f.ReadSingle();
+			this.last_move_time = f.ReadSingle();
+
+			this.health = f.ReadInt32();
+			this.max_health = f.ReadInt32();
+
+			this.gib_health = f.ReadInt32();
+			this.deadflag = f.ReadInt32();
+			this.show_hostile = f.ReadInt32();
+
+			this.powerarmor_time = f.ReadSingle();
+
+			this.map = f.ReadStringQ();
+
+			this.viewheight = f.ReadInt32();
+			this.takedamage = f.ReadInt32();
+			this.dmg = f.ReadInt32();
+			this.radius_dmg = f.ReadInt32();
+			this.dmg_radius = f.ReadSingle();
+
+			this.sounds = f.ReadInt32();
+			this.count = f.ReadInt32();
+
+			this.chain = f.ReadEdictRef();
+			this.enemy = f.ReadEdictRef();
+
+			this.oldenemy = f.ReadEdictRef();
+			this.activator = f.ReadEdictRef();
+			this.groundentity = f.ReadEdictRef();
+
+			this.groundentity_linkcount = f.ReadInt32();
+			this.teamchain = f.ReadEdictRef();
+			this.teammaster = f.ReadEdictRef();
+
+			this.mynoise = f.ReadEdictRef();
+			this.mynoise2 = f.ReadEdictRef();
+
+			this.noise_index = f.ReadInt32();
+			this.noise_index2 = f.ReadInt32();
+
+			this.volume = f.ReadSingle();
+			this.attenuation = f.ReadSingle();
+			this.wait = f.ReadSingle();
+			this.delay = f.ReadSingle();
+			this.random = f.ReadSingle();
+
+			this.teleport_time = f.ReadSingle();
+
+			this.watertype = f.ReadInt32();
+			this.waterlevel = f.ReadInt32();
+			this.move_origin = f.ReadVector();
+			this.move_angles = f.ReadVector();
+
+			this.light_level = f.ReadInt32();
+			this.style = f.ReadInt32();
+
+			this.item = f.ReadItem();
+
+			this.moveinfo.read(f);
+			this.monsterinfo.read(f);
+
+			var ndx = f.ReadInt32();
+
+			if (ndx == -1)
+				this.client = null;
+			else
+				this.client = GameBase.game.clients[ndx];
+
+			this.owner = f.ReadEdictRef();
+
+			// rst's checker :-)
+			if (f.ReadInt32() != 9876)
+				Console.Error.WriteLine("ent load check failed for num " + this.index);
+		}
+	}
 }

@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,143 +18,147 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 31.10.2003 by RST.
+namespace Quake2Sharp.game
+{
+	using Quake2Sharp;
+	using util;
+	using System;
+	using System.IO;
 
-package jake2.game;
+	public class client_persistant_t
+	{
+		public void set(client_persistant_t from)
+		{
+			this.userinfo = from.userinfo;
+			this.netname = from.netname;
+			this.hand = from.hand;
+			this.connected = from.connected;
+			this.health = from.health;
+			this.max_health = from.max_health;
+			this.savedFlags = from.savedFlags;
+			this.selected_item = from.selected_item;
+			Array.Copy(from.inventory, 0, this.inventory, 0, this.inventory.Length);
+			this.max_bullets = from.max_bullets;
+			this.max_shells = from.max_shells;
+			this.max_rockets = from.max_rockets;
+			this.max_grenades = from.max_grenades;
+			this.max_cells = from.max_cells;
+			this.max_slugs = from.max_slugs;
+			this.weapon = from.weapon;
+			this.lastweapon = from.lastweapon;
+			this.power_cubes = from.power_cubes;
+			this.score = from.score;
+			this.game_helpchanged = from.game_helpchanged;
+			this.helpchanged = from.helpchanged;
+			this.spectator = from.spectator;
+		}
 
-import jake2.Defines;
-import jake2.util.QuakeFile;
+		//	client data that stays across multiple level loads
+		public string userinfo = "";
+		public string netname = "";
+		public int hand;
 
-import java.io.IOException;
+		public bool connected; // a loadgame will leave valid entities that
 
-public class client_persistant_t {
+		// just don't have a connection yet
 
-	public void set(client_persistant_t from) {
-		
-		userinfo= from.userinfo;
-		netname= from.netname;
-		hand= from.hand;
-		connected= from.connected;
-		health= from.health;
-		max_health= from.max_health;
-		savedFlags= from.savedFlags;
-		selected_item= from.selected_item;
-		System.arraycopy(from.inventory, 0, inventory, 0, inventory.length);
-		max_bullets= from.max_bullets;
-		max_shells= from.max_shells;
-		max_rockets= from.max_rockets;
-		max_grenades= from.max_grenades;
-		max_cells= from.max_cells;
-		max_slugs= from.max_slugs;
-		weapon= from.weapon;
-		lastweapon= from.lastweapon;
-		power_cubes= from.power_cubes;
-		score= from.score;
-		game_helpchanged= from.game_helpchanged;
-		helpchanged= from.helpchanged;
-		spectator= from.spectator;
-	}
+		// values saved and restored from edicts when changing levels
+		public int health;
+		public int max_health;
+		public int savedFlags;
 
-	//	client data that stays across multiple level loads
-	String userinfo= "";
-	String netname= "";
-	int hand;
+		public int selected_item;
+		public int[] inventory = new int[Defines.MAX_ITEMS];
 
-	boolean connected; // a loadgame will leave valid entities that
-	// just don't have a connection yet
+		// ammo capacities
+		public int max_bullets;
+		public int max_shells;
+		public int max_rockets;
+		public int max_grenades;
+		public int max_cells;
 
-	// values saved and restored from edicts when changing levels
-	int health;
-	int max_health;
-	int savedFlags;
+		public int max_slugs;
 
-	int selected_item;
-	int inventory[]= new int[Defines.MAX_ITEMS];
+		//pointer
+		public gitem_t weapon;
 
-	// ammo capacities
-	public int max_bullets;
-	public int max_shells;
-	public int max_rockets;
-	public int max_grenades;
-	public int max_cells;
-	public int max_slugs;
-	//pointer
-	gitem_t weapon;
-	//pointer
-	gitem_t lastweapon;
-	int power_cubes; // used for tracking the cubes in coop games
-	int score; // for calculating total unit score in coop games
-	int game_helpchanged;
-	int helpchanged;
-	boolean spectator; // client is a spectator
+		//pointer
+		public gitem_t lastweapon;
+		public int power_cubes; // used for tracking the cubes in coop games
+		public int score; // for calculating total unit score in coop games
+		public int game_helpchanged;
+		public int helpchanged;
+		public bool spectator; // client is a spectator
 
-	/** Reads a client_persistant structure from a file. */
-	public void read(QuakeFile f) throws IOException {
+		/** Reads a client_persistant structure from a file. */
+		public void read(BinaryReader f)
+		{
+			this.userinfo = f.ReadStringQ();
+			this.netname = f.ReadStringQ();
 
-		userinfo= f.readString();
-		netname= f.readString();
+			this.hand = f.ReadInt32();
 
-		hand= f.readInt();
+			this.connected = f.ReadInt32() != 0;
+			this.health = f.ReadInt32();
 
-		connected= f.readInt() != 0;
-		health= f.readInt();
+			this.max_health = f.ReadInt32();
+			this.savedFlags = f.ReadInt32();
+			this.selected_item = f.ReadInt32();
 
-		max_health= f.readInt();
-		savedFlags= f.readInt();
-		selected_item= f.readInt();
+			for (var n = 0; n < Defines.MAX_ITEMS; n++)
+				this.inventory[n] = f.ReadInt32();
 
-		for (int n= 0; n < Defines.MAX_ITEMS; n++)
-			inventory[n]= f.readInt();
+			this.max_bullets = f.ReadInt32();
+			this.max_shells = f.ReadInt32();
+			this.max_rockets = f.ReadInt32();
+			this.max_grenades = f.ReadInt32();
+			this.max_cells = f.ReadInt32();
+			this.max_slugs = f.ReadInt32();
 
-		max_bullets= f.readInt();
-		max_shells= f.readInt();
-		max_rockets= f.readInt();
-		max_grenades= f.readInt();
-		max_cells= f.readInt();
-		max_slugs= f.readInt();
+			this.weapon = f.ReadItem();
+			this.lastweapon = f.ReadItem();
+			this.power_cubes = f.ReadInt32();
+			this.score = f.ReadInt32();
 
-		weapon= f.readItem();
-		lastweapon= f.readItem();
-		power_cubes= f.readInt();
-		score= f.readInt();
+			this.game_helpchanged = f.ReadInt32();
+			this.helpchanged = f.ReadInt32();
+			this.spectator = f.ReadInt32() != 0;
+		}
 
-		game_helpchanged= f.readInt();
-		helpchanged= f.readInt();
-		spectator= f.readInt() != 0;
-	}
+		/** Writes a client_persistant structure to a file. */
+		public void write(BinaryWriter f)
+		{
+			// client persistant_t
+			f.WriteQ(this.userinfo);
+			f.WriteQ(this.netname);
 
-	/** Writes a client_persistant structure to a file. */
-	public void write(QuakeFile f) throws IOException {
-		// client persistant_t
-		f.writeString(userinfo);
-		f.writeString(netname);
+			f.Write(this.hand);
 
-		f.writeInt(hand);
+			f.Write(this.connected ? 1 : 0);
+			f.Write(this.health);
 
-		f.writeInt(connected ? 1 : 0);
-		f.writeInt(health);
+			f.Write(this.max_health);
+			f.Write(this.savedFlags);
+			f.Write(this.selected_item);
 
-		f.writeInt(max_health);
-		f.writeInt(savedFlags);
-		f.writeInt(selected_item);
+			for (var n = 0; n < Defines.MAX_ITEMS; n++)
+				f.Write(this.inventory[n]);
 
-		for (int n= 0; n < Defines.MAX_ITEMS; n++)
-			f.writeInt(inventory[n]);
+			f.Write(this.max_bullets);
+			f.Write(this.max_shells);
+			f.Write(this.max_rockets);
+			f.Write(this.max_grenades);
+			f.Write(this.max_cells);
+			f.Write(this.max_slugs);
 
-		f.writeInt(max_bullets);
-		f.writeInt(max_shells);
-		f.writeInt(max_rockets);
-		f.writeInt(max_grenades);
-		f.writeInt(max_cells);
-		f.writeInt(max_slugs);
+			f.Write(this.weapon);
+			f.Write(this.lastweapon);
+			f.Write(this.power_cubes);
+			f.Write(this.score);
 
-		f.writeItem(weapon);
-		f.writeItem(lastweapon);
-		f.writeInt(power_cubes);
-		f.writeInt(score);
-
-		f.writeInt(game_helpchanged);
-		f.writeInt(helpchanged);
-		f.writeInt(spectator ? 1 : 0);
+			f.Write(this.game_helpchanged);
+			f.Write(this.helpchanged);
+			f.Write(this.spectator ? 1 : 0);
+		}
 	}
 }

@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,19 +18,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 07.11.2003 by RST.
-// $Id: EdictIterator.java,v 1.3 2005-02-06 18:55:16 salomo Exp $
-
-package jake2.game;
-
-/** Helps for iterating over the gedicts[] array. RST.*/
-
-public class EdictIterator
+namespace Quake2Sharp.game
 {
-	EdictIterator(int i)
+	/** Helps for iterating over the gedicts[] array. RST.*/
+	public class EdictIterator
 	{
-		this.i = i;
+		public EdictIterator(int i)
+		{
+			this.i = i;
+		}
+
+		public edict_t o;
+		public int i;
 	}
-	public edict_t o;
-	int i;
 }

@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,99 +18,99 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 31.10.2003 by RST.
-// $Id: moveinfo_t.java,v 1.2 2004-08-20 21:29:58 salomo Exp $
+namespace Quake2Sharp.game
+{
+	using util;
+	using System.IO;
 
-package jake2.game;
+	public class moveinfo_t
+	{
+		// fixed data
+		public float[] start_origin = {0, 0, 0};
+		public float[] start_angles = {0, 0, 0};
+		public float[] end_origin = {0, 0, 0};
+		public float[] end_angles = {0, 0, 0};
 
-import java.io.IOException;
+		public int sound_start;
+		public int sound_middle;
+		public int sound_end;
 
-import jake2.util.QuakeFile;
+		public float accel;
+		public float speed;
+		public float decel;
+		public float distance;
 
-public class moveinfo_t {
-	// fixed data
-	float[] start_origin= { 0, 0, 0 };
-	float[] start_angles= { 0, 0, 0 };
-	float[] end_origin= { 0, 0, 0 };
-	float[] end_angles= { 0, 0, 0 };
+		public float wait;
 
-	int sound_start;
-	int sound_middle;
-	int sound_end;
+		// state data
+		public int state;
+		public float[] dir = {0, 0, 0};
 
-	float accel;
-	float speed;
-	float decel;
-	float distance;
+		public float current_speed;
+		public float move_speed;
+		public float next_speed;
+		public float remaining_distance;
+		public float decel_distance;
+		public EntThinkAdapter endfunc;
 
-	float wait;
+		/** saves the moveinfo to the file.*/
+		public void write(BinaryWriter f)
+		{
+			f.Write(this.start_origin);
+			f.Write(this.start_angles);
+			f.Write(this.end_origin);
+			f.Write(this.end_angles);
 
-	// state data
-	int state;
-	float[] dir= { 0, 0, 0 };
+			f.Write(this.sound_start);
+			f.Write(this.sound_middle);
+			f.Write(this.sound_end);
 
-	float current_speed;
-	float move_speed;
-	float next_speed;
-	float remaining_distance;
-	float decel_distance;
-	EntThinkAdapter endfunc;
+			f.Write(this.accel);
+			f.Write(this.speed);
+			f.Write(this.decel);
+			f.Write(this.distance);
 
-	/** saves the moveinfo to the file.*/
-	public void write(QuakeFile f) throws IOException {
-		f.writeVector(start_origin);
-		f.writeVector(start_angles);
-		f.writeVector(end_origin);
-		f.writeVector(end_angles);
+			f.Write(this.wait);
 
-		f.writeInt(sound_start);
-		f.writeInt(sound_middle);
-		f.writeInt(sound_end);
+			f.Write(this.state);
+			f.Write(this.dir);
 
-		f.writeFloat(accel);
-		f.writeFloat(speed);
-		f.writeFloat(decel);
-		f.writeFloat(distance);
+			f.Write(this.current_speed);
+			f.Write(this.move_speed);
+			f.Write(this.next_speed);
+			f.Write(this.remaining_distance);
+			f.Write(this.decel_distance);
+			f.Write(this.endfunc);
+		}
 
-		f.writeFloat(wait);
+		/** Reads the moveinfo from a file. */
+		public void read(BinaryReader f)
+		{
+			this.start_origin = f.ReadVector();
+			this.start_angles = f.ReadVector();
+			this.end_origin = f.ReadVector();
+			this.end_angles = f.ReadVector();
 
-		f.writeInt(state);
-		f.writeVector(dir);
+			this.sound_start = f.ReadInt32();
+			this.sound_middle = f.ReadInt32();
+			this.sound_end = f.ReadInt32();
 
-		f.writeFloat(current_speed);
-		f.writeFloat(move_speed);
-		f.writeFloat(next_speed);
-		f.writeFloat(remaining_distance);
-		f.writeFloat(decel_distance);
-		f.writeAdapter(endfunc);
-	}
+			this.accel = f.ReadSingle();
+			this.speed = f.ReadSingle();
+			this.decel = f.ReadSingle();
+			this.distance = f.ReadSingle();
 
-	/** Reads the moveinfo from a file. */
-	public void read(QuakeFile f) throws IOException {
-		start_origin= f.readVector();
-		start_angles= f.readVector();
-		end_origin= f.readVector();
-		end_angles= f.readVector();
+			this.wait = f.ReadSingle();
 
-		sound_start= f.readInt();
-		sound_middle= f.readInt();
-		sound_end= f.readInt();
+			this.state = f.ReadInt32();
+			this.dir = f.ReadVector();
 
-		accel= f.readFloat();
-		speed= f.readFloat();
-		decel= f.readFloat();
-		distance= f.readFloat();
-
-		wait= f.readFloat();
-
-		state= f.readInt();
-		dir= f.readVector();
-
-		current_speed= f.readFloat();
-		move_speed= f.readFloat();
-		next_speed= f.readFloat();
-		remaining_distance= f.readFloat();
-		decel_distance= f.readFloat();
-		endfunc= (EntThinkAdapter) f.readAdapter();
+			this.current_speed = f.ReadSingle();
+			this.move_speed = f.ReadSingle();
+			this.next_speed = f.ReadSingle();
+			this.remaining_distance = f.ReadSingle();
+			this.decel_distance = f.ReadSingle();
+			this.endfunc = (EntThinkAdapter) f.ReadAdapter();
+		}
 	}
 }

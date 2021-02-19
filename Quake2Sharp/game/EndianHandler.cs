@@ -1,10 +1,4 @@
 /*
- * AbstractEndianHandler.java
- * Copyright (C) 2003
- * 
- * $Id: EndianHandler.java,v 1.2 2004-07-08 15:58:43 hzi Exp $
- */
-/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,54 +17,57 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.game;
 
-public abstract class EndianHandler
+namespace Quake2Sharp.game
 {
-	private static final int mask = 0xFF;
+	using System;
 
-	abstract public float BigFloat(float f);
-	abstract public short BigShort(short s);
-	abstract public int BigLong(int i);
-	abstract public float LittleFloat(float f);
-	abstract public short LittleShort(short s);
-	abstract public int LittleLong(int i);
-
-	public static float swapFloat(float f)
+	public abstract class EndianHandler
 	{
-		int i = Float.floatToRawIntBits(f);
-		i = swapInt(i);
-		f = Float.intBitsToFloat(i);
+		private static readonly int mask = 0xFF;
 
-		return f;
-	}
+		public abstract float BigFloat(float f);
+		public abstract short BigShort(short s);
+		public abstract int BigLong(int i);
+		public abstract float LittleFloat(float f);
+		public abstract short LittleShort(short s);
+		public abstract int LittleLong(int i);
 
-	public static int swapInt(int i)
-	{
+		public static float swapFloat(float f)
+		{
+			var i = BitConverter.ToInt32(BitConverter.GetBytes(f), 0);
+			i = EndianHandler.swapInt(i);
+			f = BitConverter.ToSingle(BitConverter.GetBytes(i), 0);
 
-		int a = i & mask;
-		i >>>= 8;
+			return f;
+		}
 
-		a <<= 24;
+		public static int swapInt(int i)
+		{
+			var a = i & EndianHandler.mask;
+			i >>= 8;
 
-		int b = i & mask;
+			a <<= 24;
 
-		i >>>= 8;
-		b <<= 16;
+			var b = i & EndianHandler.mask;
 
-		int c = i & mask;
-		i >>>= 8;
-		c <<= 8;
+			i >>= 8;
+			b <<= 16;
 
-		return i | c | b | a;
-	}
+			var c = i & EndianHandler.mask;
+			i >>= 8;
+			c <<= 8;
 
-	public static short swapShort(short s)
-	{
-		int a = s & mask;
-		a <<= 8;
-		int b = (s >>> 8) & mask;
+			return i | c | b | a;
+		}
 
-		return (short) (b | a);
+		public static short swapShort(short s)
+		{
+			var a = s & EndianHandler.mask;
+			a <<= 8;
+			var b = (s >> 8) & EndianHandler.mask;
+
+			return (short) (b | a);
+		}
 	}
 }

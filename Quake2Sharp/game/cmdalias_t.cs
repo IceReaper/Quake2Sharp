@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -17,14 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-// Created by HOZ.
-// $Id: cmdalias_t.java,v 1.2 2004-07-08 15:58:44 hzi Exp $
 
-package jake2.game;
-
-public final class cmdalias_t
+namespace Quake2Sharp.game
 {
-	public cmdalias_t next;
-	public String name = "";
-	public String value;
+	public sealed class cmdalias_t
+	{
+		public cmdalias_t next;
+		public string name = "";
+		public string value;
+	}
 }

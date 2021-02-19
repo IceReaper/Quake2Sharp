@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,17 +18,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 19.11.2003 by RST.
-// $Id: spawn_t.java,v 1.1 2004-07-07 19:59:26 hzi Exp $
+namespace Quake2Sharp.game
+{
+	public class spawn_t
+	{
+		public spawn_t(string name, EntThinkAdapter spawn)
+		{
+			this.name = name;
+			this.spawn = spawn;
+		}
 
-package jake2.game;
-
-public class spawn_t {
-	public spawn_t(String name, EntThinkAdapter spawn) {
-		this.name = name;
-		this.spawn = spawn;
+		public string name;
+		public EntThinkAdapter spawn;
 	}
-
-	String name;
-	EntThinkAdapter spawn;
 }

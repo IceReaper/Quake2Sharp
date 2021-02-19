@@ -1,10 +1,4 @@
 /*
- * Ref.java
- * Copyright (C) 2003
- *
- * $Id: Ref.java,v 1.3 2006-11-21 00:51:22 cawe Exp $
- */ 
- /*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -23,17 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package jake2.render;
 
-import jake2.client.refexport_t;
+namespace Quake2Sharp.render
+{
+	using client;
 
-/**
+	/**
  * Ref
  * 
  * @author cwei
  */
-public interface Ref {
-	
-	refexport_t GetRefAPI(RenderAPI renderer);
-	String getName();
+	public interface Ref
+	{
+		refexport_t GetRefAPI(RenderAPI renderer);
+		string getName();
+	}
 }

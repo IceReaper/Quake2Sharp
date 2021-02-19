@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -18,30 +18,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Created on 20.11.2003 by RST.
-// $Id: mnode_t.java,v 1.1 2004-07-07 19:59:35 hzi Exp $
+namespace Quake2Sharp.render
+{
+	using game;
 
-package jake2.render;
+	public class mnode_t
+	{
+		//	common with leaf
+		public int contents; // -1, to differentiate from leafs
+		public int visframe; // node needs to be traversed if current
 
-import jake2.game.*;
+		//public float minmaxs[] = new float[6]; // for bounding box culling
+		public float[] mins = new float[3]; // for bounding box culling
+		public float[] maxs = new float[3]; // for bounding box culling
 
-public class mnode_t {
-	//	common with leaf
-	public int contents; // -1, to differentiate from leafs
-	public int visframe; // node needs to be traversed if current
+		public mnode_t parent;
 
-	//public float minmaxs[] = new float[6]; // for bounding box culling
-	public float mins[] = new float[3]; // for bounding box culling
-	public float maxs[] = new float[3]; // for bounding box culling
+		//	node specific
+		public cplane_t plane;
+		public mnode_t[] children = new mnode_t[2];
 
-	public mnode_t parent;
-
-	//	node specific
-	public cplane_t plane;
-	public mnode_t children[] = new mnode_t[2];
-
-	// unsigned short
-	public int firstsurface;
-	public int numsurfaces;
-
+		// unsigned short
+		public int firstsurface;
+		public int numsurfaces;
+	}
 }

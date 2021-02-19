@@ -1,54 +1,70 @@
-package jake2.render;
+/*
+Copyright (C) 1997-2001 Id Software, Inc.
 
-import jake2.client.refdef_t;
-import jake2.render.opengl.GLDriver;
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-import java.awt.Dimension;
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-public interface RenderAPI {
+See the GNU General Public License for more details.
 
-    void setGLDriver(GLDriver impl);
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    boolean R_Init(int vid_xpos, int vid_ypos);
+*/
 
-    boolean R_Init2();
+namespace Quake2Sharp.render
+{
+	using client;
+	using System.Drawing;
 
-    void R_Shutdown();
+	public abstract class RenderAPI
+	{
+		public abstract bool R_Init(int vid_xpos, int vid_ypos);
 
-    void R_BeginRegistration(String map);
+		public abstract bool R_Init2();
 
-    model_t R_RegisterModel(String name);
+		public abstract void R_Shutdown();
 
-    image_t R_RegisterSkin(String name);
+		public abstract void R_BeginRegistration(string map);
 
-    image_t Draw_FindPic(String name);
+		public abstract model_t R_RegisterModel(string name);
 
-    void R_SetSky(String name, float rotate, float[] axis);
+		public abstract image_t R_RegisterSkin(string name);
 
-    void R_EndRegistration();
+		public abstract image_t Draw_FindPic(string name);
 
-    void R_RenderFrame(refdef_t fd);
+		public abstract void R_SetSky(string name, float rotate, float[] axis);
 
-    void Draw_GetPicSize(Dimension dim, String name);
+		public abstract void R_EndRegistration();
 
-    void Draw_Pic(int x, int y, String name);
+		public abstract void R_RenderFrame(refdef_t fd);
 
-    void Draw_StretchPic(int x, int y, int w, int h, String name);
+		public abstract void Draw_GetPicSize(ref Size dim, string name);
 
-    void Draw_Char(int x, int y, int num);
+		public abstract void Draw_Pic(int x, int y, string name);
 
-    void Draw_TileClear(int x, int y, int w, int h, String name);
+		public abstract void Draw_StretchPic(int x, int y, int w, int h, string name);
 
-    void Draw_Fill(int x, int y, int w, int h, int c);
+		public abstract void Draw_Char(int x, int y, int num);
 
-    void Draw_FadeScreen();
+		public abstract void Draw_TileClear(int x, int y, int w, int h, string name);
 
-    void Draw_StretchRaw(int x, int y, int w, int h, int cols, int rows,
-            byte[] data);
+		public abstract void Draw_Fill(int x, int y, int w, int h, int c);
 
-    void R_SetPalette(byte[] palette);
+		public abstract void Draw_FadeScreen();
 
-    void R_BeginFrame(float camera_separation);
+		public abstract void Draw_StretchRaw(int x, int y, int w, int h, int cols, int rows, byte[] data);
 
-    void GL_ScreenShot_f();
+		public abstract void R_SetPalette(byte[] palette);
+
+		public abstract void R_BeginFrame(float camera_separation);
+
+		public abstract void GL_ScreenShot_f();
+	}
 }
