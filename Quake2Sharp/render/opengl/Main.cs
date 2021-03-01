@@ -775,7 +775,6 @@ namespace Quake2Sharp.render.opengl
 			Base.gl.glTranslatef(-this.r_newrefdef.vieworg[0], -this.r_newrefdef.vieworg[1], -this.r_newrefdef.vieworg[2]);
 
 			Base.gl.glGetFloat(QGLConst.GL_MODELVIEW_MATRIX, this.r_world_matrix);
-			Array.Clear(this.r_world_matrix, 0, this.r_world_matrix.Length);
 
 			//
 			// set drawing parms

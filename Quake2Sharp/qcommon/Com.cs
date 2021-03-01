@@ -307,7 +307,7 @@ namespace Quake2Sharp.qcommon
 				Cl.Drop();
 				Com.recursive = false;
 
-				throw new Exception();
+				return;
 			}
 			else if (code == Defines.ERR_DROP)
 			{
@@ -316,7 +316,7 @@ namespace Quake2Sharp.qcommon
 				Cl.Drop();
 				Com.recursive = false;
 
-				throw new Exception();
+				return;
 			}
 			else
 			{

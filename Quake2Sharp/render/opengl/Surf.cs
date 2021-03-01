@@ -560,7 +560,6 @@ namespace Quake2Sharp.render.opengl
 			//
 			// go back to the world matrix
 			//
-			Array.Clear(this.r_world_matrix, 0, this.r_world_matrix.Length);
 			Base.gl.glLoadMatrix(this.r_world_matrix);
 
 			Base.gl.glEnable(QGLConst.GL_BLEND);
