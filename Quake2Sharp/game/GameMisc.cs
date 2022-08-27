@@ -1783,7 +1783,7 @@ public class GameMisc
 		}
 		else
 		{
-			var c = DateTime.Now;
+			var c = DateTime.UtcNow;
 			self.message = "" + c.Hour + ":" + c.Minute + ":" + c.Second;
 
 			/*

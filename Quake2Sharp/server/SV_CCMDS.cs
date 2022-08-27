@@ -354,7 +354,7 @@ public class SV_CCMDS
 
 			if (!autosave)
 			{
-				var c = DateTime.Now;
+				var c = DateTime.UtcNow;
 				comment = $"{c.Hour,2}_{c.Minute,2} {c.Month,2}/{c.Day,2}  ";
 				comment += SV_INIT.sv.configstrings[Defines.CS_NAME];
 			}

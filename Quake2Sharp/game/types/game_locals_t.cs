@@ -78,7 +78,7 @@ public class game_locals_t
 	/** Writes the game locals to a file. */
 	public void write(BinaryWriter f)
 	{
-		f.WriteQ(DateTime.Now.ToString());
+		f.WriteQ(DateTime.UtcNow.ToString());
 
 		f.WriteQ(this.helpmessage1);
 		f.WriteQ(this.helpmessage2);
