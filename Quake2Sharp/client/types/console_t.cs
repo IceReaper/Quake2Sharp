@@ -17,24 +17,23 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	/**
+namespace Quake2Sharp.client.types;
+
+/**
  * console_t
  */
-	public class console_t
-	{
-		public bool initialized;
-		public byte[] text = new byte[Defines.CON_TEXTSIZE];
-		public int current; // line where next message will be printed
-		public int x; // offset in current line for next print
-		public int display; // bottom of console displays this line
-		public int ormask; // high bit mask for colored characters
-		public int linewidth; // characters across screen
-		public int totallines; // total lines in console scrollback
-		public int vislines;
-		public float[] times = new float[Defines.NUM_CON_TIMES]; // cls.realtime time the line was generated
+public class console_t
+{
+	public bool initialized;
+	public byte[] text = new byte[Defines.CON_TEXTSIZE];
+	public int current; // line where next message will be printed
+	public int x; // offset in current line for next print
+	public int display; // bottom of console displays this line
+	public int ormask; // high bit mask for colored characters
+	public int linewidth; // characters across screen
+	public int totallines; // total lines in console scrollback
+	public int vislines;
+	public float[] times = new float[Defines.NUM_CON_TIMES]; // cls.realtime time the line was generated
 
-		// for transparent notify lines	
-	}
+	// for transparent notify lines	
 }

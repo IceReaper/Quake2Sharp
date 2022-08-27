@@ -17,20 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
+namespace Quake2Sharp.client.types;
+
+public class clightstyle_t
 {
-	public class clightstyle_t
+	public int length;
+	public readonly float[] value = new float[3];
+	public readonly float[] map = new float[Defines.MAX_QPATH];
+
+	public void clear()
 	{
-		public int length;
-		public readonly float[] value = new float[3];
-		public readonly float[] map = new float[Defines.MAX_QPATH];
+		this.value[0] = this.value[1] = this.value[2] = this.length = 0;
 
-		public void clear()
-		{
-			this.value[0] = this.value[1] = this.value[2] = this.length = 0;
-
-			for (var i = 0; i < this.map.Length; i++)
-				this.map[i] = 0.0f;
-		}
+		for (var i = 0; i < this.map.Length; i++)
+			this.map[i] = 0.0f;
 	}
 }

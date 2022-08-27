@@ -17,21 +17,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dbrushside_t
 {
-	using System.IO;
-
-	public class dbrushside_t
+	public dbrushside_t(BinaryReader bb)
 	{
-		public dbrushside_t(BinaryReader bb)
-		{
-			this.planenum = bb.ReadUInt16();
-			this.texinfo = bb.ReadInt16();
-		}
-
-		//unsigned short planenum;
-		public int planenum; // facing out of the leaf
-		public short texinfo;
-		public static int SIZE = 4;
+		this.planenum = bb.ReadUInt16();
+		this.texinfo = bb.ReadInt16();
 	}
+
+	//unsigned short planenum;
+	public int planenum; // facing out of the leaf
+	public short texinfo;
+	public static int SIZE = 4;
 }

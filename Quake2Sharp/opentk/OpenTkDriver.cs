@@ -1,211 +1,210 @@
-namespace Quake2Sharp.opentk
+namespace Quake2Sharp.opentk;
+
+using client;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using qcommon;
+using render;
+using render.opengl;
+using System;
+using System.Drawing;
+using System.Linq;
+
+public abstract class OpenTkDriver : OpenTkGL, GLDriver
 {
-	using client;
-	using OpenTK.Windowing.Common;
-	using OpenTK.Windowing.Desktop;
-	using OpenTK.Windowing.GraphicsLibraryFramework;
-	using qcommon;
-	using render;
-	using render.opengl;
-	using System;
-	using System.Drawing;
-	using System.Linq;
+	private DisplayMode oldDisplayMode;
+	private GameWindow window;
 
-	public abstract class OpenTkDriver : OpenTkGL, GLDriver
+	public unsafe DisplayMode[] getModeList()
 	{
-		private DisplayMode oldDisplayMode;
-		private GameWindow window;
-
-		public unsafe DisplayMode[] getModeList()
-		{
-			return GLFW.GetVideoModes(GLFW.GetPrimaryMonitor())
-				.Where(videoMode => videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits == this.oldDisplayMode.BitDepth)
-				.GroupBy(videoMode => $"{videoMode.Height},{videoMode.Height}")
-				.Select(videoModes => videoModes.OrderBy(videoMode => videoMode.RefreshRate).Last())
-				.OrderBy(videoMode => videoMode.Width)
-				.ThenBy(videoMode => videoMode.Height)
-				.Select(
-					videoMode => new DisplayMode(
-						videoMode.Width,
-						videoMode.Height,
-						videoMode.RefreshRate,
-						videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits
-					)
+		return GLFW.GetVideoModes(GLFW.GetPrimaryMonitor())
+			.Where(videoMode => videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits == this.oldDisplayMode.BitDepth)
+			.GroupBy(videoMode => $"{videoMode.Height},{videoMode.Height}")
+			.Select(videoModes => videoModes.OrderBy(videoMode => videoMode.RefreshRate).Last())
+			.OrderBy(videoMode => videoMode.Width)
+			.ThenBy(videoMode => videoMode.Height)
+			.Select(
+				videoMode => new DisplayMode(
+					videoMode.Width,
+					videoMode.Height,
+					videoMode.RefreshRate,
+					videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits
 				)
-				.ToArray();
+			)
+			.ToArray();
+	}
+
+	public unsafe int setMode(Size dim, int mode, bool fullscreen)
+	{
+		var windowSize = new Size();
+
+		VID.Printf(Defines.PRINT_ALL, "Initializing OpenGL display\n");
+		VID.Printf(Defines.PRINT_ALL, $"...setting mode {mode}:");
+
+		if (this.oldDisplayMode == null)
+		{
+			GLFW.Init();
+			var videoMode = GLFW.GetVideoMode(GLFW.GetPrimaryMonitor())[0];
+
+			this.oldDisplayMode =
+				new(videoMode.Width, videoMode.Height, videoMode.RefreshRate, videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits);
 		}
 
-		public unsafe int setMode(Size dim, int mode, bool fullscreen)
+		if (!VID.GetModeInfo(ref windowSize, mode))
 		{
-			var windowSize = new Size();
+			VID.Printf(Defines.PRINT_ALL, " invalid mode\n");
 
-			VID.Printf(Defines.PRINT_ALL, "Initializing OpenGL display\n");
-			VID.Printf(Defines.PRINT_ALL, $"...setting mode {mode}:");
-
-			if (this.oldDisplayMode == null)
-			{
-				GLFW.Init();
-				var videoMode = GLFW.GetVideoMode(GLFW.GetPrimaryMonitor())[0];
-
-				this.oldDisplayMode =
-					new(videoMode.Width, videoMode.Height, videoMode.RefreshRate, videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits);
-			}
-
-			if (!VID.GetModeInfo(ref windowSize, mode))
-			{
-				VID.Printf(Defines.PRINT_ALL, " invalid mode\n");
-
-				return Base.rserr_invalid_mode;
-			}
-
-			VID.Printf(Defines.PRINT_ALL, $" {windowSize.Width} {windowSize.Height}{'\n'}");
-
-			if (this.window != null)
-				this.shutdown();
-
-			if (fullscreen)
-			{
-				var displayMode =
-					this.getModeList().FirstOrDefault(displayMode => displayMode.Width == windowSize.Width && displayMode.Height == windowSize.Height)
-					?? this.oldDisplayMode;
-
-				this.window = new(GameWindowSettings.Default, new()
-				{
-					Profile = ContextProfile.Compatability, Size = new(displayMode.Width, displayMode.Height), WindowState = WindowState.Fullscreen
-				});
-
-				VID.Printf(
-					Defines.PRINT_ALL,
-					$"...setting fullscreen {displayMode.Width}x{displayMode.Height}x{displayMode.BitDepth}@{displayMode.RefreshRate}Hz\n"
-				);
-			}
-			else
-			{
-				this.window = new(GameWindowSettings.Default, new()
-				{
-					Profile = ContextProfile.Compatability, Size = new(windowSize.Width, windowSize.Height)
-				});
-
-				VID.Printf(Defines.PRINT_ALL, $"...setting window {windowSize.Width}x{windowSize.Height}\n");
-			}
-
-			this.window.Focus();
-			this.window.Closed += OpenTkDriver.QuitOnClose;
-
-			OpenTkKBD.Window = this.window;
-			this.window.KeyDown += OpenTkKBD.Listener.KeyDown;
-			this.window.KeyUp += OpenTkKBD.Listener.KeyUp;
-			this.window.MouseDown += OpenTkKBD.Listener.MouseDown;
-			this.window.MouseUp += OpenTkKBD.Listener.MouseUp;
-			this.window.MouseMove += OpenTkKBD.Listener.MouseMove;
-			this.window.MouseWheel += OpenTkKBD.Listener.MouseWheel;
-
-			Program.UpdateLoop = _ => this.window.Run();
-
-			var initialized = false;
-
-			var updateAccumulator = 0.0;
-			var renderAccumulator = 0.0;
-
-			this.window.UpdateFrame += args =>
-			{
-				updateAccumulator += args.Time * 1000;
-
-				var elapsed = (int)updateAccumulator;
-
-				if (elapsed <= 0)
-					return;
-
-				Qcommon.FrameUpdate(elapsed);
-				updateAccumulator -= elapsed;
-			};
-
-			this.window.RenderFrame += args =>
-			{
-				if (!initialized)
-				{
-					this.init(0, 0);
-					initialized = true;
-				}
-
-				renderAccumulator += args.Time * 1000;
-
-				var elapsed = (int)renderAccumulator;
-
-				if (elapsed <= 0)
-					return;
-
-				Qcommon.FrameRender(elapsed);
-				renderAccumulator -= elapsed;
-			};
-
-			this.window.Resize += args =>
-			{
-				Base.setVid(this.window.ClientSize.X, this.window.ClientSize.Y);
-				VID.NewWindow(this.window.ClientSize.X, this.window.ClientSize.Y);
-			};
-
-			return Base.rserr_ok;
+			return Base.rserr_invalid_mode;
 		}
 
-		private static void QuitOnClose()
+		VID.Printf(Defines.PRINT_ALL, $" {windowSize.Width} {windowSize.Height}{'\n'}");
+
+		if (this.window != null)
+			this.shutdown();
+
+		if (fullscreen)
 		{
-			Program.UpdateLoop = null;
-			Cbuf.ExecuteText(Defines.EXEC_APPEND, "quit");
+			var displayMode =
+				this.getModeList().FirstOrDefault(displayMode => displayMode.Width == windowSize.Width && displayMode.Height == windowSize.Height)
+				?? this.oldDisplayMode;
+
+			this.window = new(GameWindowSettings.Default, new()
+			{
+				Profile = ContextProfile.Compatability, Size = new(displayMode.Width, displayMode.Height), WindowState = WindowState.Fullscreen
+			});
+
+			VID.Printf(
+				Defines.PRINT_ALL,
+				$"...setting fullscreen {displayMode.Width}x{displayMode.Height}x{displayMode.BitDepth}@{displayMode.RefreshRate}Hz\n"
+			);
+		}
+		else
+		{
+			this.window = new(GameWindowSettings.Default, new()
+			{
+				Profile = ContextProfile.Compatability, Size = new(windowSize.Width, windowSize.Height)
+			});
+
+			VID.Printf(Defines.PRINT_ALL, $"...setting window {windowSize.Width}x{windowSize.Height}\n");
 		}
 
-		public void shutdown()
+		this.window.Focus();
+		this.window.Closed += OpenTkDriver.QuitOnClose;
+
+		OpenTkKBD.Window = this.window;
+		this.window.KeyDown += OpenTkKBD.Listener.KeyDown;
+		this.window.KeyUp += OpenTkKBD.Listener.KeyUp;
+		this.window.MouseDown += OpenTkKBD.Listener.MouseDown;
+		this.window.MouseUp += OpenTkKBD.Listener.MouseUp;
+		this.window.MouseMove += OpenTkKBD.Listener.MouseMove;
+		this.window.MouseWheel += OpenTkKBD.Listener.MouseWheel;
+
+		Program.UpdateLoop = _ => this.window.Run();
+
+		var initialized = false;
+
+		var updateAccumulator = 0.0;
+		var renderAccumulator = 0.0;
+
+		this.window.UpdateFrame += args =>
 		{
-			if (this.window == null)
+			updateAccumulator += args.Time * 1000;
+
+			var elapsed = (int)updateAccumulator;
+
+			if (elapsed <= 0)
 				return;
 
-			this.window.Closed -= OpenTkDriver.QuitOnClose;
-			this.window.Close();
-			OpenTkKBD.Window = null;
-			this.window = null;
-			Program.UpdateLoop = null;
-		}
+			Qcommon.FrameUpdate(elapsed);
+			updateAccumulator -= elapsed;
+		};
 
-		public bool init(int xpos, int ypos)
+		this.window.RenderFrame += args =>
 		{
-			if (this.window == null)
-				return true;
+			if (!initialized)
+			{
+				this.init(0, 0);
+				initialized = true;
+			}
 
+			renderAccumulator += args.Time * 1000;
+
+			var elapsed = (int)renderAccumulator;
+
+			if (elapsed <= 0)
+				return;
+
+			Qcommon.FrameRender(elapsed);
+			renderAccumulator -= elapsed;
+		};
+
+		this.window.Resize += args =>
+		{
 			Base.setVid(this.window.ClientSize.X, this.window.ClientSize.Y);
 			VID.NewWindow(this.window.ClientSize.X, this.window.ClientSize.Y);
+		};
 
+		return Base.rserr_ok;
+	}
+
+	private static void QuitOnClose()
+	{
+		Program.UpdateLoop = null;
+		Cbuf.ExecuteText(Defines.EXEC_APPEND, "quit");
+	}
+
+	public void shutdown()
+	{
+		if (this.window == null)
+			return;
+
+		this.window.Closed -= OpenTkDriver.QuitOnClose;
+		this.window.Close();
+		OpenTkKBD.Window = null;
+		this.window = null;
+		Program.UpdateLoop = null;
+	}
+
+	public bool init(int xpos, int ypos)
+	{
+		if (this.window == null)
 			return true;
-		}
 
-		public void beginFrame(float cameraSeparation)
-		{
-		}
+		Base.setVid(this.window.ClientSize.X, this.window.ClientSize.Y);
+		VID.NewWindow(this.window.ClientSize.X, this.window.ClientSize.Y);
 
-		public void endFrame()
-		{
-			this.glFlush();
-			this.window?.SwapBuffers();
-		}
+		return true;
+	}
 
-		public void enableLogging(bool enable)
-		{
-		}
+	public void beginFrame(float cameraSeparation)
+	{
+	}
 
-		public void logNewFrame()
-		{
-		}
+	public void endFrame()
+	{
+		this.glFlush();
+		this.window?.SwapBuffers();
+	}
 
-		public void updateScreen(Action callback)
-		{
-			callback();
-		}
+	public void enableLogging(bool enable)
+	{
+	}
 
-		public void screenshot()
-		{
-		}
+	public void logNewFrame()
+	{
+	}
 
-		protected void activate()
-		{
-		}
+	public void updateScreen(Action callback)
+	{
+		callback();
+	}
+
+	public void screenshot()
+	{
+	}
+
+	protected void activate()
+	{
 	}
 }

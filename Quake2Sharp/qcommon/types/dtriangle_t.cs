@@ -17,24 +17,23 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dtriangle_t
 {
-	using System.IO;
+	public short[] index_xyz = { 0, 0, 0 };
+	public short[] index_st = { 0, 0, 0 };
 
-	public class dtriangle_t
+	public dtriangle_t(BinaryReader b)
 	{
-		public short[] index_xyz = { 0, 0, 0 };
-		public short[] index_st = { 0, 0, 0 };
+		this.index_xyz[0] = b.ReadInt16();
+		this.index_xyz[1] = b.ReadInt16();
+		this.index_xyz[2] = b.ReadInt16();
 
-		public dtriangle_t(BinaryReader b)
-		{
-			this.index_xyz[0] = b.ReadInt16();
-			this.index_xyz[1] = b.ReadInt16();
-			this.index_xyz[2] = b.ReadInt16();
-
-			this.index_st[0] = b.ReadInt16();
-			this.index_st[1] = b.ReadInt16();
-			this.index_st[2] = b.ReadInt16();
-		}
+		this.index_st[0] = b.ReadInt16();
+		this.index_st[1] = b.ReadInt16();
+		this.index_st[2] = b.ReadInt16();
 	}
 }

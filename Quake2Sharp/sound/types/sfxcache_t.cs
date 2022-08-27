@@ -17,20 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.sound.types
-{
-	public class sfxcache_t
-	{
-		public int length;
-		public int loopstart;
-		public int speed; // not needed, because converted on load?
-		public int width;
-		public int stereo;
-		public byte[] data; // variable sized
+namespace Quake2Sharp.sound.types;
 
-		public sfxcache_t(int size)
-		{
-			this.data = new byte[size];
-		}
+public class sfxcache_t
+{
+	public int length;
+	public int loopstart;
+	public int speed; // not needed, because converted on load?
+	public int width;
+	public int stereo;
+	public byte[] data; // variable sized
+
+	public sfxcache_t(int size)
+	{
+		this.data = new byte[size];
 	}
 }

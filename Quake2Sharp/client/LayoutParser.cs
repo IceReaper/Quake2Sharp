@@ -17,271 +17,270 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client
+namespace Quake2Sharp.client;
+
+using qcommon;
+
+public class LayoutParser
 {
-	using qcommon;
+	private int tokenPos;
+	private int tokenLength;
+	private int index;
+	private int length;
+	private string data;
 
-	public class LayoutParser
+	public LayoutParser()
 	{
-		private int tokenPos;
-		private int tokenLength;
-		private int index;
-		private int length;
-		private string data;
+		this.init(null);
+	}
 
-		public LayoutParser()
-		{
-			this.init(null);
-		}
+	public void init(string layout)
+	{
+		this.tokenPos = 0;
+		this.tokenLength = 0;
+		this.index = 0;
+		this.data = layout ?? "";
+		this.length = layout?.Length ?? 0;
+	}
 
-		public void init(string layout)
+	public bool hasNext()
+	{
+		return !this.isEof();
+	}
+
+	public void next()
+	{
+		if (this.data == null)
 		{
-			this.tokenPos = 0;
 			this.tokenLength = 0;
-			this.index = 0;
-			this.data = layout ?? "";
-			this.length = layout?.Length ?? 0;
+
+			return;
 		}
 
-		public bool hasNext()
+		while (true)
 		{
-			return !this.isEof();
-		}
+			// skip whitespace
+			this.skipwhites();
 
-		public void next()
-		{
-			if (this.data == null)
+			if (this.isEof())
 			{
 				this.tokenLength = 0;
 
 				return;
 			}
 
-			while (true)
+			// skip // comments
+			if (this.getchar() == '/')
 			{
-				// skip whitespace
-				this.skipwhites();
-
-				if (this.isEof())
+				if (this.nextchar() == '/')
 				{
-					this.tokenLength = 0;
+					this.skiptoeol();
 
-					return;
+					// goto skip whitespace
+					continue;
 				}
 
-				// skip // comments
-				if (this.getchar() == '/')
-				{
-					if (this.nextchar() == '/')
-					{
-						this.skiptoeol();
-
-						// goto skip whitespace
-						continue;
-					}
-
-					this.prevchar();
-
-					break;
-				}
+				this.prevchar();
 
 				break;
 			}
 
-			int c;
-			var len = 0;
+			break;
+		}
 
-			// handle quoted strings specially
-			if (this.getchar() == '\"')
-			{
-				this.nextchar();
-				this.tokenPos = this.index;
+		int c;
+		var len = 0;
 
-				while (true)
-				{
-					c = this.getchar();
-					this.nextchar();
-
-					if (c == '\"' || c == 0)
-					{
-						this.tokenLength = len;
-
-						return;
-					}
-
-					if (len < Defines.MAX_TOKEN_CHARS)
-						++len;
-				}
-			}
-
-			// parse a regular word
-			c = this.getchar();
+		// handle quoted strings specially
+		if (this.getchar() == '\"')
+		{
+			this.nextchar();
 			this.tokenPos = this.index;
 
-			do
+			while (true)
 			{
+				c = this.getchar();
+				this.nextchar();
+
+				if (c == '\"' || c == 0)
+				{
+					this.tokenLength = len;
+
+					return;
+				}
+
 				if (len < Defines.MAX_TOKEN_CHARS)
 					++len;
-
-				c = this.nextchar();
 			}
-			while (c > 32);
+		}
 
-			if (len == Defines.MAX_TOKEN_CHARS)
+		// parse a regular word
+		c = this.getchar();
+		this.tokenPos = this.index;
+
+		do
+		{
+			if (len < Defines.MAX_TOKEN_CHARS)
+				++len;
+
+			c = this.nextchar();
+		}
+		while (c > 32);
+
+		if (len == Defines.MAX_TOKEN_CHARS)
+		{
+			Com.Printf("Token exceeded " + Defines.MAX_TOKEN_CHARS + " chars, discarded.\n");
+			len = 0;
+		}
+
+		this.tokenLength = len;
+
+		return;
+	}
+
+	public bool tokenEquals(string other)
+	{
+		if (this.tokenLength != other.Length)
+			return false;
+
+		return this.data.Substring(this.tokenPos, this.tokenLength) == other[..this.tokenLength];
+	}
+
+	public int tokenAsInt()
+	{
+		if (this.tokenLength == 0)
+			return 0;
+
+		return this.atoi();
+	}
+
+	public string token()
+	{
+		if (this.tokenLength == 0)
+			return "";
+
+		return this.data.Substring(this.tokenPos, this.tokenLength);
+	}
+
+	private int atoi()
+	{
+		var result = 0;
+		var negative = false;
+		int i = 0, max = this.tokenLength;
+		var s = this.data;
+		int limit;
+		int multmin;
+		int digit;
+
+		if (max > 0)
+		{
+			if (s[this.tokenPos] == '-')
 			{
-				Com.Printf("Token exceeded " + Defines.MAX_TOKEN_CHARS + " chars, discarded.\n");
-				len = 0;
-			}
-
-			this.tokenLength = len;
-
-			return;
-		}
-
-		public bool tokenEquals(string other)
-		{
-			if (this.tokenLength != other.Length)
-				return false;
-
-			return this.data.Substring(this.tokenPos, this.tokenLength) == other[..this.tokenLength];
-		}
-
-		public int tokenAsInt()
-		{
-			if (this.tokenLength == 0)
-				return 0;
-
-			return this.atoi();
-		}
-
-		public string token()
-		{
-			if (this.tokenLength == 0)
-				return "";
-
-			return this.data.Substring(this.tokenPos, this.tokenLength);
-		}
-
-		private int atoi()
-		{
-			var result = 0;
-			var negative = false;
-			int i = 0, max = this.tokenLength;
-			var s = this.data;
-			int limit;
-			int multmin;
-			int digit;
-
-			if (max > 0)
-			{
-				if (s[this.tokenPos] == '-')
-				{
-					negative = true;
-					limit = int.MinValue;
-					i++;
-				}
-				else
-					limit = -int.MaxValue;
-
-				multmin = limit / 10;
-
-				if (i < max)
-				{
-					digit = s[this.tokenPos + i++] - '0';
-
-					if (digit < 0)
-						return 0; // wrong format
-
-					result = -digit;
-				}
-
-				while (i < max)
-				{
-					// Accumulating negatively avoids surprises near MAX_VALUE
-					digit = s[this.tokenPos + i++] - '0';
-
-					if (digit < 0)
-						return 0; // wrong format
-
-					if (result < multmin)
-						return 0; // wrong format
-
-					result *= 10;
-
-					if (result < limit + digit)
-						return 0; // wrong format
-
-					result -= digit;
-				}
+				negative = true;
+				limit = int.MinValue;
+				i++;
 			}
 			else
-				return 0; // wrong format
+				limit = -int.MaxValue;
 
-			if (negative)
+			multmin = limit / 10;
+
+			if (i < max)
 			{
-				if (i > 1)
-					return result;
+				digit = s[this.tokenPos + i++] - '0';
 
-				/* Only got "-" */
-				return 0; // wrong format
+				if (digit < 0)
+					return 0; // wrong format
+
+				result = -digit;
 			}
 
-			return -result;
+			while (i < max)
+			{
+				// Accumulating negatively avoids surprises near MAX_VALUE
+				digit = s[this.tokenPos + i++] - '0';
+
+				if (digit < 0)
+					return 0; // wrong format
+
+				if (result < multmin)
+					return 0; // wrong format
+
+				result *= 10;
+
+				if (result < limit + digit)
+					return 0; // wrong format
+
+				result -= digit;
+			}
+		}
+		else
+			return 0; // wrong format
+
+		if (negative)
+		{
+			if (i > 1)
+				return result;
+
+			/* Only got "-" */
+			return 0; // wrong format
 		}
 
-		private char getchar()
-		{
-			if (this.index < this.length)
-				return this.data[this.index];
+		return -result;
+	}
 
-			return (char)0;
+	private char getchar()
+	{
+		if (this.index < this.length)
+			return this.data[this.index];
+
+		return (char)0;
+	}
+
+	private char nextchar()
+	{
+		++this.index;
+
+		if (this.index < this.length)
+			return this.data[this.index];
+
+		return (char)0;
+	}
+
+	private char prevchar()
+	{
+		if (this.index > 0)
+		{
+			--this.index;
+
+			return this.data[this.index];
 		}
 
-		private char nextchar()
-		{
+		return (char)0;
+	}
+
+	private bool isEof()
+	{
+		return this.index >= this.length;
+	}
+
+	private char skipwhites()
+	{
+		var c = (char)0;
+
+		while (this.index < this.length && (c = this.data[this.index]) <= ' ' && c != 0)
 			++this.index;
 
-			if (this.index < this.length)
-				return this.data[this.index];
+		return c;
+	}
 
-			return (char)0;
-		}
+	private char skiptoeol()
+	{
+		var c = (char)0;
 
-		private char prevchar()
-		{
-			if (this.index > 0)
-			{
-				--this.index;
+		while (this.index < this.length && (c = this.data[this.index]) != '\n' && c != 0)
+			++this.index;
 
-				return this.data[this.index];
-			}
-
-			return (char)0;
-		}
-
-		private bool isEof()
-		{
-			return this.index >= this.length;
-		}
-
-		private char skipwhites()
-		{
-			var c = (char)0;
-
-			while (this.index < this.length && (c = this.data[this.index]) <= ' ' && c != 0)
-				++this.index;
-
-			return c;
-		}
-
-		private char skiptoeol()
-		{
-			var c = (char)0;
-
-			while (this.index < this.length && (c = this.data[this.index]) != '\n' && c != 0)
-				++this.index;
-
-			return c;
-		}
+		return c;
 	}
 }

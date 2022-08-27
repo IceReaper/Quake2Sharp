@@ -17,44 +17,43 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+using System.Text;
+using util;
+
+public class texinfo_t
 {
-	using System.IO;
-	using System.Text;
-	using util;
-
-	public class texinfo_t
+	// works fine.
+	public texinfo_t(byte[] cmod_base, int o, int len)
+		: this(new(new MemoryStream(cmod_base, o, len)))
 	{
-		// works fine.
-		public texinfo_t(byte[] cmod_base, int o, int len)
-			: this(new(new MemoryStream(cmod_base, o, len)))
-		{
-		}
-
-		public texinfo_t(BinaryReader bb)
-		{
-			var str = new byte[32];
-
-			this.vecs[0] = new float[] { bb.ReadSingle(), bb.ReadSingle(), bb.ReadSingle(), bb.ReadSingle() };
-			this.vecs[1] = new float[] { bb.ReadSingle(), bb.ReadSingle(), bb.ReadSingle(), bb.ReadSingle() };
-
-			this.flags = bb.ReadInt32();
-			this.value = bb.ReadInt32();
-
-			bb.Read(str);
-			this.texture = Encoding.ASCII.GetString(str, 0, Lib.strlen(str));
-			this.nexttexinfo = bb.ReadInt32();
-		}
-
-		public static readonly int SIZE = 32 + 4 + 4 + 32 + 4;
-
-		//float			vecs[2][4];		// [s/t][xyz offset]
-		public float[][] vecs = { new float[] { 0, 0, 0, 0 }, new float[] { 0, 0, 0, 0 } };
-		public int flags; // miptex flags + overrides
-		public int value; // light emission, etc
-
-		//char			texture[32];	// texture name (textures/*.wal)
-		public string texture = "";
-		public int nexttexinfo; // for animations, -1 = end of chain
 	}
+
+	public texinfo_t(BinaryReader bb)
+	{
+		var str = new byte[32];
+
+		this.vecs[0] = new float[] { bb.ReadSingle(), bb.ReadSingle(), bb.ReadSingle(), bb.ReadSingle() };
+		this.vecs[1] = new float[] { bb.ReadSingle(), bb.ReadSingle(), bb.ReadSingle(), bb.ReadSingle() };
+
+		this.flags = bb.ReadInt32();
+		this.value = bb.ReadInt32();
+
+		bb.Read(str);
+		this.texture = Encoding.ASCII.GetString(str, 0, Lib.strlen(str));
+		this.nexttexinfo = bb.ReadInt32();
+	}
+
+	public static readonly int SIZE = 32 + 4 + 4 + 32 + 4;
+
+	//float			vecs[2][4];		// [s/t][xyz offset]
+	public float[][] vecs = { new float[] { 0, 0, 0, 0 }, new float[] { 0, 0, 0, 0 } };
+	public int flags; // miptex flags + overrides
+	public int value; // light emission, etc
+
+	//char			texture[32];	// texture name (textures/*.wal)
+	public string texture = "";
+	public int nexttexinfo; // for animations, -1 = end of chain
 }

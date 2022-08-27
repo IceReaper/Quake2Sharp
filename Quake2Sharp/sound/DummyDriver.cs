@@ -17,71 +17,70 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.sound
+namespace Quake2Sharp.sound;
+
+using System.IO;
+using types;
+
+public class DummyDriver : Sound
 {
-	using System.IO;
-	using types;
-
-	public class DummyDriver : Sound
+	static DummyDriver()
 	{
-		static DummyDriver()
-		{
-			S.register(new DummyDriver());
-		}
+		S.register(new DummyDriver());
+	}
 
-		private DummyDriver()
-		{
-		}
+	private DummyDriver()
+	{
+	}
 
-		public bool Init()
-		{
-			return true;
-		}
+	public bool Init()
+	{
+		return true;
+	}
 
-		public void Shutdown()
-		{
-		}
+	public void Shutdown()
+	{
+	}
 
-		public void BeginRegistration()
-		{
-		}
+	public void BeginRegistration()
+	{
+	}
 
-		public sfx_t RegisterSound(string sample)
-		{
-			return null;
-		}
+	public sfx_t RegisterSound(string sample)
+	{
+		return null;
+	}
 
-		public void EndRegistration()
-		{
-		}
+	public void EndRegistration()
+	{
+	}
 
-		public void StartLocalSound(string sound)
-		{
-		}
+	public void StartLocalSound(string sound)
+	{
+	}
 
-		public void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs)
-		{
-		}
+	public void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs)
+	{
+	}
 
-		public void Update(float[] origin, float[] forward, float[] right, float[] up)
-		{
-		}
+	public void Update(float[] origin, float[] forward, float[] right, float[] up)
+	{
+	}
 
-		public void RawSamples(int samples, int rate, int width, int channels, BinaryReader data)
-		{
-		}
+	public void RawSamples(int samples, int rate, int width, int channels, BinaryReader data)
+	{
+	}
 
-		public void disableStreaming()
-		{
-		}
+	public void disableStreaming()
+	{
+	}
 
-		public void StopAllSounds()
-		{
-		}
+	public void StopAllSounds()
+	{
+	}
 
-		public string getName()
-		{
-			return "dummy";
-		}
+	public string getName()
+	{
+		return "dummy";
 	}
 }

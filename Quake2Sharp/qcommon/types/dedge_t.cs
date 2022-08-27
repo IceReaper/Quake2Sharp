@@ -17,11 +17,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+public class dedge_t
 {
-	public class dedge_t
-	{
-		// unsigned short v[2];
-		private int[] v = { 0, 0 };
-	}
+	// unsigned short v[2];
+	private int[] v = { 0, 0 };
 }

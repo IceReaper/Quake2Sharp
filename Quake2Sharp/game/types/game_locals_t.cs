@@ -17,87 +17,86 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+using qcommon;
+using System;
+using System.IO;
+using util;
+
+public class game_locals_t
 {
-	using qcommon;
-	using System;
-	using System.IO;
-	using util;
+	//
+	//	this structure is left intact through an entire game
+	//	it should be initialized at dll load time, and read/written to
+	//	the server.ssv file for savegames
+	//
+	public string helpmessage1 = "";
+	public string helpmessage2 = "";
+	public int helpchanged; // flash F1 icon if non 0, play sound
 
-	public class game_locals_t
+	// and increment only if 1, 2, or 3
+	public gclient_t[] clients = new gclient_t[Defines.MAX_CLIENTS];
+
+	// can't store spawnpoint in level, because
+	// it would get overwritten by the savegame restore
+	public string spawnpoint = ""; // needed for coop respawns
+
+	// store latched cvars here that we want to get at often
+	public int maxclients;
+	public int maxentities;
+
+	// cross level triggers
+	public int serverflags;
+
+	// items
+	public int num_items;
+	public bool autosaved;
+
+	/** Reads the game locals from a file. */
+	public void load(BinaryReader f)
 	{
-		//
-		//	this structure is left intact through an entire game
-		//	it should be initialized at dll load time, and read/written to
-		//	the server.ssv file for savegames
-		//
-		public string helpmessage1 = "";
-		public string helpmessage2 = "";
-		public int helpchanged; // flash F1 icon if non 0, play sound
+		var date = f.ReadStringQ();
 
-		// and increment only if 1, 2, or 3
-		public gclient_t[] clients = new gclient_t[Defines.MAX_CLIENTS];
+		this.helpmessage1 = f.ReadStringQ();
+		this.helpmessage2 = f.ReadStringQ();
 
-		// can't store spawnpoint in level, because
-		// it would get overwritten by the savegame restore
-		public string spawnpoint = ""; // needed for coop respawns
+		this.helpchanged = f.ReadInt32();
 
-		// store latched cvars here that we want to get at often
-		public int maxclients;
-		public int maxentities;
+		// gclient_t*
 
-		// cross level triggers
-		public int serverflags;
+		this.spawnpoint = f.ReadStringQ();
+		this.maxclients = f.ReadInt32();
+		this.maxentities = f.ReadInt32();
+		this.serverflags = f.ReadInt32();
+		this.num_items = f.ReadInt32();
+		this.autosaved = f.ReadInt32() != 0;
 
-		// items
-		public int num_items;
-		public bool autosaved;
+		// rst's checker :-)
+		if (f.ReadInt32() != 1928)
+			Com.DPrintf("error in loading game_locals, 1928\n");
+	}
 
-		/** Reads the game locals from a file. */
-		public void load(BinaryReader f)
-		{
-			var date = f.ReadStringQ();
+	/** Writes the game locals to a file. */
+	public void write(BinaryWriter f)
+	{
+		f.WriteQ(DateTime.Now.ToString());
 
-			this.helpmessage1 = f.ReadStringQ();
-			this.helpmessage2 = f.ReadStringQ();
+		f.WriteQ(this.helpmessage1);
+		f.WriteQ(this.helpmessage2);
 
-			this.helpchanged = f.ReadInt32();
+		f.Write(this.helpchanged);
 
-			// gclient_t*
+		// gclient_t*
 
-			this.spawnpoint = f.ReadStringQ();
-			this.maxclients = f.ReadInt32();
-			this.maxentities = f.ReadInt32();
-			this.serverflags = f.ReadInt32();
-			this.num_items = f.ReadInt32();
-			this.autosaved = f.ReadInt32() != 0;
+		f.WriteQ(this.spawnpoint);
+		f.Write(this.maxclients);
+		f.Write(this.maxentities);
+		f.Write(this.serverflags);
+		f.Write(this.num_items);
+		f.Write(this.autosaved ? 1 : 0);
 
-			// rst's checker :-)
-			if (f.ReadInt32() != 1928)
-				Com.DPrintf("error in loading game_locals, 1928\n");
-		}
-
-		/** Writes the game locals to a file. */
-		public void write(BinaryWriter f)
-		{
-			f.WriteQ(DateTime.Now.ToString());
-
-			f.WriteQ(this.helpmessage1);
-			f.WriteQ(this.helpmessage2);
-
-			f.Write(this.helpchanged);
-
-			// gclient_t*
-
-			f.WriteQ(this.spawnpoint);
-			f.Write(this.maxclients);
-			f.Write(this.maxentities);
-			f.Write(this.serverflags);
-			f.Write(this.num_items);
-			f.Write(this.autosaved ? 1 : 0);
-
-			// rst's checker :-)
-			f.Write(1928);
-		}
+		// rst's checker :-)
+		f.Write(1928);
 	}
 }

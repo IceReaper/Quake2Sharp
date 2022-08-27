@@ -1,16 +1,15 @@
-namespace Quake2Sharp.qcommon
+namespace Quake2Sharp.qcommon;
+
+using System.Net;
+
+public class Packet
 {
-	using System.Net;
+	public readonly IPEndPoint NetPeer;
+	public readonly byte[] RawData;
 
-	public class Packet
+	public Packet(IPEndPoint netPeer, byte[] rawData)
 	{
-		public readonly IPEndPoint NetPeer;
-		public readonly byte[] RawData;
-
-		public Packet(IPEndPoint netPeer, byte[] rawData)
-		{
-			this.NetPeer = netPeer;
-			this.RawData = rawData;
-		}
+		this.NetPeer = netPeer;
+		this.RawData = rawData;
 	}
 }

@@ -17,26 +17,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dsprite_t
 {
-	using System.IO;
+	public int ident;
+	public int version;
+	public int numframes;
+	public dsprframe_t[] frames; // variable sized
 
-	public class dsprite_t
+	public dsprite_t(BinaryReader b)
 	{
-		public int ident;
-		public int version;
-		public int numframes;
-		public dsprframe_t[] frames; // variable sized
+		this.ident = b.ReadInt32();
+		this.version = b.ReadInt32();
+		this.numframes = b.ReadInt32();
+		this.frames = new dsprframe_t[this.numframes];
 
-		public dsprite_t(BinaryReader b)
-		{
-			this.ident = b.ReadInt32();
-			this.version = b.ReadInt32();
-			this.numframes = b.ReadInt32();
-			this.frames = new dsprframe_t[this.numframes];
-
-			for (var i = 0; i < this.numframes; i++)
-				this.frames[i] = new(b);
-		}
+		for (var i = 0; i < this.numframes; i++)
+			this.frames[i] = new(b);
 	}
 }

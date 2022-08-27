@@ -17,21 +17,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.types
+namespace Quake2Sharp.render.types;
+
+using System.IO;
+
+public class mvertex_t
 {
-	using System.IO;
+	public static readonly int DISK_SIZE = 3 * Defines.SIZE_OF_FLOAT;
+	public static readonly int MEM_SIZE = 3 * Defines.SIZE_OF_FLOAT;
+	public float[] position = { 0, 0, 0 };
 
-	public class mvertex_t
+	public mvertex_t(BinaryReader b)
 	{
-		public static readonly int DISK_SIZE = 3 * Defines.SIZE_OF_FLOAT;
-		public static readonly int MEM_SIZE = 3 * Defines.SIZE_OF_FLOAT;
-		public float[] position = { 0, 0, 0 };
-
-		public mvertex_t(BinaryReader b)
-		{
-			this.position[0] = b.ReadSingle();
-			this.position[1] = b.ReadSingle();
-			this.position[2] = b.ReadSingle();
-		}
+		this.position[0] = b.ReadSingle();
+		this.position[1] = b.ReadSingle();
+		this.position[2] = b.ReadSingle();
 	}
 }

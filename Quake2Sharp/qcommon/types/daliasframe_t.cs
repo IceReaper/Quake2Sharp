@@ -17,29 +17,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+using System.Text;
+
+public class daliasframe_t
 {
-	using System.IO;
-	using System.Text;
+	public float[] scale = { 0, 0, 0 }; // multiply byte verts by this
+	public float[] translate = { 0, 0, 0 }; // then add this
+	public string name; // frame name from grabbing (size 16)
+	public int[] verts; // variable sized
 
-	public class daliasframe_t
+	public daliasframe_t(BinaryReader b)
 	{
-		public float[] scale = { 0, 0, 0 }; // multiply byte verts by this
-		public float[] translate = { 0, 0, 0 }; // then add this
-		public string name; // frame name from grabbing (size 16)
-		public int[] verts; // variable sized
-
-		public daliasframe_t(BinaryReader b)
-		{
-			this.scale[0] = b.ReadSingle();
-			this.scale[1] = b.ReadSingle();
-			this.scale[2] = b.ReadSingle();
-			this.translate[0] = b.ReadSingle();
-			this.translate[1] = b.ReadSingle();
-			this.translate[2] = b.ReadSingle();
-			var nameBuf = new byte[16];
-			b.Read(nameBuf);
-			this.name = Encoding.ASCII.GetString(nameBuf).Split((char)0)[0];
-		}
+		this.scale[0] = b.ReadSingle();
+		this.scale[1] = b.ReadSingle();
+		this.scale[2] = b.ReadSingle();
+		this.translate[0] = b.ReadSingle();
+		this.translate[1] = b.ReadSingle();
+		this.translate[2] = b.ReadSingle();
+		var nameBuf = new byte[16];
+		b.Read(nameBuf);
+		this.name = Encoding.ASCII.GetString(nameBuf).Split((char)0)[0];
 	}
 }

@@ -17,40 +17,39 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.types
+namespace Quake2Sharp.render.types;
+
+public abstract class glpoly_t
 {
-	public abstract class glpoly_t
+	public static readonly int STRIDE = 7;
+	public static readonly int BYTE_STRIDE = 7 * sizeof(float);
+	public static readonly int MAX_VERTICES = 64;
+	public glpoly_t next;
+	public glpoly_t chain;
+	public int numverts;
+	public int flags; // for SURF_UNDERWATER (not needed anymore?)
+
+	// the array position (glDrawArrays) 
+	public int pos = 0;
+
+	protected glpoly_t()
 	{
-		public static readonly int STRIDE = 7;
-		public static readonly int BYTE_STRIDE = 7 * sizeof(float);
-		public static readonly int MAX_VERTICES = 64;
-		public glpoly_t next;
-		public glpoly_t chain;
-		public int numverts;
-		public int flags; // for SURF_UNDERWATER (not needed anymore?)
-
-		// the array position (glDrawArrays) 
-		public int pos = 0;
-
-		protected glpoly_t()
-		{
-		}
-
-		public abstract float x(int index);
-		public abstract void x(int index, float value);
-		public abstract float y(int index);
-		public abstract void y(int index, float value);
-		public abstract float z(int index);
-		public abstract void z(int index, float value);
-		public abstract float s1(int index);
-		public abstract void s1(int index, float value);
-		public abstract float t1(int index);
-		public abstract void t1(int index, float value);
-		public abstract float s2(int index);
-		public abstract void s2(int index, float value);
-		public abstract float t2(int index);
-		public abstract void t2(int index, float value);
-		public abstract void beginScrolling(float s1);
-		public abstract void endScrolling();
 	}
+
+	public abstract float x(int index);
+	public abstract void x(int index, float value);
+	public abstract float y(int index);
+	public abstract void y(int index, float value);
+	public abstract float z(int index);
+	public abstract void z(int index, float value);
+	public abstract float s1(int index);
+	public abstract void s1(int index, float value);
+	public abstract float t1(int index);
+	public abstract void t1(int index, float value);
+	public abstract float s2(int index);
+	public abstract void s2(int index, float value);
+	public abstract float t2(int index);
+	public abstract void t2(int index, float value);
+	public abstract void beginScrolling(float s1);
+	public abstract void endScrolling();
 }

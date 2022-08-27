@@ -17,35 +17,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
+namespace Quake2Sharp.client.types;
+
+using render.types;
+using System;
+
+public class clientinfo_t
 {
-	using render.types;
-	using System;
+	public string name = "";
+	public string cinfo = "";
+	public image_t skin; // ptr
+	public image_t icon; // ptr
+	public string iconname = "";
+	public model_t model; // ptr
+	public model_t[] weaponmodel = new model_t[Defines.MAX_CLIENTWEAPONMODELS]; // arary of references
 
-	public class clientinfo_t
+	//	public void reset()
+	//	{
+	//		set(new clientinfo_t());
+	//	}
+
+	public void set(clientinfo_t from)
 	{
-		public string name = "";
-		public string cinfo = "";
-		public image_t skin; // ptr
-		public image_t icon; // ptr
-		public string iconname = "";
-		public model_t model; // ptr
-		public model_t[] weaponmodel = new model_t[Defines.MAX_CLIENTWEAPONMODELS]; // arary of references
-
-		//	public void reset()
-		//	{
-		//		set(new clientinfo_t());
-		//	}
-
-		public void set(clientinfo_t from)
-		{
-			this.name = from.name;
-			this.cinfo = from.cinfo;
-			this.skin = from.skin;
-			this.icon = from.icon;
-			this.iconname = from.iconname;
-			this.model = from.model;
-			Array.Copy(from.weaponmodel, 0, this.weaponmodel, 0, Defines.MAX_CLIENTWEAPONMODELS);
-		}
+		this.name = from.name;
+		this.cinfo = from.cinfo;
+		this.skin = from.skin;
+		this.icon = from.icon;
+		this.iconname = from.iconname;
+		this.model = from.model;
+		Array.Copy(from.weaponmodel, 0, this.weaponmodel, 0, Defines.MAX_CLIENTWEAPONMODELS);
 	}
 }

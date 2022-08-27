@@ -17,25 +17,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.server.types
+namespace Quake2Sharp.server.types;
+
+using game.types;
+
+public class areanode_t
 {
-	using game.types;
+	public int axis; // -1 = leaf node
+	public float dist;
+	public areanode_t[] children = new areanode_t[2];
+	public link_t trigger_edicts;
+	public link_t solid_edicts;
 
-	public class areanode_t
+	// used for debugging
+	//	float mins_rst[] = {0,0,0};
+	//	float maxs_rst[] = {0,0,0};
+	public areanode_t()
 	{
-		public int axis; // -1 = leaf node
-		public float dist;
-		public areanode_t[] children = new areanode_t[2];
-		public link_t trigger_edicts;
-		public link_t solid_edicts;
-
-		// used for debugging
-		//	float mins_rst[] = {0,0,0};
-		//	float maxs_rst[] = {0,0,0};
-		public areanode_t()
-		{
-			this.trigger_edicts = new(this);
-			this.solid_edicts = new(this);
-		}
+		this.trigger_edicts = new(this);
+		this.solid_edicts = new(this);
 	}
 }

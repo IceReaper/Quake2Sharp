@@ -17,34 +17,33 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dface_t
 {
-	using System.IO;
+	public static readonly int SIZE = 4 * Defines.SIZE_OF_SHORT + 2 * Defines.SIZE_OF_INT + Defines.MAXLIGHTMAPS;
 
-	public class dface_t
+	//unsigned short	planenum;
+	public int planenum;
+	public short side;
+	public int firstedge; // we must support > 64k edges
+	public short numedges;
+	public short texinfo;
+
+	// lighting info
+	public byte[] styles = new byte[Defines.MAXLIGHTMAPS];
+	public int lightofs; // start of [numstyles*surfsize] samples
+
+	public dface_t(BinaryReader b)
 	{
-		public static readonly int SIZE = 4 * Defines.SIZE_OF_SHORT + 2 * Defines.SIZE_OF_INT + Defines.MAXLIGHTMAPS;
-
-		//unsigned short	planenum;
-		public int planenum;
-		public short side;
-		public int firstedge; // we must support > 64k edges
-		public short numedges;
-		public short texinfo;
-
-		// lighting info
-		public byte[] styles = new byte[Defines.MAXLIGHTMAPS];
-		public int lightofs; // start of [numstyles*surfsize] samples
-
-		public dface_t(BinaryReader b)
-		{
-			this.planenum = b.ReadUInt16();
-			this.side = b.ReadInt16();
-			this.firstedge = b.ReadInt32();
-			this.numedges = b.ReadInt16();
-			this.texinfo = b.ReadInt16();
-			b.Read(this.styles);
-			this.lightofs = b.ReadInt32();
-		}
+		this.planenum = b.ReadUInt16();
+		this.side = b.ReadInt16();
+		this.firstedge = b.ReadInt32();
+		this.numedges = b.ReadInt16();
+		this.texinfo = b.ReadInt16();
+		b.Read(this.styles);
+		this.lightofs = b.ReadInt32();
 	}
 }

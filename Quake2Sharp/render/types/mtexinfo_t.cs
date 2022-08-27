@@ -17,28 +17,27 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.types
+namespace Quake2Sharp.render.types;
+
+using System;
+
+public class mtexinfo_t
 {
-	using System;
+	// [s/t][xyz offset]
+	public float[][] vecs = { new float[] { 0, 0, 0, 0 }, new float[] { 0, 0, 0, 0 } };
+	public int flags;
+	public int numframes;
+	public mtexinfo_t next; // animation chain
+	public image_t image;
 
-	public class mtexinfo_t
+	public void clear()
 	{
-		// [s/t][xyz offset]
-		public float[][] vecs = { new float[] { 0, 0, 0, 0 }, new float[] { 0, 0, 0, 0 } };
-		public int flags;
-		public int numframes;
-		public mtexinfo_t next; // animation chain
-		public image_t image;
+		Array.Fill(this.vecs[0], 0);
+		Array.Fill(this.vecs[1], 0);
 
-		public void clear()
-		{
-			Array.Fill(this.vecs[0], 0);
-			Array.Fill(this.vecs[1], 0);
-
-			this.flags = 0;
-			this.numframes = 0;
-			this.next = null;
-			this.image = null;
-		}
+		this.flags = 0;
+		this.numframes = 0;
+		this.next = null;
+		this.image = null;
 	}
 }

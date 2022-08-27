@@ -17,23 +17,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	public class cinematics_t
-	{
-		public bool restart_sound;
-		public int s_rate;
-		public int s_width;
-		public int s_channels;
-		public int width;
-		public int height;
-		public byte[] pic;
-		public byte[] pic_pending;
+namespace Quake2Sharp.client.types;
 
-		// order 1 huffman stuff
-		public int[] hnodes1; // [256][256][2];
-		public readonly int[] numhnodes1 = new int[256];
-		public readonly int[] h_used = new int[512];
-		public readonly int[] h_count = new int[512];
-	}
+public class cinematics_t
+{
+	public bool restart_sound;
+	public int s_rate;
+	public int s_width;
+	public int s_channels;
+	public int width;
+	public int height;
+	public byte[] pic;
+	public byte[] pic_pending;
+
+	// order 1 huffman stuff
+	public int[] hnodes1; // [256][256][2];
+	public readonly int[] numhnodes1 = new int[256];
+	public readonly int[] h_used = new int[512];
+	public readonly int[] h_count = new int[512];
 }

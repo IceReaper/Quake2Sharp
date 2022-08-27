@@ -17,12 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+public class cmdalias_t
 {
-	public class cmdalias_t
-	{
-		public cmdalias_t next;
-		public string name = "";
-		public string value;
-	}
+	public cmdalias_t next;
+	public string name = "";
+	public string value;
 }

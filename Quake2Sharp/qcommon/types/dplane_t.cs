@@ -17,25 +17,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dplane_t
 {
-	using System.IO;
-
-	public class dplane_t
+	public dplane_t(BinaryReader bb)
 	{
-		public dplane_t(BinaryReader bb)
-		{
-			this.normal[0] = bb.ReadSingle();
-			this.normal[1] = bb.ReadSingle();
-			this.normal[2] = bb.ReadSingle();
+		this.normal[0] = bb.ReadSingle();
+		this.normal[1] = bb.ReadSingle();
+		this.normal[2] = bb.ReadSingle();
 
-			this.dist = bb.ReadSingle();
-			this.type = bb.ReadInt32();
-		}
-
-		public float[] normal = { 0, 0, 0 };
-		public float dist;
-		public int type; // PLANE_X - PLANE_ANYZ ?remove? trivial to regenerate
-		public static readonly int SIZE = 3 * 4 + 4 + 4;
+		this.dist = bb.ReadSingle();
+		this.type = bb.ReadInt32();
 	}
+
+	public float[] normal = { 0, 0, 0 };
+	public float dist;
+	public int type; // PLANE_X - PLANE_ANYZ ?remove? trivial to regenerate
+	public static readonly int SIZE = 3 * 4 + 4 + 4;
 }

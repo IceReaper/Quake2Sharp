@@ -17,17 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
+namespace Quake2Sharp.client.types;
+
+public class playermodelinfo_t
 {
-	public class playermodelinfo_t
-	{
-		public int nskins;
-		public string[] skindisplaynames;
+	public int nskins;
+	public string[] skindisplaynames;
 
-		//char displayname[MAX_DISPLAYNAME];
-		public string displayname;
+	//char displayname[MAX_DISPLAYNAME];
+	public string displayname;
 
-		//char directory[MAX_QPATH];
-		public string directory;
-	}
+	//char directory[MAX_QPATH];
+	public string directory;
 }

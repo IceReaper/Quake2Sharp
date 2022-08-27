@@ -17,20 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class darea_t
 {
-	using System.IO;
-
-	public class darea_t
+	public darea_t(BinaryReader bb)
 	{
-		public darea_t(BinaryReader bb)
-		{
-			this.numareaportals = bb.ReadInt32();
-			this.firstareaportal = bb.ReadInt32();
-		}
-
-		public int numareaportals;
-		public int firstareaportal;
-		public static int SIZE = 8;
+		this.numareaportals = bb.ReadInt32();
+		this.firstareaportal = bb.ReadInt32();
 	}
+
+	public int numareaportals;
+	public int firstareaportal;
+	public static int SIZE = 8;
 }

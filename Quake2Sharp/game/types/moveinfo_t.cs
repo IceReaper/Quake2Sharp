@@ -17,96 +17,95 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+using adapters;
+using System.IO;
+using util;
+
+public class moveinfo_t
 {
-	using adapters;
-	using System.IO;
-	using util;
+	// fixed data
+	public float[] start_origin = { 0, 0, 0 };
+	public float[] start_angles = { 0, 0, 0 };
+	public float[] end_origin = { 0, 0, 0 };
+	public float[] end_angles = { 0, 0, 0 };
+	public int sound_start;
+	public int sound_middle;
+	public int sound_end;
+	public float accel;
+	public float speed;
+	public float decel;
+	public float distance;
+	public float wait;
 
-	public class moveinfo_t
+	// state data
+	public int state;
+	public float[] dir = { 0, 0, 0 };
+	public float current_speed;
+	public float move_speed;
+	public float next_speed;
+	public float remaining_distance;
+	public float decel_distance;
+	public EntThinkAdapter endfunc;
+
+	/** saves the moveinfo to the file.*/
+	public void write(BinaryWriter f)
 	{
-		// fixed data
-		public float[] start_origin = { 0, 0, 0 };
-		public float[] start_angles = { 0, 0, 0 };
-		public float[] end_origin = { 0, 0, 0 };
-		public float[] end_angles = { 0, 0, 0 };
-		public int sound_start;
-		public int sound_middle;
-		public int sound_end;
-		public float accel;
-		public float speed;
-		public float decel;
-		public float distance;
-		public float wait;
+		f.Write(this.start_origin);
+		f.Write(this.start_angles);
+		f.Write(this.end_origin);
+		f.Write(this.end_angles);
 
-		// state data
-		public int state;
-		public float[] dir = { 0, 0, 0 };
-		public float current_speed;
-		public float move_speed;
-		public float next_speed;
-		public float remaining_distance;
-		public float decel_distance;
-		public EntThinkAdapter endfunc;
+		f.Write(this.sound_start);
+		f.Write(this.sound_middle);
+		f.Write(this.sound_end);
 
-		/** saves the moveinfo to the file.*/
-		public void write(BinaryWriter f)
-		{
-			f.Write(this.start_origin);
-			f.Write(this.start_angles);
-			f.Write(this.end_origin);
-			f.Write(this.end_angles);
+		f.Write(this.accel);
+		f.Write(this.speed);
+		f.Write(this.decel);
+		f.Write(this.distance);
 
-			f.Write(this.sound_start);
-			f.Write(this.sound_middle);
-			f.Write(this.sound_end);
+		f.Write(this.wait);
 
-			f.Write(this.accel);
-			f.Write(this.speed);
-			f.Write(this.decel);
-			f.Write(this.distance);
+		f.Write(this.state);
+		f.Write(this.dir);
 
-			f.Write(this.wait);
+		f.Write(this.current_speed);
+		f.Write(this.move_speed);
+		f.Write(this.next_speed);
+		f.Write(this.remaining_distance);
+		f.Write(this.decel_distance);
+		f.Write(this.endfunc);
+	}
 
-			f.Write(this.state);
-			f.Write(this.dir);
+	/** Reads the moveinfo from a file. */
+	public void read(BinaryReader f)
+	{
+		this.start_origin = f.ReadVector();
+		this.start_angles = f.ReadVector();
+		this.end_origin = f.ReadVector();
+		this.end_angles = f.ReadVector();
 
-			f.Write(this.current_speed);
-			f.Write(this.move_speed);
-			f.Write(this.next_speed);
-			f.Write(this.remaining_distance);
-			f.Write(this.decel_distance);
-			f.Write(this.endfunc);
-		}
+		this.sound_start = f.ReadInt32();
+		this.sound_middle = f.ReadInt32();
+		this.sound_end = f.ReadInt32();
 
-		/** Reads the moveinfo from a file. */
-		public void read(BinaryReader f)
-		{
-			this.start_origin = f.ReadVector();
-			this.start_angles = f.ReadVector();
-			this.end_origin = f.ReadVector();
-			this.end_angles = f.ReadVector();
+		this.accel = f.ReadSingle();
+		this.speed = f.ReadSingle();
+		this.decel = f.ReadSingle();
+		this.distance = f.ReadSingle();
 
-			this.sound_start = f.ReadInt32();
-			this.sound_middle = f.ReadInt32();
-			this.sound_end = f.ReadInt32();
+		this.wait = f.ReadSingle();
 
-			this.accel = f.ReadSingle();
-			this.speed = f.ReadSingle();
-			this.decel = f.ReadSingle();
-			this.distance = f.ReadSingle();
+		this.state = f.ReadInt32();
+		this.dir = f.ReadVector();
 
-			this.wait = f.ReadSingle();
-
-			this.state = f.ReadInt32();
-			this.dir = f.ReadVector();
-
-			this.current_speed = f.ReadSingle();
-			this.move_speed = f.ReadSingle();
-			this.next_speed = f.ReadSingle();
-			this.remaining_distance = f.ReadSingle();
-			this.decel_distance = f.ReadSingle();
-			this.endfunc = (EntThinkAdapter)f.ReadAdapter();
-		}
+		this.current_speed = f.ReadSingle();
+		this.move_speed = f.ReadSingle();
+		this.next_speed = f.ReadSingle();
+		this.remaining_distance = f.ReadSingle();
+		this.decel_distance = f.ReadSingle();
+		this.endfunc = (EntThinkAdapter)f.ReadAdapter();
 	}
 }

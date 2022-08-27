@@ -17,31 +17,30 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.opengl.types
+namespace Quake2Sharp.render.opengl.types;
+
+using render.types;
+
+public class gllightmapstate_t
 {
-	using render.types;
+	public int internal_format;
+	public int current_lightmap_texture;
+	public readonly msurface_t[] lightmap_surfaces = new msurface_t[OpenGLRenderApi.MAX_LIGHTMAPS];
+	public readonly int[] allocated = new int[OpenGLRenderApi.BLOCK_WIDTH];
 
-	public class gllightmapstate_t
+	// the lightmap texture data needs to be kept in
+	// main memory so texsubimage can update properly
+	public readonly int[] lightmap_buffer = new int[OpenGLRenderApi.BLOCK_WIDTH * OpenGLRenderApi.BLOCK_HEIGHT];
+
+	public gllightmapstate_t()
 	{
-		public int internal_format;
-		public int current_lightmap_texture;
-		public readonly msurface_t[] lightmap_surfaces = new msurface_t[OpenGLRenderApi.MAX_LIGHTMAPS];
-		public readonly int[] allocated = new int[OpenGLRenderApi.BLOCK_WIDTH];
+		for (var i = 0; i < OpenGLRenderApi.MAX_LIGHTMAPS; i++)
+			this.lightmap_surfaces[i] = new();
+	}
 
-		// the lightmap texture data needs to be kept in
-		// main memory so texsubimage can update properly
-		public readonly int[] lightmap_buffer = new int[OpenGLRenderApi.BLOCK_WIDTH * OpenGLRenderApi.BLOCK_HEIGHT];
-
-		public gllightmapstate_t()
-		{
-			for (var i = 0; i < OpenGLRenderApi.MAX_LIGHTMAPS; i++)
-				this.lightmap_surfaces[i] = new();
-		}
-
-		public void clearLightmapSurfaces()
-		{
-			for (var i = 0; i < OpenGLRenderApi.MAX_LIGHTMAPS; i++)
-				this.lightmap_surfaces[i] = new();
-		}
+	public void clearLightmapSurfaces()
+	{
+		for (var i = 0; i < OpenGLRenderApi.MAX_LIGHTMAPS; i++)
+			this.lightmap_surfaces[i] = new();
 	}
 }

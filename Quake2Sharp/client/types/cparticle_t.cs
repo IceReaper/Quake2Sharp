@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	public class cparticle_t
-	{
-		public cparticle_t next;
-		public float time;
-		public float[] org = { 0, 0, 0 }; // vec3_t
-		public float[] vel = { 0, 0, 0 }; // vec3_t
-		public float[] accel = { 0, 0, 0 }; // vec3_t
-		public float color;
+namespace Quake2Sharp.client.types;
 
-		//public float colorvel;
-		public float alpha;
-		public float alphavel;
-	}
+public class cparticle_t
+{
+	public cparticle_t next;
+	public float time;
+	public float[] org = { 0, 0, 0 }; // vec3_t
+	public float[] vel = { 0, 0, 0 }; // vec3_t
+	public float[] accel = { 0, 0, 0 }; // vec3_t
+	public float color;
+
+	//public float colorvel;
+	public float alpha;
+	public float alphavel;
 }

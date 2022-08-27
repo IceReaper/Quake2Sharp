@@ -17,21 +17,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render
-{
-	public class DisplayMode
-	{
-		public readonly int Width;
-		public readonly int Height;
-		public readonly int RefreshRate;
-		public readonly int BitDepth;
+namespace Quake2Sharp.render;
 
-		public DisplayMode(int width, int height, int refreshRate, int bitDepth)
-		{
-			this.Width = width;
-			this.Height = height;
-			this.RefreshRate = refreshRate;
-			this.BitDepth = bitDepth;
-		}
+public class DisplayMode
+{
+	public readonly int Width;
+	public readonly int Height;
+	public readonly int RefreshRate;
+	public readonly int BitDepth;
+
+	public DisplayMode(int width, int height, int refreshRate, int bitDepth)
+	{
+		this.Width = width;
+		this.Height = height;
+		this.RefreshRate = refreshRate;
+		this.BitDepth = bitDepth;
 	}
 }

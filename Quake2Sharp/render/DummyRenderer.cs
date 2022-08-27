@@ -17,118 +17,117 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render
+namespace Quake2Sharp.render;
+
+using client.types;
+using sys;
+using System;
+using System.Drawing;
+using types;
+
+public class DummyRenderer : refexport_t
 {
-	using client.types;
-	using sys;
-	using System;
-	using System.Drawing;
-	using types;
-
-	public class DummyRenderer : refexport_t
+	public bool Init(int vid_xpos, int vid_ypos)
 	{
-		public bool Init(int vid_xpos, int vid_ypos)
-		{
-			return false;
-		}
+		return false;
+	}
 
-		public void Shutdown()
-		{
-		}
+	public void Shutdown()
+	{
+	}
 
-		public void BeginRegistration(string map)
-		{
-		}
+	public void BeginRegistration(string map)
+	{
+	}
 
-		public model_t RegisterModel(string name)
-		{
-			return null;
-		}
+	public model_t RegisterModel(string name)
+	{
+		return null;
+	}
 
-		public image_t RegisterSkin(string name)
-		{
-			return null;
-		}
+	public image_t RegisterSkin(string name)
+	{
+		return null;
+	}
 
-		public image_t RegisterPic(string name)
-		{
-			return null;
-		}
+	public image_t RegisterPic(string name)
+	{
+		return null;
+	}
 
-		public void SetSky(string name, float rotate, float[] axis)
-		{
-		}
+	public void SetSky(string name, float rotate, float[] axis)
+	{
+	}
 
-		public void EndRegistration()
-		{
-		}
+	public void EndRegistration()
+	{
+	}
 
-		public void RenderFrame(refdef_t fd)
-		{
-		}
+	public void RenderFrame(refdef_t fd)
+	{
+	}
 
-		public void DrawGetPicSize(ref Size dim, string name)
-		{
-		}
+	public void DrawGetPicSize(ref Size dim, string name)
+	{
+	}
 
-		public void DrawPic(int x, int y, string name)
-		{
-		}
+	public void DrawPic(int x, int y, string name)
+	{
+	}
 
-		public void DrawStretchPic(int x, int y, int w, int h, string name)
-		{
-		}
+	public void DrawStretchPic(int x, int y, int w, int h, string name)
+	{
+	}
 
-		public void DrawChar(int x, int y, int num)
-		{
-		}
+	public void DrawChar(int x, int y, int num)
+	{
+	}
 
-		public void DrawTileClear(int x, int y, int w, int h, string name)
-		{
-		}
+	public void DrawTileClear(int x, int y, int w, int h, string name)
+	{
+	}
 
-		public void DrawFill(int x, int y, int w, int h, int c)
-		{
-		}
+	public void DrawFill(int x, int y, int w, int h, int c)
+	{
+	}
 
-		public void DrawFadeScreen()
-		{
-		}
+	public void DrawFadeScreen()
+	{
+	}
 
-		public void DrawStretchRaw(int x, int y, int w, int h, int cols, int rows, byte[] data)
-		{
-		}
+	public void DrawStretchRaw(int x, int y, int w, int h, int cols, int rows, byte[] data)
+	{
+	}
 
-		public void CinematicSetPalette(byte[] palette)
-		{
-		}
+	public void CinematicSetPalette(byte[] palette)
+	{
+	}
 
-		public void BeginFrame(float camera_separation)
-		{
-		}
+	public void BeginFrame(float camera_separation)
+	{
+	}
 
-		public void EndFrame()
-		{
-		}
+	public void EndFrame()
+	{
+	}
 
-		public void updateScreen(Action callback)
-		{
-			callback();
-		}
+	public void updateScreen(Action callback)
+	{
+		callback();
+	}
 
-		public int apiVersion()
-		{
-			return 0;
-		}
+	public int apiVersion()
+	{
+		return 0;
+	}
 
-		public DisplayMode[] getModeList()
-		{
-			return null;
-		}
+	public DisplayMode[] getModeList()
+	{
+		return null;
+	}
 
-		public KBD getKeyboardHandler()
-		{
-			return null;
-		}
+	public KBD getKeyboardHandler()
+	{
+		return null;
 	}
 }

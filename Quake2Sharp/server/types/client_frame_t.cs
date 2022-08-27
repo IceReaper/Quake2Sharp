@@ -17,17 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.server.types
-{
-	using game.types;
+namespace Quake2Sharp.server.types;
 
-	public class client_frame_t
-	{
-		public int areabytes;
-		public byte[] areabits = new byte[Defines.MAX_MAP_AREAS / 8]; // portalarea visibility bits
-		public player_state_t ps = new();
-		public int num_entities;
-		public int first_entity; // into the circular sv_packet_entities[]
-		public int senttime; // for ping calculations
-	}
+using game.types;
+
+public class client_frame_t
+{
+	public int areabytes;
+	public byte[] areabits = new byte[Defines.MAX_MAP_AREAS / 8]; // portalarea visibility bits
+	public player_state_t ps = new();
+	public int num_entities;
+	public int first_entity; // into the circular sv_packet_entities[]
+	public int senttime; // for ping calculations
 }

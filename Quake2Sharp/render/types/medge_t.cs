@@ -17,23 +17,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.types
+namespace Quake2Sharp.render.types;
+
+using System.IO;
+
+public class medge_t
 {
-	using System.IO;
+	public static readonly int DISK_SIZE = 2 * Defines.SIZE_OF_SHORT;
+	public static readonly int MEM_SIZE = 3 * Defines.SIZE_OF_INT;
 
-	public class medge_t
+	// unsigned short
+	public int[] v = new int[2];
+	public int cachededgeoffset;
+
+	public medge_t(BinaryReader b)
 	{
-		public static readonly int DISK_SIZE = 2 * Defines.SIZE_OF_SHORT;
-		public static readonly int MEM_SIZE = 3 * Defines.SIZE_OF_INT;
-
-		// unsigned short
-		public int[] v = new int[2];
-		public int cachededgeoffset;
-
-		public medge_t(BinaryReader b)
-		{
-			this.v[0] = b.ReadUInt16();
-			this.v[1] = b.ReadUInt16();
-		}
+		this.v[0] = b.ReadUInt16();
+		this.v[1] = b.ReadUInt16();
 	}
 }

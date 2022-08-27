@@ -17,21 +17,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	public class vidmode_t
-	{
-		private string description;
-		public int width;
-		public int height;
-		private int mode;
+namespace Quake2Sharp.client.types;
 
-		public vidmode_t(string description, int width, int height, int mode)
-		{
-			this.description = description;
-			this.width = width;
-			this.height = height;
-			this.mode = mode;
-		}
+public class vidmode_t
+{
+	private string description;
+	public int width;
+	public int height;
+	private int mode;
+
+	public vidmode_t(string description, int width, int height, int mode)
+	{
+		this.description = description;
+		this.width = width;
+		this.height = height;
+		this.mode = mode;
 	}
 }

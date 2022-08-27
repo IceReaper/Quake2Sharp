@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.adapters
+namespace Quake2Sharp.game.adapters;
+
+using System;
+using types;
+
+public class EntThinkAdapter : SuperAdapter
 {
-	using System;
-	using types;
+	public Func<edict_t, bool> think;
 
-	public class EntThinkAdapter : SuperAdapter
+	public EntThinkAdapter(string id, Func<edict_t, bool> think)
+		: base(id)
 	{
-		public Func<edict_t, bool> think;
-
-		public EntThinkAdapter(string id, Func<edict_t, bool> think)
-			: base(id)
-		{
-			this.think = think;
-		}
+		this.think = think;
 	}
 }

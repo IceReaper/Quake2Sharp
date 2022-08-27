@@ -17,26 +17,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dvis_t
 {
-	using System.IO;
-
-	public class dvis_t
+	public dvis_t(BinaryReader bb)
 	{
-		public dvis_t(BinaryReader bb)
+		this.numclusters = bb.ReadInt32();
+		this.bitofs = new int[this.numclusters][];
+
+		for (var i = 0; i < this.numclusters; i++)
 		{
-			this.numclusters = bb.ReadInt32();
-			this.bitofs = new int[this.numclusters][];
-
-			for (var i = 0; i < this.numclusters; i++)
-			{
-				this.bitofs[i] = new int[2];
-				this.bitofs[i][0] = bb.ReadInt32();
-				this.bitofs[i][1] = bb.ReadInt32();
-			}
+			this.bitofs[i] = new int[2];
+			this.bitofs[i][0] = bb.ReadInt32();
+			this.bitofs[i][1] = bb.ReadInt32();
 		}
-
-		public int numclusters;
-		public int[][] bitofs = new int[8][]; // bitofs[numclusters][2]	
 	}
+
+	public int numclusters;
+	public int[][] bitofs = new int[8][]; // bitofs[numclusters][2]	
 }

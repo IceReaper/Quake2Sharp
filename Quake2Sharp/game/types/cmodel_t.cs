@@ -17,13 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+public class cmodel_t
 {
-	public class cmodel_t
-	{
-		public float[] mins = { 0, 0, 0 };
-		public float[] maxs = { 0, 0, 0 };
-		public float[] origin = { 0, 0, 0 }; // for sounds or lights
-		public int headnode;
-	}
+	public float[] mins = { 0, 0, 0 };
+	public float[] maxs = { 0, 0, 0 };
+	public float[] origin = { 0, 0, 0 }; // for sounds or lights
+	public int headnode;
 }

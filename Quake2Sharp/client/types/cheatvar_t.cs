@@ -17,14 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	using game.types;
+namespace Quake2Sharp.client.types;
 
-	public class cheatvar_t
-	{
-		public string name;
-		public string value;
-		public cvar_t var;
-	}
+using game.types;
+
+public class cheatvar_t
+{
+	public string name;
+	public string value;
+	public cvar_t var;
 }

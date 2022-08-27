@@ -17,12 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+public class csurface_t
 {
-	public class csurface_t
-	{
-		public string name = "";
-		public int flags;
-		public int value;
-	}
+	public string name = "";
+	public int flags;
+	public int value;
 }

@@ -17,25 +17,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	public class refdef_t
-	{
-		public int x, y, width, height; // in virtual screen coordinates
-		public float fov_x, fov_y;
-		public float[] vieworg = { 0, 0, 0 };
-		public float[] viewangles = { 0, 0, 0 };
-		public float[] blend = { 0, 0, 0, 0 }; // rgba 0-1 full screen blend
-		public float time; // time is uesed to auto animate
-		public int rdflags; // RDF_UNDERWATER, etc
-		public byte[] areabits; // if not NULL, only areas with set bits will be drawn
-		public lightstyle_t[] lightstyles; // [MAX_LIGHTSTYLES]
-		public int num_entities;
-		public entity_t[] entities;
-		public int num_dlights;
-		public dlight_t[] dlights;
-		public int num_particles;
+namespace Quake2Sharp.client.types;
 
-		//public particle_t	particles[];
-	}
+public class refdef_t
+{
+	public int x, y, width, height; // in virtual screen coordinates
+	public float fov_x, fov_y;
+	public float[] vieworg = { 0, 0, 0 };
+	public float[] viewangles = { 0, 0, 0 };
+	public float[] blend = { 0, 0, 0, 0 }; // rgba 0-1 full screen blend
+	public float time; // time is uesed to auto animate
+	public int rdflags; // RDF_UNDERWATER, etc
+	public byte[] areabits; // if not NULL, only areas with set bits will be drawn
+	public lightstyle_t[] lightstyles; // [MAX_LIGHTSTYLES]
+	public int num_entities;
+	public entity_t[] entities;
+	public int num_dlights;
+	public dlight_t[] dlights;
+	public int num_particles;
+
+	//public particle_t	particles[];
 }

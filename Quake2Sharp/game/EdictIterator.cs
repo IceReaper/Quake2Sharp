@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game
+namespace Quake2Sharp.game;
+
+using types;
+
+/** Helps for iterating over the gedicts[] array. RST.*/
+public class EdictIterator
 {
-	using types;
-
-	/** Helps for iterating over the gedicts[] array. RST.*/
-	public class EdictIterator
+	public EdictIterator(int i)
 	{
-		public EdictIterator(int i)
-		{
-			this.i = i;
-		}
-
-		public edict_t o;
-		public int i;
+		this.i = i;
 	}
+
+	public edict_t o;
+	public int i;
 }

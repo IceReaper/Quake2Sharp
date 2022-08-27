@@ -17,26 +17,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+using System.Text;
+
+public class dsprframe_t
 {
-	using System.IO;
-	using System.Text;
+	public int width, height;
+	public int origin_x, origin_y; // raster coordinates inside pic
+	public string name; // name of pcx file (MAX_SKINNAME)
 
-	public class dsprframe_t
+	public dsprframe_t(BinaryReader b)
 	{
-		public int width, height;
-		public int origin_x, origin_y; // raster coordinates inside pic
-		public string name; // name of pcx file (MAX_SKINNAME)
-
-		public dsprframe_t(BinaryReader b)
-		{
-			this.width = b.ReadInt32();
-			this.height = b.ReadInt32();
-			this.origin_x = b.ReadInt32();
-			this.origin_y = b.ReadInt32();
-			var nameBuf = new byte[qfiles.MAX_SKINNAME];
-			b.Read(nameBuf);
-			this.name = Encoding.ASCII.GetString(nameBuf).Split((char)0)[0];
-		}
+		this.width = b.ReadInt32();
+		this.height = b.ReadInt32();
+		this.origin_x = b.ReadInt32();
+		this.origin_y = b.ReadInt32();
+		var nameBuf = new byte[qfiles.MAX_SKINNAME];
+		b.Read(nameBuf);
+		this.name = Encoding.ASCII.GetString(nameBuf).Split((char)0)[0];
 	}
 }

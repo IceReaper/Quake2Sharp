@@ -17,166 +17,165 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.sys
-{
-	using client;
-	using game;
-	using game.types;
-	using qcommon;
-	using util;
+namespace Quake2Sharp.sys;
 
-	/**
+using client;
+using game;
+using game.types;
+using qcommon;
+using util;
+
+/**
  * IN
  */
-	public class IN
+public class IN
+{
+	private static bool mouse_avail = true;
+	public static bool mouse_active;
+	private static int old_mouse_x;
+	private static int old_mouse_y;
+	private static bool mlooking;
+
+	public static void ActivateMouse()
 	{
-		private static bool mouse_avail = true;
-		public static bool mouse_active;
-		private static int old_mouse_x;
-		private static int old_mouse_y;
-		private static bool mlooking;
+		if (!IN.mouse_avail)
+			return;
 
-		public static void ActivateMouse()
+		if (!IN.mouse_active)
 		{
-			if (!IN.mouse_avail)
-				return;
-
-			if (!IN.mouse_active)
-			{
-				KBD.mx = KBD.my = 0; // don't spazz
-				IN.install_grabs();
-				IN.mouse_active = true;
-			}
+			KBD.mx = KBD.my = 0; // don't spazz
+			IN.install_grabs();
+			IN.mouse_active = true;
 		}
+	}
 
-		public static void DeactivateMouse()
+	public static void DeactivateMouse()
+	{
+		// if (!mouse_avail || c == null) return;
+		if (IN.mouse_active)
 		{
-			// if (!mouse_avail || c == null) return;
-			if (IN.mouse_active)
-			{
-				IN.uninstall_grabs();
-				IN.mouse_active = false;
-			}
+			IN.uninstall_grabs();
+			IN.mouse_active = false;
 		}
+	}
 
-		private static void install_grabs()
-		{
-			Globals.re.getKeyboardHandler().installGrabs();
-		}
+	private static void install_grabs()
+	{
+		Globals.re.getKeyboardHandler().installGrabs();
+	}
 
-		private static void uninstall_grabs()
-		{
-			Globals.re.getKeyboardHandler().uninstallGrabs();
-		}
+	private static void uninstall_grabs()
+	{
+		Globals.re.getKeyboardHandler().uninstallGrabs();
+	}
 
-		public static void toggleMouse()
-		{
-			if (IN.mouse_avail)
-			{
-				IN.mouse_avail = false;
-				IN.DeactivateMouse();
-			}
-			else
-			{
-				IN.mouse_avail = true;
-				IN.ActivateMouse();
-			}
-		}
-
-		public static void Init()
-		{
-			Globals.in_mouse = Cvar.Get("in_mouse", "1", Defines.CVAR_ARCHIVE);
-			Globals.in_joystick = Cvar.Get("in_joystick", "0", Defines.CVAR_ARCHIVE);
-		}
-
-		public static void Shutdown()
+	public static void toggleMouse()
+	{
+		if (IN.mouse_avail)
 		{
 			IN.mouse_avail = false;
+			IN.DeactivateMouse();
 		}
-
-		public static void Real_IN_Init()
+		else
 		{
-			// mouse variables
-			Globals.m_filter = Cvar.Get("m_filter", "0", 0);
-			Globals.in_mouse = Cvar.Get("in_mouse", "1", Defines.CVAR_ARCHIVE);
-			Globals.freelook = Cvar.Get("freelook", "1", 0);
-			Globals.lookstrafe = Cvar.Get("lookstrafe", "0", 0);
-			Globals.sensitivity = Cvar.Get("sensitivity", "3", 0);
-			Globals.m_pitch = Cvar.Get("m_pitch", "0.022", 0);
-			Globals.m_yaw = Cvar.Get("m_yaw", "0.022", 0);
-			Globals.m_forward = Cvar.Get("m_forward", "1", 0);
-			Globals.m_side = Cvar.Get("m_side", "0.8", 0);
-
-			Cmd.AddCommand("+mlook", () => { IN.MLookDown(); });
-
-			Cmd.AddCommand("-mlook", () => { IN.MLookUp(); });
-
-			Cmd.AddCommand("force_centerview", () => { IN.Force_CenterView_f(); });
-
-			Cmd.AddCommand("togglemouse", () => { IN.toggleMouse(); });
-
 			IN.mouse_avail = true;
+			IN.ActivateMouse();
 		}
+	}
 
-		public static void Frame()
+	public static void Init()
+	{
+		Globals.in_mouse = Cvar.Get("in_mouse", "1", Defines.CVAR_ARCHIVE);
+		Globals.in_joystick = Cvar.Get("in_joystick", "0", Defines.CVAR_ARCHIVE);
+	}
+
+	public static void Shutdown()
+	{
+		IN.mouse_avail = false;
+	}
+
+	public static void Real_IN_Init()
+	{
+		// mouse variables
+		Globals.m_filter = Cvar.Get("m_filter", "0", 0);
+		Globals.in_mouse = Cvar.Get("in_mouse", "1", Defines.CVAR_ARCHIVE);
+		Globals.freelook = Cvar.Get("freelook", "1", 0);
+		Globals.lookstrafe = Cvar.Get("lookstrafe", "0", 0);
+		Globals.sensitivity = Cvar.Get("sensitivity", "3", 0);
+		Globals.m_pitch = Cvar.Get("m_pitch", "0.022", 0);
+		Globals.m_yaw = Cvar.Get("m_yaw", "0.022", 0);
+		Globals.m_forward = Cvar.Get("m_forward", "1", 0);
+		Globals.m_side = Cvar.Get("m_side", "0.8", 0);
+
+		Cmd.AddCommand("+mlook", () => { IN.MLookDown(); });
+
+		Cmd.AddCommand("-mlook", () => { IN.MLookUp(); });
+
+		Cmd.AddCommand("force_centerview", () => { IN.Force_CenterView_f(); });
+
+		Cmd.AddCommand("togglemouse", () => { IN.toggleMouse(); });
+
+		IN.mouse_avail = true;
+	}
+
+	public static void Frame()
+	{
+		if (!Globals.cl.cinematicpalette_active
+		    && (!Globals.cl.refresh_prepped || Globals.cls.key_dest == Defines.key_console || Globals.cls.key_dest == Defines.key_menu))
+			IN.DeactivateMouse();
+		else
+			IN.ActivateMouse();
+	}
+
+	public static void CenterView()
+	{
+		Globals.cl.viewangles[Defines.PITCH] = -Math3D.SHORT2ANGLE(Globals.cl.frame.playerstate.pmove.delta_angles[Defines.PITCH]);
+	}
+
+	public static void Move(usercmd_t cmd)
+	{
+		if (!IN.mouse_avail)
+			return;
+
+		if (Globals.m_filter.value != 0.0f)
 		{
-			if (!Globals.cl.cinematicpalette_active
-				&& (!Globals.cl.refresh_prepped || Globals.cls.key_dest == Defines.key_console || Globals.cls.key_dest == Defines.key_menu))
-				IN.DeactivateMouse();
-			else
-				IN.ActivateMouse();
+			KBD.mx = (KBD.mx + IN.old_mouse_x) / 2;
+			KBD.my = (KBD.my + IN.old_mouse_y) / 2;
 		}
 
-		public static void CenterView()
-		{
-			Globals.cl.viewangles[Defines.PITCH] = -Math3D.SHORT2ANGLE(Globals.cl.frame.playerstate.pmove.delta_angles[Defines.PITCH]);
-		}
+		IN.old_mouse_x = KBD.mx;
+		IN.old_mouse_y = KBD.my;
 
-		public static void Move(usercmd_t cmd)
-		{
-			if (!IN.mouse_avail)
-				return;
+		KBD.mx = (int)(KBD.mx * Globals.sensitivity.value);
+		KBD.my = (int)(KBD.my * Globals.sensitivity.value);
 
-			if (Globals.m_filter.value != 0.0f)
-			{
-				KBD.mx = (KBD.mx + IN.old_mouse_x) / 2;
-				KBD.my = (KBD.my + IN.old_mouse_y) / 2;
-			}
+		// add mouse X/Y movement to cmd
+		if ((CL_input.in_strafe.state & 1) != 0 || (Globals.lookstrafe.value != 0 && IN.mlooking))
+			cmd.sidemove += (short)(Globals.m_side.value * KBD.mx);
+		else
+			Globals.cl.viewangles[Defines.YAW] -= Globals.m_yaw.value * KBD.mx;
 
-			IN.old_mouse_x = KBD.mx;
-			IN.old_mouse_y = KBD.my;
+		if ((IN.mlooking || Globals.freelook.value != 0.0f) && (CL_input.in_strafe.state & 1) == 0)
+			Globals.cl.viewangles[Defines.PITCH] += Globals.m_pitch.value * KBD.my;
+		else
+			cmd.forwardmove -= (short)(Globals.m_forward.value * KBD.my);
 
-			KBD.mx = (int)(KBD.mx * Globals.sensitivity.value);
-			KBD.my = (int)(KBD.my * Globals.sensitivity.value);
+		KBD.mx = KBD.my = 0;
+	}
 
-			// add mouse X/Y movement to cmd
-			if ((CL_input.in_strafe.state & 1) != 0 || (Globals.lookstrafe.value != 0 && IN.mlooking))
-				cmd.sidemove += (short)(Globals.m_side.value * KBD.mx);
-			else
-				Globals.cl.viewangles[Defines.YAW] -= Globals.m_yaw.value * KBD.mx;
+	private static void MLookDown()
+	{
+		IN.mlooking = true;
+	}
 
-			if ((IN.mlooking || Globals.freelook.value != 0.0f) && (CL_input.in_strafe.state & 1) == 0)
-				Globals.cl.viewangles[Defines.PITCH] += Globals.m_pitch.value * KBD.my;
-			else
-				cmd.forwardmove -= (short)(Globals.m_forward.value * KBD.my);
+	private static void MLookUp()
+	{
+		IN.mlooking = false;
+		IN.CenterView();
+	}
 
-			KBD.mx = KBD.my = 0;
-		}
-
-		private static void MLookDown()
-		{
-			IN.mlooking = true;
-		}
-
-		private static void MLookUp()
-		{
-			IN.mlooking = false;
-			IN.CenterView();
-		}
-
-		private static void Force_CenterView_f()
-		{
-			Globals.cl.viewangles[Defines.PITCH] = 0;
-		}
+	private static void Force_CenterView_f()
+	{
+		Globals.cl.viewangles[Defines.PITCH] = 0;
 	}
 }

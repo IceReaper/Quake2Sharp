@@ -17,17 +17,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game
-{
-	using qcommon;
-	using System;
-	using System.IO;
-	using types;
-	using util;
+namespace Quake2Sharp.game;
 
-	public class GameSVCmds
-	{
-		/**
+using qcommon;
+using System;
+using System.IO;
+using types;
+using util;
+
+public class GameSVCmds
+{
+	/**
      * 
      * PACKET FILTERING
      * 
@@ -59,266 +59,265 @@ namespace Quake2Sharp.game
      * your local network.
      * 
      */
-		public class ipfilter_t
-		{
-			public int mask;
-			public int compare;
-		}
+	public class ipfilter_t
+	{
+		public int mask;
+		public int compare;
+	}
 
-		public static void Svcmd_Test_f()
-		{
-			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Svcmd_Test_f()\n");
-		}
+	public static void Svcmd_Test_f()
+	{
+		GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Svcmd_Test_f()\n");
+	}
 
-		public static readonly int MAX_IPFILTERS = 1024;
-		private static readonly ipfilter_t[] ipfilters = new ipfilter_t[GameSVCmds.MAX_IPFILTERS];
-		private static int numipfilters;
+	public static readonly int MAX_IPFILTERS = 1024;
+	private static readonly ipfilter_t[] ipfilters = new ipfilter_t[GameSVCmds.MAX_IPFILTERS];
+	private static int numipfilters;
 
-		static GameSVCmds()
-		{
-			for (var n = 0; n < GameSVCmds.MAX_IPFILTERS; n++)
-				GameSVCmds.ipfilters[n] = new();
-		}
+	static GameSVCmds()
+	{
+		for (var n = 0; n < GameSVCmds.MAX_IPFILTERS; n++)
+			GameSVCmds.ipfilters[n] = new();
+	}
 
-		/**
+	/**
      * StringToFilter.
      */
-		private static bool StringToFilter(string s, ipfilter_t f)
+	private static bool StringToFilter(string s, ipfilter_t f)
+	{
+		byte[] b = { 0, 0, 0, 0 };
+		byte[] m = { 0, 0, 0, 0 };
+
+		try
 		{
-			byte[] b = { 0, 0, 0, 0 };
-			byte[] m = { 0, 0, 0, 0 };
+			var tk = s.Split(". ");
 
-			try
+			for (var n = 0; n < 4; n++)
 			{
-				var tk = s.Split(". ");
+				b[n] = (byte)Lib.atoi(tk[n]);
 
-				for (var n = 0; n < 4; n++)
-				{
-					b[n] = (byte)Lib.atoi(tk[n]);
-
-					if (b[n] != 0)
-						m[n] = 0xff;
-				}
-
-				f.mask = new BinaryReader(new MemoryStream(m)).ReadInt32();
-				f.compare = new BinaryReader(new MemoryStream(b)).ReadInt32();
-			}
-			catch (Exception)
-			{
-				GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Bad filter address: " + s + "\n");
-
-				return false;
+				if (b[n] != 0)
+					m[n] = 0xff;
 			}
 
-			return true;
+			f.mask = new BinaryReader(new MemoryStream(m)).ReadInt32();
+			f.compare = new BinaryReader(new MemoryStream(b)).ReadInt32();
+		}
+		catch (Exception)
+		{
+			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Bad filter address: " + s + "\n");
+
+			return false;
 		}
 
-		/**
+		return true;
+	}
+
+	/**
      * SV_FilterPacket.
      */
-		public static bool SV_FilterPacket(string from)
+	public static bool SV_FilterPacket(string from)
+	{
+		int i;
+		int @in;
+		int[] m = { 0, 0, 0, 0 };
+
+		var p = 0;
+		char c;
+
+		i = 0;
+
+		while (p < from.Length && i < 4)
 		{
-			int i;
-			int @in;
-			int[] m = { 0, 0, 0, 0 };
+			m[i] = 0;
 
-			var p = 0;
-			char c;
+			c = from[p];
 
-			i = 0;
-
-			while (p < from.Length && i < 4)
+			while (c >= '0' && c <= '9')
 			{
-				m[i] = 0;
-
-				c = from[p];
-
-				while (c >= '0' && c <= '9')
-				{
-					m[i] = m[i] * 10 + (c - '0');
-					c = from[p++];
-				}
-
-				if (p == from.Length || c == ':')
-					break;
-
-				i++;
-				p++;
+				m[i] = m[i] * 10 + (c - '0');
+				c = from[p++];
 			}
 
-			@in = (m[0] & 0xff) | ((m[1] & 0xff) << 8) | ((m[2] & 0xff) << 16) | ((m[3] & 0xff) << 24);
+			if (p == from.Length || c == ':')
+				break;
 
-			for (i = 0; i < GameSVCmds.numipfilters; i++)
-			{
-				if ((@in & GameSVCmds.ipfilters[i].mask) == GameSVCmds.ipfilters[i].compare)
-					return (int)GameBase.filterban.value != 0;
-			}
-
-			return (int)1 - GameBase.filterban.value != 0;
+			i++;
+			p++;
 		}
 
-		/**
+		@in = (m[0] & 0xff) | ((m[1] & 0xff) << 8) | ((m[2] & 0xff) << 16) | ((m[3] & 0xff) << 24);
+
+		for (i = 0; i < GameSVCmds.numipfilters; i++)
+		{
+			if ((@in & GameSVCmds.ipfilters[i].mask) == GameSVCmds.ipfilters[i].compare)
+				return (int)GameBase.filterban.value != 0;
+		}
+
+		return (int)1 - GameBase.filterban.value != 0;
+	}
+
+	/**
      * SV_AddIP_f.
      */
-		private static void SVCmd_AddIP_f()
-		{
-			int i;
+	private static void SVCmd_AddIP_f()
+	{
+		int i;
 
-			if (GameBase.gi.argc() < 3)
+		if (GameBase.gi.argc() < 3)
+		{
+			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Usage:  addip <ip-mask>\n");
+
+			return;
+		}
+
+		for (i = 0; i < GameSVCmds.numipfilters; i++)
+		{
+			if ((uint)GameSVCmds.ipfilters[i].compare == 0xffffffff)
+				break; // free spot
+		}
+
+		if (i == GameSVCmds.numipfilters)
+		{
+			if (GameSVCmds.numipfilters == GameSVCmds.MAX_IPFILTERS)
 			{
-				GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Usage:  addip <ip-mask>\n");
+				GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "IP filter list is full\n");
 
 				return;
 			}
 
-			for (i = 0; i < GameSVCmds.numipfilters; i++)
-			{
-				if ((uint)GameSVCmds.ipfilters[i].compare == 0xffffffff)
-					break; // free spot
-			}
-
-			if (i == GameSVCmds.numipfilters)
-			{
-				if (GameSVCmds.numipfilters == GameSVCmds.MAX_IPFILTERS)
-				{
-					GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "IP filter list is full\n");
-
-					return;
-				}
-
-				GameSVCmds.numipfilters++;
-			}
-
-			if (!GameSVCmds.StringToFilter(GameBase.gi.argv(2), GameSVCmds.ipfilters[i]))
-				GameSVCmds.ipfilters[i].compare = unchecked((int)0xffffffff);
+			GameSVCmds.numipfilters++;
 		}
 
-		/**
+		if (!GameSVCmds.StringToFilter(GameBase.gi.argv(2), GameSVCmds.ipfilters[i]))
+			GameSVCmds.ipfilters[i].compare = unchecked((int)0xffffffff);
+	}
+
+	/**
      * SV_RemoveIP_f.
      */
-		private static void SVCmd_RemoveIP_f()
+	private static void SVCmd_RemoveIP_f()
+	{
+		ipfilter_t f = new();
+		int i, j;
+
+		if (GameBase.gi.argc() < 3)
 		{
-			ipfilter_t f = new();
-			int i, j;
+			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Usage:  sv removeip <ip-mask>\n");
 
-			if (GameBase.gi.argc() < 3)
-			{
-				GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Usage:  sv removeip <ip-mask>\n");
-
-				return;
-			}
-
-			if (!GameSVCmds.StringToFilter(GameBase.gi.argv(2), f))
-				return;
-
-			for (i = 0; i < GameSVCmds.numipfilters; i++)
-			{
-				if (GameSVCmds.ipfilters[i].mask == f.mask && GameSVCmds.ipfilters[i].compare == f.compare)
-				{
-					for (j = i + 1; j < GameSVCmds.numipfilters; j++)
-						GameSVCmds.ipfilters[j - 1] = GameSVCmds.ipfilters[j];
-
-					GameSVCmds.numipfilters--;
-					GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Removed.\n");
-
-					return;
-				}
-			}
-
-			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Didn't find " + GameBase.gi.argv(2) + ".\n");
+			return;
 		}
 
-		/**
+		if (!GameSVCmds.StringToFilter(GameBase.gi.argv(2), f))
+			return;
+
+		for (i = 0; i < GameSVCmds.numipfilters; i++)
+		{
+			if (GameSVCmds.ipfilters[i].mask == f.mask && GameSVCmds.ipfilters[i].compare == f.compare)
+			{
+				for (j = i + 1; j < GameSVCmds.numipfilters; j++)
+					GameSVCmds.ipfilters[j - 1] = GameSVCmds.ipfilters[j];
+
+				GameSVCmds.numipfilters--;
+				GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Removed.\n");
+
+				return;
+			}
+		}
+
+		GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Didn't find " + GameBase.gi.argv(2) + ".\n");
+	}
+
+	/**
      * SV_ListIP_f.
      */
-		private static void SVCmd_ListIP_f()
-		{
-			int i;
-			byte[] b;
+	private static void SVCmd_ListIP_f()
+	{
+		int i;
+		byte[] b;
 
-			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Filter list:\n");
+		GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Filter list:\n");
+
+		for (i = 0; i < GameSVCmds.numipfilters; i++)
+		{
+			b = Lib.getIntBytes(GameSVCmds.ipfilters[i].compare);
+			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, (b[0] & 0xff) + "." + (b[1] & 0xff) + "." + (b[2] & 0xff) + "." + (b[3] & 0xff));
+		}
+	}
+
+	/**
+     * SV_WriteIP_f.
+     */
+	private static void SVCmd_WriteIP_f()
+	{
+		StreamWriter f;
+
+		//char name[MAX_OSPATH];
+		string name;
+		byte[] b;
+
+		int i;
+		cvar_t game;
+
+		game = GameBase.gi.cvar("game", "", 0);
+
+		if (game.@string == null)
+			name = Defines.GAMEVERSION + "/listip.cfg";
+		else
+			name = game.@string + "/listip.cfg";
+
+		GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Writing " + name + ".\n");
+
+		f = File.CreateText(name);
+
+		if (f == null)
+		{
+			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Couldn't open " + name + "\n");
+
+			return;
+		}
+
+		try
+		{
+			f.Write("set filterban " + (int)GameBase.filterban.value + "\n");
 
 			for (i = 0; i < GameSVCmds.numipfilters; i++)
 			{
 				b = Lib.getIntBytes(GameSVCmds.ipfilters[i].compare);
-				GameBase.gi.cprintf(null, Defines.PRINT_HIGH, (b[0] & 0xff) + "." + (b[1] & 0xff) + "." + (b[2] & 0xff) + "." + (b[3] & 0xff));
+				f.Write("sv addip " + (b[0] & 0xff) + "." + (b[1] & 0xff) + "." + (b[2] & 0xff) + "." + (b[3] & 0xff) + "\n");
 			}
 		}
-
-		/**
-     * SV_WriteIP_f.
-     */
-		private static void SVCmd_WriteIP_f()
+		catch (Exception e)
 		{
-			StreamWriter f;
-
-			//char name[MAX_OSPATH];
-			string name;
-			byte[] b;
-
-			int i;
-			cvar_t game;
-
-			game = GameBase.gi.cvar("game", "", 0);
-
-			if (game.@string == null)
-				name = Defines.GAMEVERSION + "/listip.cfg";
-			else
-				name = game.@string + "/listip.cfg";
-
-			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Writing " + name + ".\n");
-
-			f = File.CreateText(name);
-
-			if (f == null)
-			{
-				GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Couldn't open " + name + "\n");
-
-				return;
-			}
-
-			try
-			{
-				f.Write("set filterban " + (int)GameBase.filterban.value + "\n");
-
-				for (i = 0; i < GameSVCmds.numipfilters; i++)
-				{
-					b = Lib.getIntBytes(GameSVCmds.ipfilters[i].compare);
-					f.Write("sv addip " + (b[0] & 0xff) + "." + (b[1] & 0xff) + "." + (b[2] & 0xff) + "." + (b[3] & 0xff) + "\n");
-				}
-			}
-			catch (Exception e)
-			{
-				Com.Printf("IOError in SVCmd_WriteIP_f:" + e);
-			}
-
-			f.Close();
+			Com.Printf("IOError in SVCmd_WriteIP_f:" + e);
 		}
 
-		/**
+		f.Close();
+	}
+
+	/**
      * ServerCommand
      * 
      * ServerCommand will be called when an "sv" command is issued. The game can
      * issue gi.argc() / gi.argv() commands to get the rest of the parameters
      */
-		public static void ServerCommand()
-		{
-			string cmd;
+	public static void ServerCommand()
+	{
+		string cmd;
 
-			cmd = GameBase.gi.argv(1);
+		cmd = GameBase.gi.argv(1);
 
-			if (Lib.Q_stricmp(cmd, "test") == 0)
-				GameSVCmds.Svcmd_Test_f();
-			else if (Lib.Q_stricmp(cmd, "addip") == 0)
-				GameSVCmds.SVCmd_AddIP_f();
-			else if (Lib.Q_stricmp(cmd, "removeip") == 0)
-				GameSVCmds.SVCmd_RemoveIP_f();
-			else if (Lib.Q_stricmp(cmd, "listip") == 0)
-				GameSVCmds.SVCmd_ListIP_f();
-			else if (Lib.Q_stricmp(cmd, "writeip") == 0)
-				GameSVCmds.SVCmd_WriteIP_f();
-			else
-				GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Unknown server command \"" + cmd + "\"\n");
-		}
+		if (Lib.Q_stricmp(cmd, "test") == 0)
+			GameSVCmds.Svcmd_Test_f();
+		else if (Lib.Q_stricmp(cmd, "addip") == 0)
+			GameSVCmds.SVCmd_AddIP_f();
+		else if (Lib.Q_stricmp(cmd, "removeip") == 0)
+			GameSVCmds.SVCmd_RemoveIP_f();
+		else if (Lib.Q_stricmp(cmd, "listip") == 0)
+			GameSVCmds.SVCmd_ListIP_f();
+		else if (Lib.Q_stricmp(cmd, "writeip") == 0)
+			GameSVCmds.SVCmd_WriteIP_f();
+		else
+			GameBase.gi.cprintf(null, Defines.PRINT_HIGH, "Unknown server command \"" + cmd + "\"\n");
 	}
 }

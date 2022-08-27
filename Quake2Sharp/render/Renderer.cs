@@ -17,85 +17,84 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render
+namespace Quake2Sharp.render;
+
+using client.types;
+using opengl;
+using opentk;
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+public class Renderer
 {
-	using client.types;
-	using opengl;
-	using opentk;
-	using System;
-	using System.Collections.Generic;
-	using System.Runtime.CompilerServices;
+	private static readonly RenderAPI renderApi = new OpenGLRenderApi();
+	private static readonly List<Ref> drivers = new();
 
-	public class Renderer
+	static Renderer()
 	{
-		private static readonly RenderAPI renderApi = new OpenGLRenderApi();
-		private static readonly List<Ref> drivers = new();
-
-		static Renderer()
+		try
 		{
 			try
 			{
-				try
-				{
-					RuntimeHelpers.RunClassConstructor(typeof(OpenTkRenderer).TypeHandle);
-				}
-				catch (Exception)
-				{
-				}
+				RuntimeHelpers.RunClassConstructor(typeof(OpenTkRenderer).TypeHandle);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				Console.WriteLine(e);
 			}
 		}
-
-		public static void register(Ref impl)
+		catch (Exception e)
 		{
-			if (impl == null)
-				throw new("Ref implementation can't be null");
+			Console.WriteLine(e);
+		}
+	}
 
-			if (!Renderer.drivers.Contains(impl))
-				Renderer.drivers.Add(impl);
+	public static void register(Ref impl)
+	{
+		if (impl == null)
+			throw new("Ref implementation can't be null");
+
+		if (!Renderer.drivers.Contains(impl))
+			Renderer.drivers.Add(impl);
+	}
+
+	public static refexport_t getDriver(string driverName)
+	{
+		Ref driver = null;
+		var count = Renderer.drivers.Count;
+
+		for (var i = 0; i < count; i++)
+		{
+			driver = Renderer.drivers[i];
+
+			if (driver.getName().Equals(driverName))
+				return driver.GetRefAPI(Renderer.renderApi);
 		}
 
-		public static refexport_t getDriver(string driverName)
-		{
-			Ref driver = null;
-			var count = Renderer.drivers.Count;
+		return null;
+	}
 
-			for (var i = 0; i < count; i++)
-			{
-				driver = Renderer.drivers[i];
+	public static string getDefaultName()
+	{
+		return Renderer.drivers.Count == 0 ? null : Renderer.drivers[0].getName();
+	}
 
-				if (driver.getName().Equals(driverName))
-					return driver.GetRefAPI(Renderer.renderApi);
-			}
+	public static string getPreferedName()
+	{
+		return Renderer.drivers.Count == 0 ? null : Renderer.drivers[0].getName();
+	}
 
+	public static string[] getDriverNames()
+	{
+		if (Renderer.drivers.Count == 0)
 			return null;
-		}
 
-		public static string getDefaultName()
-		{
-			return Renderer.drivers.Count == 0 ? null : Renderer.drivers[0].getName();
-		}
+		var count = Renderer.drivers.Count;
+		var names = new string[count];
 
-		public static string getPreferedName()
-		{
-			return Renderer.drivers.Count == 0 ? null : Renderer.drivers[0].getName();
-		}
+		for (var i = 0; i < count; i++)
+			names[i] = Renderer.drivers[i].getName();
 
-		public static string[] getDriverNames()
-		{
-			if (Renderer.drivers.Count == 0)
-				return null;
-
-			var count = Renderer.drivers.Count;
-			var names = new string[count];
-
-			for (var i = 0; i < count; i++)
-				names[i] = Renderer.drivers[i].getName();
-
-			return names;
-		}
+		return names;
 	}
 }

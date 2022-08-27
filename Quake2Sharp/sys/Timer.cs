@@ -17,23 +17,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.sys
+namespace Quake2Sharp.sys;
+
+using System.Diagnostics;
+
+public abstract class Timer
 {
-	using System.Diagnostics;
+	private static readonly Stopwatch stopwatch;
 
-	public abstract class Timer
+	static Timer()
 	{
-		private static readonly Stopwatch stopwatch;
+		Timer.stopwatch = new();
+		Timer.stopwatch.Start();
+	}
 
-		static Timer()
-		{
-			Timer.stopwatch = new();
-			Timer.stopwatch.Start();
-		}
-
-		public static int Milliseconds()
-		{
-			return Globals.curtime = (int)Timer.stopwatch.ElapsedMilliseconds;
-		}
+	public static int Milliseconds()
+	{
+		return Globals.curtime = (int)Timer.stopwatch.ElapsedMilliseconds;
 	}
 }

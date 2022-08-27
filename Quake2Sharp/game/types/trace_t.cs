@@ -17,50 +17,49 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+using util;
+
+//a trace is returned when a box is swept through the world
+public class trace_t
 {
-	using util;
+	public bool allsolid; // if true, plane is not valid
+	public bool startsolid; // if true, the initial point was in a solid area
+	public float fraction; // time completed, 1.0 = didn't hit anything
+	public float[] endpos = { 0, 0, 0 }; // final position
 
-	//a trace is returned when a box is swept through the world
-	public class trace_t
+	// memory
+	public cplane_t plane = new(); // surface normal at impact
+
+	// pointer
+	public csurface_t surface; // surface hit
+	public int contents; // contents on other side of surface hit
+
+	// pointer
+	public edict_t ent; // not set by CM_*() functions
+
+	public void set(trace_t from)
 	{
-		public bool allsolid; // if true, plane is not valid
-		public bool startsolid; // if true, the initial point was in a solid area
-		public float fraction; // time completed, 1.0 = didn't hit anything
-		public float[] endpos = { 0, 0, 0 }; // final position
+		this.allsolid = from.allsolid;
+		this.startsolid = from.allsolid;
+		this.fraction = from.fraction;
+		Math3D.VectorCopy(from.endpos, this.endpos);
+		this.plane.set(from.plane);
+		this.surface = from.surface;
+		this.contents = from.contents;
+		this.ent = from.ent;
+	}
 
-		// memory
-		public cplane_t plane = new(); // surface normal at impact
-
-		// pointer
-		public csurface_t surface; // surface hit
-		public int contents; // contents on other side of surface hit
-
-		// pointer
-		public edict_t ent; // not set by CM_*() functions
-
-		public void set(trace_t from)
-		{
-			this.allsolid = from.allsolid;
-			this.startsolid = from.allsolid;
-			this.fraction = from.fraction;
-			Math3D.VectorCopy(from.endpos, this.endpos);
-			this.plane.set(from.plane);
-			this.surface = from.surface;
-			this.contents = from.contents;
-			this.ent = from.ent;
-		}
-
-		public void clear()
-		{
-			this.allsolid = false;
-			this.startsolid = false;
-			this.fraction = 0;
-			Math3D.VectorClear(this.endpos);
-			this.plane.clear();
-			this.surface = null;
-			this.contents = 0;
-			this.ent = null;
-		}
+	public void clear()
+	{
+		this.allsolid = false;
+		this.startsolid = false;
+		this.fraction = 0;
+		Math3D.VectorClear(this.endpos);
+		this.plane.clear();
+		this.surface = null;
+		this.contents = 0;
+		this.ent = null;
 	}
 }

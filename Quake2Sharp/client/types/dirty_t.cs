@@ -17,26 +17,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
+namespace Quake2Sharp.client.types;
+
+public class dirty_t
 {
-	public class dirty_t
+	public int x1;
+	public int x2;
+	public int y1;
+	public int y2;
+
+	public void set(dirty_t src)
 	{
-		public int x1;
-		public int x2;
-		public int y1;
-		public int y2;
+		this.x1 = src.x1;
+		this.x2 = src.x2;
+		this.y1 = src.y1;
+		this.y2 = src.y2;
+	}
 
-		public void set(dirty_t src)
-		{
-			this.x1 = src.x1;
-			this.x2 = src.x2;
-			this.y1 = src.y1;
-			this.y2 = src.y2;
-		}
-
-		public void clear()
-		{
-			this.x1 = this.x2 = this.y1 = this.y2 = 0;
-		}
+	public void clear()
+	{
+		this.x1 = this.x2 = this.y1 = this.y2 = 0;
 	}
 }

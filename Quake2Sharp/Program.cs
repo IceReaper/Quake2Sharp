@@ -17,68 +17,67 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp
+namespace Quake2Sharp;
+
+using qcommon;
+using sys;
+using System;
+
+public class Program
 {
-	using qcommon;
-	using sys;
-	using System;
+	public static Action<int> UpdateLoop;
+	private static int last = Timer.Milliseconds();
 
-	public class Program
+	public static void Main(string[] args)
 	{
-		public static Action<int> UpdateLoop;
-		private static int last = Timer.Milliseconds();
+		var dedicated = false;
 
-		public static void Main(string[] args)
+		// check if we are in dedicated mode to hide the dialog.
+		for (var n = 0; n < args.Length; n++)
 		{
-			var dedicated = false;
+			if (!args[n].Equals("+set"))
+				continue;
 
-			// check if we are in dedicated mode to hide the dialog.
-			for (var n = 0; n < args.Length; n++)
+			if (++n >= args.Length)
+				break;
+
+			if (!args[n].Equals("dedicated"))
+				continue;
+
+			if (++n >= args.Length)
+				break;
+
+			if (!args[n].Equals("1") && !args[n].Equals("\"1\""))
+				continue;
+
+			Com.Printf("Starting in dedicated mode.\n");
+			dedicated = true;
+		}
+
+		Globals.dedicated = Cvar.Get("dedicated", "0", Defines.CVAR_NOSET);
+
+		if (dedicated)
+			Globals.dedicated.value = 1.0f;
+
+		Qcommon.Init(args);
+
+		Globals.nostdout = Cvar.Get("nostdout", "0", 0);
+
+		while (true)
+		{
+			// find time spending rendering last frame
+			var now = Timer.Milliseconds();
+			var delta = now - Program.last;
+
+			if (Program.UpdateLoop != null)
+				Program.UpdateLoop(delta);
+			else if (delta > 0)
 			{
-				if (!args[n].Equals("+set"))
-					continue;
-
-				if (++n >= args.Length)
-					break;
-
-				if (!args[n].Equals("dedicated"))
-					continue;
-
-				if (++n >= args.Length)
-					break;
-
-				if (!args[n].Equals("1") && !args[n].Equals("\"1\""))
-					continue;
-
-				Com.Printf("Starting in dedicated mode.\n");
-				dedicated = true;
+				Qcommon.FrameUpdate(delta);
+				Qcommon.FrameRender(delta);
 			}
 
-			Globals.dedicated = Cvar.Get("dedicated", "0", Defines.CVAR_NOSET);
-
-			if (dedicated)
-				Globals.dedicated.value = 1.0f;
-
-			Qcommon.Init(args);
-
-			Globals.nostdout = Cvar.Get("nostdout", "0", 0);
-
-			while (true)
-			{
-				// find time spending rendering last frame
-				var now = Timer.Milliseconds();
-				var delta = now - Program.last;
-
-				if (Program.UpdateLoop != null)
-					Program.UpdateLoop(delta);
-				else if (delta > 0)
-				{
-					Qcommon.FrameUpdate(delta);
-					Qcommon.FrameRender(delta);
-				}
-
-				Program.last = now;
-			}
+			Program.last = now;
 		}
 	}
 }

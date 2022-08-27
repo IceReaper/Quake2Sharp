@@ -17,80 +17,79 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.sound
+namespace Quake2Sharp.sound;
+
+using System.IO;
+using types;
+
+public interface Sound
 {
-	using System.IO;
-	using types;
+	string getName();
+	bool Init();
+	void Shutdown();
 
-	public interface Sound
-	{
-		string getName();
-		bool Init();
-		void Shutdown();
+	/*
+	=====================
+	S_BeginRegistration
+	=====================
+	*/
+	void BeginRegistration();
 
-		/*
-		=====================
-		S_BeginRegistration
-		=====================
-		*/
-		void BeginRegistration();
+	/*
+	=====================
+	S_RegisterSound
+	=====================
+	*/
+	sfx_t RegisterSound(string sample);
 
-		/*
-		=====================
-		S_RegisterSound
-		=====================
-		*/
-		sfx_t RegisterSound(string sample);
+	/*
+	=====================
+	S_EndRegistration
+	=====================
+	*/
+	void EndRegistration();
 
-		/*
-		=====================
-		S_EndRegistration
-		=====================
-		*/
-		void EndRegistration();
+	/*
+	==================
+	S_StartLocalSound
+	==================
+	*/
+	void StartLocalSound(string sound);
 
-		/*
-		==================
-		S_StartLocalSound
-		==================
-		*/
-		void StartLocalSound(string sound);
+	/*
+	====================
+	S_StartSound
 
-		/*
-		====================
-		S_StartSound
-	
-		Validates the parms and ques the sound up
-		if pos is NULL, the sound will be dynamically sourced from the entity
-		Entchannel 0 will never override a playing sound
-		====================
-		*/
-		void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs);
+	Validates the parms and ques the sound up
+	if pos is NULL, the sound will be dynamically sourced from the entity
+	Entchannel 0 will never override a playing sound
+	====================
+	*/
+	void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs);
 
-		/*
-		============
-		S_Update
-	
-		Called once each time through the main loop
-		============
-		*/
-		void Update(float[] origin, float[] forward, float[] right, float[] up);
+	/*
+	============
+	S_Update
 
-		/*
-		============
-		S_RawSamples
-		 
-		Cinematic streaming and voice over network
-		============
-		*/
-		void RawSamples(int samples, int rate, int width, int channels, BinaryReader data);
-		void disableStreaming();
+	Called once each time through the main loop
+	============
+	*/
+	void Update(float[] origin, float[] forward, float[] right, float[] up);
 
-		/*
-		==================
-		S_StopAllSounds
-		==================
-		*/
-		void StopAllSounds();
-	}
+	/*
+	============
+	S_RawSamples
+	 
+	Cinematic streaming and voice over network
+	============
+	*/
+	void RawSamples(int samples, int rate, int width, int channels, BinaryReader data);
+	void disableStreaming();
+
+	/*
+	==================
+	S_StopAllSounds
+	==================
+	*/
+	void StopAllSounds();
 }

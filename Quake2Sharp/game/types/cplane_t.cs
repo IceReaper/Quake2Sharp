@@ -17,41 +17,40 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+using util;
+
+public class cplane_t
 {
-	using util;
+	public float[] normal = new float[3];
+	public float dist;
 
-	public class cplane_t
+	/** This is for fast side tests, 0=xplane, 1=yplane, 2=zplane and 3=arbitrary. */
+	public byte type;
+
+	/** This represents signx + (signy<<1) + (signz << 1). */
+	public byte signbits; // signx + (signy<<1) + (signz<<1)
+
+	public byte[] pad = { 0, 0 };
+
+	public void set(cplane_t c)
 	{
-		public float[] normal = new float[3];
-		public float dist;
+		Math3D.set(this.normal, c.normal);
+		this.dist = c.dist;
+		this.type = c.type;
+		this.signbits = c.signbits;
+		this.pad[0] = c.pad[0];
+		this.pad[1] = c.pad[1];
+	}
 
-		/** This is for fast side tests, 0=xplane, 1=yplane, 2=zplane and 3=arbitrary. */
-		public byte type;
-
-		/** This represents signx + (signy<<1) + (signz << 1). */
-		public byte signbits; // signx + (signy<<1) + (signz<<1)
-
-		public byte[] pad = { 0, 0 };
-
-		public void set(cplane_t c)
-		{
-			Math3D.set(this.normal, c.normal);
-			this.dist = c.dist;
-			this.type = c.type;
-			this.signbits = c.signbits;
-			this.pad[0] = c.pad[0];
-			this.pad[1] = c.pad[1];
-		}
-
-		public void clear()
-		{
-			Math3D.VectorClear(this.normal);
-			this.dist = 0;
-			this.type = 0;
-			this.signbits = 0;
-			this.pad[0] = 0;
-			this.pad[1] = 0;
-		}
+	public void clear()
+	{
+		Math3D.VectorClear(this.normal);
+		this.dist = 0;
+		this.type = 0;
+		this.signbits = 0;
+		this.pad[0] = 0;
+		this.pad[1] = 0;
 	}
 }

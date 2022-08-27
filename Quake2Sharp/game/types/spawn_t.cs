@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+using adapters;
+
+public class spawn_t
 {
-	using adapters;
-
-	public class spawn_t
+	public spawn_t(string name, EntThinkAdapter spawn)
 	{
-		public spawn_t(string name, EntThinkAdapter spawn)
-		{
-			this.name = name;
-			this.spawn = spawn;
-		}
-
-		public string name;
-		public EntThinkAdapter spawn;
+		this.name = name;
+		this.spawn = spawn;
 	}
+
+	public string name;
+	public EntThinkAdapter spawn;
 }

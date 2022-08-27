@@ -17,55 +17,54 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+using System.Text;
+
+/*
+==============================================================================
+
+  .WAL texture file format
+
+==============================================================================
+*/
+public class miptex_t
 {
-	using System.IO;
-	using System.Text;
+	private static readonly int MIPLEVELS = 4;
+	private static readonly int NAME_SIZE = 32;
+	public string name; // char name[32];
+	public int width, height;
+	public int[] offsets = new int[miptex_t.MIPLEVELS]; // 4 mip maps stored
 
-	/*
-	==============================================================================
-	
-	  .WAL texture file format
-	
-	==============================================================================
-	*/
-	public class miptex_t
+	// next frame in animation chain
+	public string animname; //	char	animname[32];
+	public int flags;
+	public int contents;
+	public int value;
+
+	public miptex_t(byte[] dataBytes)
+		: this(new BinaryReader(new MemoryStream(dataBytes)))
 	{
-		private static readonly int MIPLEVELS = 4;
-		private static readonly int NAME_SIZE = 32;
-		public string name; // char name[32];
-		public int width, height;
-		public int[] offsets = new int[miptex_t.MIPLEVELS]; // 4 mip maps stored
+	}
 
-		// next frame in animation chain
-		public string animname; //	char	animname[32];
-		public int flags;
-		public int contents;
-		public int value;
+	public miptex_t(BinaryReader b)
+	{
+		var nameBuf = new byte[miptex_t.NAME_SIZE];
 
-		public miptex_t(byte[] dataBytes)
-			: this(new BinaryReader(new MemoryStream(dataBytes)))
-		{
-		}
-
-		public miptex_t(BinaryReader b)
-		{
-			var nameBuf = new byte[miptex_t.NAME_SIZE];
-
-			// fill header
-			b.Read(nameBuf);
-			this.name = Encoding.ASCII.GetString(nameBuf).Split((char)0)[0];
-			this.width = b.ReadInt32();
-			this.height = b.ReadInt32();
-			this.offsets[0] = b.ReadInt32();
-			this.offsets[1] = b.ReadInt32();
-			this.offsets[2] = b.ReadInt32();
-			this.offsets[3] = b.ReadInt32();
-			b.Read(nameBuf);
-			this.animname = Encoding.ASCII.GetString(nameBuf).Split((char)0)[0];
-			this.flags = b.ReadInt32();
-			this.contents = b.ReadInt32();
-			this.value = b.ReadInt32();
-		}
+		// fill header
+		b.Read(nameBuf);
+		this.name = Encoding.ASCII.GetString(nameBuf).Split((char)0)[0];
+		this.width = b.ReadInt32();
+		this.height = b.ReadInt32();
+		this.offsets[0] = b.ReadInt32();
+		this.offsets[1] = b.ReadInt32();
+		this.offsets[2] = b.ReadInt32();
+		this.offsets[3] = b.ReadInt32();
+		b.Read(nameBuf);
+		this.animname = Encoding.ASCII.GetString(nameBuf).Split((char)0)[0];
+		this.flags = b.ReadInt32();
+		this.contents = b.ReadInt32();
+		this.value = b.ReadInt32();
 	}
 }

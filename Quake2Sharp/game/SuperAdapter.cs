@@ -17,46 +17,45 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game
+namespace Quake2Sharp.game;
+
+using qcommon;
+using System;
+using System.Collections.Generic;
+
+public abstract class SuperAdapter
 {
-	using qcommon;
-	using System;
-	using System.Collections.Generic;
-
-	public abstract class SuperAdapter
+	/** Constructor, does the adapter registration. */
+	public SuperAdapter(string id)
 	{
-		/** Constructor, does the adapter registration. */
-		public SuperAdapter(string id)
-		{
-			this.getID = () => id;
-			SuperAdapter.register(this, id);
-		}
-
-		/** Adapter registration. */
-		private static void register(SuperAdapter sa, string id)
-		{
-			if (SuperAdapter.adapters.ContainsKey(id))
-				SuperAdapter.adapters[id] = sa;
-			else
-				SuperAdapter.adapters.Add(id, sa);
-		}
-
-		/** Adapter repository. */
-		private static readonly Dictionary<string, SuperAdapter> adapters = new();
-
-		/** Returns the adapter from the repository given by its ID. */
-		public static SuperAdapter getFromID(string key)
-		{
-			var sa = (SuperAdapter)SuperAdapter.adapters[key];
-
-			// try to create the adapter
-			if (sa == null)
-				Com.DPrintf("SuperAdapter.getFromID():adapter not found->" + key + "\n");
-
-			return sa;
-		}
-
-		/** Returns the Adapter-ID. */
-		public Func<string> getID;
+		this.getID = () => id;
+		SuperAdapter.register(this, id);
 	}
+
+	/** Adapter registration. */
+	private static void register(SuperAdapter sa, string id)
+	{
+		if (SuperAdapter.adapters.ContainsKey(id))
+			SuperAdapter.adapters[id] = sa;
+		else
+			SuperAdapter.adapters.Add(id, sa);
+	}
+
+	/** Adapter repository. */
+	private static readonly Dictionary<string, SuperAdapter> adapters = new();
+
+	/** Returns the adapter from the repository given by its ID. */
+	public static SuperAdapter getFromID(string key)
+	{
+		var sa = (SuperAdapter)SuperAdapter.adapters[key];
+
+		// try to create the adapter
+		if (sa == null)
+			Com.DPrintf("SuperAdapter.getFromID():adapter not found->" + key + "\n");
+
+		return sa;
+	}
+
+	/** Returns the Adapter-ID. */
+	public Func<string> getID;
 }

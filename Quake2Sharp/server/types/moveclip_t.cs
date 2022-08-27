@@ -17,39 +17,38 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.server.types
+namespace Quake2Sharp.server.types;
+
+using game.types;
+using util;
+
+public class moveclip_t
 {
-	using game.types;
-	using util;
+	public float[] boxmins = { 0, 0, 0 }; // enclose the test object along entire move
+	public float[] boxmaxs = { 0, 0, 0 }; // enclose the test object along entire move
+	public float[] mins; // size of the moving object
+	public float[] maxs; // size of the moving object
+	public float[] mins2 = { 0, 0, 0 }; // size when clipping against mosnters
+	public float[] maxs2 = { 0, 0, 0 }; // size when clipping against mosnters
+	public float[] start;
+	public float[] end;
 
-	public class moveclip_t
+	// mem
+	public trace_t trace = new();
+	public edict_t passedict;
+	public int contentmask;
+
+	public void clear()
 	{
-		public float[] boxmins = { 0, 0, 0 }; // enclose the test object along entire move
-		public float[] boxmaxs = { 0, 0, 0 }; // enclose the test object along entire move
-		public float[] mins; // size of the moving object
-		public float[] maxs; // size of the moving object
-		public float[] mins2 = { 0, 0, 0 }; // size when clipping against mosnters
-		public float[] maxs2 = { 0, 0, 0 }; // size when clipping against mosnters
-		public float[] start;
-		public float[] end;
-
-		// mem
-		public trace_t trace = new();
-		public edict_t passedict;
-		public int contentmask;
-
-		public void clear()
-		{
-			Math3D.VectorClear(this.boxmins);
-			Math3D.VectorClear(this.boxmaxs);
-			Math3D.VectorClear(this.mins);
-			Math3D.VectorClear(this.maxs);
-			Math3D.VectorClear(this.mins2);
-			Math3D.VectorClear(this.maxs2);
-			this.start = this.end = null;
-			this.trace.clear();
-			this.passedict = null;
-			this.contentmask = 0;
-		}
+		Math3D.VectorClear(this.boxmins);
+		Math3D.VectorClear(this.boxmaxs);
+		Math3D.VectorClear(this.mins);
+		Math3D.VectorClear(this.maxs);
+		Math3D.VectorClear(this.mins2);
+		Math3D.VectorClear(this.maxs2);
+		this.start = this.end = null;
+		this.trace.clear();
+		this.passedict = null;
+		this.contentmask = 0;
 	}
 }

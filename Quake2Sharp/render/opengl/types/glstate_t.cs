@@ -17,18 +17,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.opengl.types
+namespace Quake2Sharp.render.opengl.types;
+
+public class glstate_t
 {
-	public class glstate_t
-	{
-		public float inverse_intensity;
-		public bool fullscreen;
-		public int prev_mode;
-		public byte[] d_16to8table;
-		public int lightmap_textures;
-		public int[] currenttextures = { 0, 0 };
-		public int currenttmu;
-		public float camera_separation;
-		public bool stereo_enabled;
-	}
+	public float inverse_intensity;
+	public bool fullscreen;
+	public int prev_mode;
+	public byte[] d_16to8table;
+	public int lightmap_textures;
+	public int[] currenttextures = { 0, 0 };
+	public int currenttmu;
+	public float camera_separation;
+	public bool stereo_enabled;
 }

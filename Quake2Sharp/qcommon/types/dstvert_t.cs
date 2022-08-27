@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dstvert_t
 {
-	using System.IO;
+	public short s;
+	public short t;
 
-	public class dstvert_t
+	public dstvert_t(BinaryReader b)
 	{
-		public short s;
-		public short t;
-
-		public dstvert_t(BinaryReader b)
-		{
-			this.s = b.ReadInt16();
-			this.t = b.ReadInt16();
-		}
+		this.s = b.ReadInt16();
+		this.t = b.ReadInt16();
 	}
 }

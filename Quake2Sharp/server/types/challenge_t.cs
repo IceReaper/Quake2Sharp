@@ -17,15 +17,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.server.types
-{
-	using qcommon.types;
+namespace Quake2Sharp.server.types;
 
-	public class challenge_t
-	{
-		//mem
-		public netadr_t adr = new();
-		public int challenge;
-		public int time;
-	}
+using qcommon.types;
+
+public class challenge_t
+{
+	//mem
+	public netadr_t adr = new();
+	public int challenge;
+	public int time;
 }

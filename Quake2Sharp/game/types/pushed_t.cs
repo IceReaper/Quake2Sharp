@@ -17,13 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+public class pushed_t
 {
-	public class pushed_t
-	{
-		public edict_t ent;
-		public float[] origin = { 0.0f, 0.0f, 0.0f };
-		public float[] angles = { 0.0f, 0.0f, 0.0f };
-		public float deltayaw;
-	}
+	public edict_t ent;
+	public float[] origin = { 0.0f, 0.0f, 0.0f };
+	public float[] angles = { 0.0f, 0.0f, 0.0f };
+	public float deltayaw;
 }

@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.adapters
+namespace Quake2Sharp.game.adapters;
+
+using System;
+using types;
+
+public class EntUseAdapter : SuperAdapter
 {
-	using System;
-	using types;
+	public Action<edict_t, edict_t, edict_t> use;
 
-	public class EntUseAdapter : SuperAdapter
+	public EntUseAdapter(string id, Action<edict_t, edict_t, edict_t> use)
+		: base(id)
 	{
-		public Action<edict_t, edict_t, edict_t> use;
-
-		public EntUseAdapter(string id, Action<edict_t, edict_t, edict_t> use)
-			: base(id)
-		{
-			this.use = use;
-		}
+		this.use = use;
 	}
 }

@@ -17,22 +17,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	public class explosion_t
-	{
-		public int type;
-		public readonly entity_t ent = new();
-		public int frames;
-		public float light;
-		public readonly float[] lightcolor = new float[3];
-		public float start;
-		public int baseframe;
+namespace Quake2Sharp.client.types;
 
-		public void clear()
-		{
-			this.lightcolor[0] = this.lightcolor[1] = this.lightcolor[2] = this.light = this.start = this.type = this.frames = this.baseframe = 0;
-			this.ent.clear();
-		}
+public class explosion_t
+{
+	public int type;
+	public readonly entity_t ent = new();
+	public int frames;
+	public float light;
+	public readonly float[] lightcolor = new float[3];
+	public float start;
+	public int baseframe;
+
+	public void clear()
+	{
+		this.lightcolor[0] = this.lightcolor[1] = this.lightcolor[2] = this.light = this.start = this.type = this.frames = this.baseframe = 0;
+		this.ent.clear();
 	}
 }

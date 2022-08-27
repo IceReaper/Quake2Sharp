@@ -17,18 +17,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.sound.types
-{
-	/**
+namespace Quake2Sharp.sound.types;
+
+/**
  * wavinfo_t
  */
-	public class wavinfo_t
-	{
-		public int rate;
-		public int width;
-		public int channels;
-		public int loopstart;
-		public int samples;
-		public int dataofs; // chunk starts this many bytes from file start
-	}
+public class wavinfo_t
+{
+	public int rate;
+	public int width;
+	public int channels;
+	public int loopstart;
+	public int samples;
+	public int dataofs; // chunk starts this many bytes from file start
 }

@@ -17,36 +17,35 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.opengl.types
+namespace Quake2Sharp.render.opengl.types;
+
+using System;
+using System.Globalization;
+
+public class glconfig_t
 {
-	using System;
-	using System.Globalization;
+	public int renderer;
+	public string renderer_string;
+	public string vendor_string;
+	public string version_string;
+	public string extensions_string;
+	public bool allow_cds;
+	private float version = 1.1f;
 
-	public class glconfig_t
+	public void parseOpenGLVersion()
 	{
-		public int renderer;
-		public string renderer_string;
-		public string vendor_string;
-		public string version_string;
-		public string extensions_string;
-		public bool allow_cds;
-		private float version = 1.1f;
-
-		public void parseOpenGLVersion()
+		try
 		{
-			try
-			{
-				this.version = float.Parse(this.version_string[..3], CultureInfo.InvariantCulture);
-			}
-			catch (Exception)
-			{
-				this.version = 1.1f;
-			}
+			this.version = float.Parse(this.version_string[..3], CultureInfo.InvariantCulture);
 		}
-
-		public float getOpenGLVersion()
+		catch (Exception)
 		{
-			return this.version;
+			this.version = 1.1f;
 		}
+	}
+
+	public float getOpenGLVersion()
+	{
+		return this.version;
 	}
 }

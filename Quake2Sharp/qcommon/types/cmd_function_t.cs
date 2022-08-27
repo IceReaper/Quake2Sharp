@@ -17,17 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
-{
-	using System;
+namespace Quake2Sharp.qcommon.types;
 
-	/**
+using System;
+
+/**
  * cmd_function_t
  */
-	public class cmd_function_t
-	{
-		public cmd_function_t next = null;
-		public string name = null;
-		public Action function;
-	}
+public class cmd_function_t
+{
+	public cmd_function_t next = null;
+	public string name = null;
+	public Action function;
 }

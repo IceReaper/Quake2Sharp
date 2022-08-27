@@ -17,16 +17,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
-{
-	public class link_t
-	{
-		public link_t(object o)
-		{
-			this.o = o;
-		}
+namespace Quake2Sharp.game.types;
 
-		public link_t prev, next;
-		public object o;
+public class link_t
+{
+	public link_t(object o)
+	{
+		this.o = o;
 	}
+
+	public link_t prev, next;
+	public object o;
 }

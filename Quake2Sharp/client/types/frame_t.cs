@@ -17,41 +17,40 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
+namespace Quake2Sharp.client.types;
+
+using game.types;
+using System;
+
+public class frame_t
 {
-	using game.types;
-	using System;
+	public static readonly int MAX_MAP_AREAS = 256;
+	public bool valid; // cleared if delta parsing was invalid
+	public int serverframe;
+	public int servertime; // server time the message is valid for (in msec)
+	public int deltaframe;
+	public byte[] areabits = new byte [frame_t.MAX_MAP_AREAS / 8]; // portalarea visibility bits
+	public player_state_t playerstate = new(); // mem
+	public int num_entities;
+	public int parse_entities; // non-masked index into cl_parse_entities array
 
-	public class frame_t
+	public void set(frame_t from)
 	{
-		public static readonly int MAX_MAP_AREAS = 256;
-		public bool valid; // cleared if delta parsing was invalid
-		public int serverframe;
-		public int servertime; // server time the message is valid for (in msec)
-		public int deltaframe;
-		public byte[] areabits = new byte [frame_t.MAX_MAP_AREAS / 8]; // portalarea visibility bits
-		public player_state_t playerstate = new(); // mem
-		public int num_entities;
-		public int parse_entities; // non-masked index into cl_parse_entities array
+		this.valid = from.valid;
+		this.serverframe = from.serverframe;
+		this.deltaframe = from.deltaframe;
+		this.num_entities = from.num_entities;
+		this.parse_entities = from.parse_entities;
+		Array.Copy(from.areabits, 0, this.areabits, 0, this.areabits.Length);
+		this.playerstate.set(from.playerstate);
+	}
 
-		public void set(frame_t from)
-		{
-			this.valid = from.valid;
-			this.serverframe = from.serverframe;
-			this.deltaframe = from.deltaframe;
-			this.num_entities = from.num_entities;
-			this.parse_entities = from.parse_entities;
-			Array.Copy(from.areabits, 0, this.areabits, 0, this.areabits.Length);
-			this.playerstate.set(from.playerstate);
-		}
-
-		public void reset()
-		{
-			this.valid = false;
-			this.serverframe = this.servertime = this.deltaframe = 0;
-			Array.Fill(this.areabits, (byte)0);
-			this.playerstate.clear();
-			this.num_entities = this.parse_entities = 0;
-		}
+	public void reset()
+	{
+		this.valid = false;
+		this.serverframe = this.servertime = this.deltaframe = 0;
+		Array.Fill(this.areabits, (byte)0);
+		this.playerstate.clear();
+		this.num_entities = this.parse_entities = 0;
 	}
 }

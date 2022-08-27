@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.adapters
+namespace Quake2Sharp.game.adapters;
+
+using System;
+using types;
+
+public class EntDodgeAdapter : SuperAdapter
 {
-	using System;
-	using types;
+	public Action<edict_t, edict_t, float> dodge;
 
-	public class EntDodgeAdapter : SuperAdapter
+	public EntDodgeAdapter(string id, Action<edict_t, edict_t, float> dodge)
+		: base(id)
 	{
-		public Action<edict_t, edict_t, float> dodge;
-
-		public EntDodgeAdapter(string id, Action<edict_t, edict_t, float> dodge)
-			: base(id)
-		{
-			this.dodge = dodge;
-		}
+		this.dodge = dodge;
 	}
 }

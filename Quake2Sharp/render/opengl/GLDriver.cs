@@ -17,22 +17,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.opengl
-{
-	using System;
-	using System.Drawing;
+namespace Quake2Sharp.render.opengl;
 
-	public interface GLDriver
-	{
-		bool init(int xpos, int ypos);
-		int setMode(Size dim, int mode, bool fullscreen);
-		void shutdown();
-		void beginFrame(float camera_separation);
-		void endFrame();
-		void enableLogging(bool enable);
-		void logNewFrame();
-		DisplayMode[] getModeList();
-		void updateScreen(Action callback);
-		void screenshot();
-	}
+using System;
+using System.Drawing;
+
+public interface GLDriver
+{
+	bool init(int xpos, int ypos);
+	int setMode(Size dim, int mode, bool fullscreen);
+	void shutdown();
+	void beginFrame(float camera_separation);
+	void endFrame();
+	void enableLogging(bool enable);
+	void logNewFrame();
+	DisplayMode[] getModeList();
+	void updateScreen(Action callback);
+	void screenshot();
 }

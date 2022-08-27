@@ -17,16 +17,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	/**
+namespace Quake2Sharp.client.types;
+
+/**
  * kbutton_t
  */
-	public class kbutton_t
-	{
-		public int[] down = new int[2]; // key nums holding it down
-		public long downtime; // msec timestamp
-		public long msec; // msec down this frame
-		public int state;
-	}
+public class kbutton_t
+{
+	public int[] down = new int[2]; // key nums holding it down
+	public long downtime; // msec timestamp
+	public long msec; // msec down this frame
+	public int state;
 }

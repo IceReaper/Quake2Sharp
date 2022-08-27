@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.adapters
+namespace Quake2Sharp.game.adapters;
+
+using System;
+using types;
+
+public class AIAdapter : SuperAdapter
 {
-	using System;
-	using types;
+	public Action<edict_t, float> ai;
 
-	public class AIAdapter : SuperAdapter
+	public AIAdapter(string id, Action<edict_t, float> ai)
+		: base(id)
 	{
-		public Action<edict_t, float> ai;
-
-		public AIAdapter(string id, Action<edict_t, float> ai)
-			: base(id)
-		{
-			this.ai = ai;
-		}
+		this.ai = ai;
 	}
 }

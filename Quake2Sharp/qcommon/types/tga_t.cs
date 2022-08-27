@@ -17,49 +17,48 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+/*
+========================================================================
+
+TGA files are used for sky planes
+
+========================================================================
+*/
+public class tga_t
 {
-	using System.IO;
+	// targa header
+	public int id_length, colormap_type, image_type; // unsigned char
+	public int colormap_index, colormap_length; // unsigned short
+	public int colormap_size; // unsigned char
+	public int x_origin, y_origin, width, height; // unsigned short
+	public int pixel_size, attributes; // unsigned char
+	public byte[] data; // (un)compressed data
 
-	/*
-	========================================================================
-
-	TGA files are used for sky planes
-
-	========================================================================
-	*/
-	public class tga_t
+	public tga_t(byte[] dataBytes)
+		: this(new BinaryReader(new MemoryStream(dataBytes)))
 	{
-		// targa header
-		public int id_length, colormap_type, image_type; // unsigned char
-		public int colormap_index, colormap_length; // unsigned short
-		public int colormap_size; // unsigned char
-		public int x_origin, y_origin, width, height; // unsigned short
-		public int pixel_size, attributes; // unsigned char
-		public byte[] data; // (un)compressed data
+	}
 
-		public tga_t(byte[] dataBytes)
-			: this(new BinaryReader(new MemoryStream(dataBytes)))
-		{
-		}
+	public tga_t(BinaryReader b)
+	{
+		// fill header
+		this.id_length = b.ReadByte();
+		this.colormap_type = b.ReadByte();
+		this.image_type = b.ReadByte();
+		this.colormap_index = b.ReadUInt16();
+		this.colormap_length = b.ReadUInt16();
+		this.colormap_size = b.ReadByte();
+		this.x_origin = b.ReadUInt16();
+		this.y_origin = b.ReadUInt16();
+		this.width = b.ReadUInt16();
+		this.height = b.ReadUInt16();
+		this.pixel_size = b.ReadByte();
 
-		public tga_t(BinaryReader b)
-		{
-			// fill header
-			this.id_length = b.ReadByte();
-			this.colormap_type = b.ReadByte();
-			this.image_type = b.ReadByte();
-			this.colormap_index = b.ReadUInt16();
-			this.colormap_length = b.ReadUInt16();
-			this.colormap_size = b.ReadByte();
-			this.x_origin = b.ReadUInt16();
-			this.y_origin = b.ReadUInt16();
-			this.width = b.ReadUInt16();
-			this.height = b.ReadUInt16();
-			this.pixel_size = b.ReadByte();
-
-			// fill data
-			this.data = b.ReadBytes((int)(b.BaseStream.Length - b.BaseStream.Position));
-		}
+		// fill data
+		this.data = b.ReadBytes((int)(b.BaseStream.Length - b.BaseStream.Position));
 	}
 }

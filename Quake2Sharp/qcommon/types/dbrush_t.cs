@@ -17,22 +17,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dbrush_t
 {
-	using System.IO;
-
-	public class dbrush_t
+	public dbrush_t(BinaryReader bb)
 	{
-		public dbrush_t(BinaryReader bb)
-		{
-			this.firstside = bb.ReadInt32();
-			this.numsides = bb.ReadInt32();
-			this.contents = bb.ReadInt32();
-		}
-
-		public static int SIZE = 3 * 4;
-		public int firstside;
-		public int numsides;
-		public int contents;
+		this.firstside = bb.ReadInt32();
+		this.numsides = bb.ReadInt32();
+		this.contents = bb.ReadInt32();
 	}
+
+	public static int SIZE = 3 * 4;
+	public int firstside;
+	public int numsides;
+	public int contents;
 }

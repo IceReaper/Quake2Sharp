@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.opengl.types
-{
-	public class glmode_t
-	{
-		public readonly string name;
-		public readonly int minimize;
-		public readonly int maximize;
+namespace Quake2Sharp.render.opengl.types;
 
-		public glmode_t(string name, int minimize, int maximze)
-		{
-			this.name = name;
-			this.minimize = minimize;
-			this.maximize = maximze;
-		}
+public class glmode_t
+{
+	public readonly string name;
+	public readonly int minimize;
+	public readonly int maximize;
+
+	public glmode_t(string name, int minimize, int maximze)
+	{
+		this.name = name;
+		this.minimize = minimize;
+		this.maximize = maximze;
 	}
 }

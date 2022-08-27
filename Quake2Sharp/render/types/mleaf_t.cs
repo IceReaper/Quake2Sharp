@@ -17,41 +17,40 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.types
+namespace Quake2Sharp.render.types;
+
+public class mleaf_t : mnode_t
 {
-	public class mleaf_t : mnode_t
+	//	common with node
+	/*
+	public int contents; // wil be a negative contents number
+	public int visframe; // node needs to be traversed if current
+
+	public float minmaxs[] = new float[6]; // for bounding box culling
+
+	public mnode_t parent;
+	*/
+
+	//	leaf specific
+	public int cluster;
+	public int area;
+
+	//public msurface_t firstmarksurface;
+	public int nummarksurfaces;
+	private int markIndex;
+	private msurface_t[] markSurfaces;
+
+	public void setMarkSurface(int markIndex, msurface_t[] markSurfaces)
 	{
-		//	common with node
-		/*
-		public int contents; // wil be a negative contents number
-		public int visframe; // node needs to be traversed if current
-	
-		public float minmaxs[] = new float[6]; // for bounding box culling
-	
-		public mnode_t parent;
-		*/
+		this.markIndex = markIndex;
+		this.markSurfaces = markSurfaces;
+	}
 
-		//	leaf specific
-		public int cluster;
-		public int area;
+	public msurface_t getMarkSurface(int index)
+	{
+		if (!(index >= 0 && index <= this.nummarksurfaces))
+			throw new("mleaf: markSurface bug (index = " + index + "; num = " + this.nummarksurfaces + ")");
 
-		//public msurface_t firstmarksurface;
-		public int nummarksurfaces;
-		private int markIndex;
-		private msurface_t[] markSurfaces;
-
-		public void setMarkSurface(int markIndex, msurface_t[] markSurfaces)
-		{
-			this.markIndex = markIndex;
-			this.markSurfaces = markSurfaces;
-		}
-
-		public msurface_t getMarkSurface(int index)
-		{
-			if (!(index >= 0 && index <= this.nummarksurfaces))
-				throw new("mleaf: markSurface bug (index = " + index + "; num = " + this.nummarksurfaces + ")");
-
-			return index < this.nummarksurfaces ? this.markSurfaces[this.markIndex + index] : null;
-		}
+		return index < this.nummarksurfaces ? this.markSurfaces[this.markIndex + index] : null;
 	}
 }

@@ -17,43 +17,42 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dnode_t
 {
-	using System.IO;
-
-	public class dnode_t
+	public dnode_t(BinaryReader bb)
 	{
-		public dnode_t(BinaryReader bb)
-		{
-			this.planenum = bb.ReadInt32();
+		this.planenum = bb.ReadInt32();
 
-			this.children[0] = bb.ReadInt32();
-			this.children[1] = bb.ReadInt32();
+		this.children[0] = bb.ReadInt32();
+		this.children[1] = bb.ReadInt32();
 
-			for (var j = 0; j < 3; j++)
-				this.mins[j] = bb.ReadInt16();
+		for (var j = 0; j < 3; j++)
+			this.mins[j] = bb.ReadInt16();
 
-			for (var j = 0; j < 3; j++)
-				this.maxs[j] = bb.ReadInt16();
+		for (var j = 0; j < 3; j++)
+			this.maxs[j] = bb.ReadInt16();
 
-			this.firstface = bb.ReadUInt16();
-			this.numfaces = bb.ReadUInt16();
-		}
-
-		public int planenum;
-		public int[] children = { 0, 0 };
-
-		// negative numbers are -(leafs+1), not nodes
-		public short[] mins = { 0, 0, 0 }; // for frustom culling
-
-		public short[] maxs = { 0, 0, 0 };
-		/*
-		unsigned short	firstface;
-		unsigned short	numfaces;	// counting both sides
-		*/
-
-		public int firstface;
-		public int numfaces;
-		public static int SIZE = 4 + 8 + 6 + 6 + 2 + 2; // counting both sides
+		this.firstface = bb.ReadUInt16();
+		this.numfaces = bb.ReadUInt16();
 	}
+
+	public int planenum;
+	public int[] children = { 0, 0 };
+
+	// negative numbers are -(leafs+1), not nodes
+	public short[] mins = { 0, 0, 0 }; // for frustom culling
+
+	public short[] maxs = { 0, 0, 0 };
+	/*
+	unsigned short	firstface;
+	unsigned short	numfaces;	// counting both sides
+	*/
+
+	public int firstface;
+	public int numfaces;
+	public static int SIZE = 4 + 8 + 6 + 6 + 2 + 2; // counting both sides
 }

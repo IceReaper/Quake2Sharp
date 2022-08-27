@@ -17,17 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.opengl.types
-{
-	public class gltmode_t
-	{
-		public readonly string name;
-		public readonly int mode;
+namespace Quake2Sharp.render.opengl.types;
 
-		public gltmode_t(string name, int mode)
-		{
-			this.name = name;
-			this.mode = mode;
-		}
+public class gltmode_t
+{
+	public readonly string name;
+	public readonly int mode;
+
+	public gltmode_t(string name, int mode)
+	{
+		this.name = name;
+		this.mode = mode;
 	}
 }

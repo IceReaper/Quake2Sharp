@@ -17,23 +17,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dheader_t
 {
-	using System.IO;
-
-	public class dheader_t
+	public dheader_t(BinaryReader bb)
 	{
-		public dheader_t(BinaryReader bb)
-		{
-			this.ident = bb.ReadInt32();
-			this.version = bb.ReadInt32();
+		this.ident = bb.ReadInt32();
+		this.version = bb.ReadInt32();
 
-			for (var n = 0; n < Defines.HEADER_LUMPS; n++)
-				this.lumps[n] = new(bb.ReadInt32(), bb.ReadInt32());
-		}
-
-		public int ident;
-		public int version;
-		public lump_t[] lumps = new lump_t[Defines.HEADER_LUMPS];
+		for (var n = 0; n < Defines.HEADER_LUMPS; n++)
+			this.lumps[n] = new(bb.ReadInt32(), bb.ReadInt32());
 	}
+
+	public int ident;
+	public int version;
+	public lump_t[] lumps = new lump_t[Defines.HEADER_LUMPS];
 }

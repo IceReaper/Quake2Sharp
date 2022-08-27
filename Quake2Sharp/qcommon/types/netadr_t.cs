@@ -17,65 +17,64 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using sys;
+using System;
+using System.Net;
+
+public class netadr_t
 {
-	using sys;
-	using System;
-	using System.Net;
+	public int type;
+	public int port;
+	public byte[] ip;
 
-	public class netadr_t
+	public netadr_t()
 	{
-		public int type;
-		public int port;
-		public byte[] ip;
+		this.type = Defines.NA_LOOPBACK;
+		this.port = 0; // any
 
-		public netadr_t()
+		try
 		{
-			this.type = Defines.NA_LOOPBACK;
-			this.port = 0; // any
+			// localhost / 127.0.0.1
+			this.ip = IPAddress.Loopback.GetAddressBytes();
+		}
+		catch (Exception)
+		{
+		}
+	}
 
-			try
-			{
+	public IPAddress getInetAddress()
+	{
+		switch (this.type)
+		{
+			case Defines.NA_BROADCAST:
+				return IPAddress.Broadcast;
+
+			case Defines.NA_LOOPBACK:
 				// localhost / 127.0.0.1
-				this.ip = IPAddress.Loopback.GetAddressBytes();
-			}
-			catch (Exception)
-			{
-			}
+				return IPAddress.Loopback;
+
+			case Defines.NA_IP:
+				return new(this.ip);
+
+			default:
+				return null;
 		}
+	}
 
-		public IPAddress getInetAddress()
-		{
-			switch (this.type)
-			{
-				case Defines.NA_BROADCAST:
-					return IPAddress.Broadcast;
+	public void set(netadr_t from)
+	{
+		this.type = from.type;
+		this.port = from.port;
+		this.ip[0] = from.ip[0];
+		this.ip[1] = from.ip[1];
+		this.ip[2] = from.ip[2];
+		this.ip[3] = from.ip[3];
+	}
 
-				case Defines.NA_LOOPBACK:
-					// localhost / 127.0.0.1
-					return IPAddress.Loopback;
-
-				case Defines.NA_IP:
-					return new(this.ip);
-
-				default:
-					return null;
-			}
-		}
-
-		public void set(netadr_t from)
-		{
-			this.type = from.type;
-			this.port = from.port;
-			this.ip[0] = from.ip[0];
-			this.ip[1] = from.ip[1];
-			this.ip[2] = from.ip[2];
-			this.ip[3] = from.ip[3];
-		}
-
-		public string toString()
-		{
-			return this.type == Defines.NA_LOOPBACK ? "loopback" : NET.AdrToString(this);
-		}
+	public string toString()
+	{
+		return this.type == Defines.NA_LOOPBACK ? "loopback" : NET.AdrToString(this);
 	}
 }

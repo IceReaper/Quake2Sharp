@@ -17,18 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
-{
-	// using Quake2Sharp;
-	// using Quake2Sharp.client;
-	// using Quake2Sharp.game;
-	// using Quake2Sharp.qcommon;
-	// using Quake2Sharp.render;
-	// using Quake2Sharp.server;
+namespace Quake2Sharp.game.types;
+// using Quake2Sharp;
+// using Quake2Sharp.client;
+// using Quake2Sharp.game;
+// using Quake2Sharp.qcommon;
+// using Quake2Sharp.render;
+// using Quake2Sharp.server;
 
-	public class mapsurface_t
-	{
-		public csurface_t c = new();
-		public string rname;
-	}
+public class mapsurface_t
+{
+	public csurface_t c = new();
+	public string rname;
 }

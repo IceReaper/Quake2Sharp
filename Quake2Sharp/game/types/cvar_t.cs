@@ -17,19 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
-{
-	/**
+namespace Quake2Sharp.game.types;
+
+/**
  * cvar_t implements the struct cvar_t of the C version
  */
-	public class cvar_t
-	{
-		public string name;
-		public string @string;
-		public string latched_string;
-		public int flags = 0;
-		public bool modified = false;
-		public float value = 0.0f;
-		public cvar_t next = null;
-	}
+public class cvar_t
+{
+	public string name;
+	public string @string;
+	public string latched_string;
+	public int flags = 0;
+	public bool modified = false;
+	public float value = 0.0f;
+	public cvar_t next = null;
 }

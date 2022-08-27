@@ -17,35 +17,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dmodel_t
 {
-	using System.IO;
-
-	public class dmodel_t
+	public dmodel_t(BinaryReader bb)
 	{
-		public dmodel_t(BinaryReader bb)
-		{
-			for (var j = 0; j < 3; j++)
-				this.mins[j] = bb.ReadSingle();
+		for (var j = 0; j < 3; j++)
+			this.mins[j] = bb.ReadSingle();
 
-			for (var j = 0; j < 3; j++)
-				this.maxs[j] = bb.ReadSingle();
+		for (var j = 0; j < 3; j++)
+			this.maxs[j] = bb.ReadSingle();
 
-			for (var j = 0; j < 3; j++)
-				this.origin[j] = bb.ReadSingle();
+		for (var j = 0; j < 3; j++)
+			this.origin[j] = bb.ReadSingle();
 
-			this.headnode = bb.ReadInt32();
-			this.firstface = bb.ReadInt32();
-			this.numfaces = bb.ReadInt32();
-		}
-
-		public float[] mins = { 0, 0, 0 };
-		public float[] maxs = { 0, 0, 0 };
-		public float[] origin = { 0, 0, 0 }; // for sounds or lights
-		public int headnode;
-		public int firstface, numfaces; // submodels just draw faces
-
-		// without walking the bsp tree
-		public static int SIZE = 3 * 4 + 3 * 4 + 3 * 4 + 4 + 8;
+		this.headnode = bb.ReadInt32();
+		this.firstface = bb.ReadInt32();
+		this.numfaces = bb.ReadInt32();
 	}
+
+	public float[] mins = { 0, 0, 0 };
+	public float[] maxs = { 0, 0, 0 };
+	public float[] origin = { 0, 0, 0 }; // for sounds or lights
+	public int headnode;
+	public int firstface, numfaces; // submodels just draw faces
+
+	// without walking the bsp tree
+	public static int SIZE = 3 * 4 + 3 * 4 + 3 * 4 + 4 + 8;
 }

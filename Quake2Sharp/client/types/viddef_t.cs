@@ -17,16 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	public class viddef_t
-	{
-		private int width;
-		private int height;
-		private int newWidth;
-		private int newHeight;
+namespace Quake2Sharp.client.types;
 
-		/**
+public class viddef_t
+{
+	private int width;
+	private int height;
+	private int newWidth;
+	private int newHeight;
+
+	/**
      * This method hasn't an effect on <code>width</code> and <code>height</code>
      * directly. The new values will be active after an <code>update()</code>
      * call.
@@ -36,30 +36,29 @@ namespace Quake2Sharp.client.types
      * @param height
      *                the visible render screen height.
      */
-		public void setSize(int width, int height)
-		{
-			this.newWidth = width;
-			this.newHeight = height;
-		}
+	public void setSize(int width, int height)
+	{
+		this.newWidth = width;
+		this.newHeight = height;
+	}
 
-		/**
+	/**
      * Updates the buffered <code>width</code> and <code>height</code>. The
      * method should be called once at the beginning of a frame.
      */
-		public void update()
-		{
-			this.width = this.newWidth;
-			this.height = this.newHeight;
-		}
+	public void update()
+	{
+		this.width = this.newWidth;
+		this.height = this.newHeight;
+	}
 
-		public int getWidth()
-		{
-			return this.width;
-		}
+	public int getWidth()
+	{
+		return this.width;
+	}
 
-		public int getHeight()
-		{
-			return this.height;
-		}
+	public int getHeight()
+	{
+		return this.height;
 	}
 }

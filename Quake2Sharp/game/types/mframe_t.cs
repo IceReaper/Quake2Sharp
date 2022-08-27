@@ -17,42 +17,41 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+using adapters;
+using System.IO;
+using util;
+
+public class mframe_t
 {
-	using adapters;
-	using System.IO;
-	using util;
-
-	public class mframe_t
+	public mframe_t(AIAdapter ai, float dist, EntThinkAdapter think)
 	{
-		public mframe_t(AIAdapter ai, float dist, EntThinkAdapter think)
-		{
-			this.ai = ai;
-			this.dist = dist;
-			this.think = think;
-		}
+		this.ai = ai;
+		this.dist = dist;
+		this.think = think;
+	}
 
-		/** Empty constructor. */
-		public mframe_t()
-		{
-		}
+	/** Empty constructor. */
+	public mframe_t()
+	{
+	}
 
-		public AIAdapter ai;
-		public float dist;
-		public EntThinkAdapter think;
+	public AIAdapter ai;
+	public float dist;
+	public EntThinkAdapter think;
 
-		public void write(BinaryWriter f)
-		{
-			f.Write(this.ai);
-			f.Write(this.dist);
-			f.Write(this.think);
-		}
+	public void write(BinaryWriter f)
+	{
+		f.Write(this.ai);
+		f.Write(this.dist);
+		f.Write(this.think);
+	}
 
-		public void read(BinaryReader f)
-		{
-			this.ai = (AIAdapter)f.ReadAdapter();
-			this.dist = f.ReadSingle();
-			this.think = (EntThinkAdapter)f.ReadAdapter();
-		}
+	public void read(BinaryReader f)
+	{
+		this.ai = (AIAdapter)f.ReadAdapter();
+		this.dist = f.ReadSingle();
+		this.think = (EntThinkAdapter)f.ReadAdapter();
 	}
 }

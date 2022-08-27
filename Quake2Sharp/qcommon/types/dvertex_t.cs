@@ -17,20 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.qcommon.types
+namespace Quake2Sharp.qcommon.types;
+
+using System.IO;
+
+public class dvertex_t
 {
-	using System.IO;
+	public static readonly int SIZE = 3 * 4; // 3 mal 32 bit float 
+	public float[] point = { 0, 0, 0 };
 
-	public class dvertex_t
+	public dvertex_t(BinaryReader b)
 	{
-		public static readonly int SIZE = 3 * 4; // 3 mal 32 bit float 
-		public float[] point = { 0, 0, 0 };
-
-		public dvertex_t(BinaryReader b)
-		{
-			this.point[0] = b.ReadSingle();
-			this.point[1] = b.ReadSingle();
-			this.point[2] = b.ReadSingle();
-		}
+		this.point[0] = b.ReadSingle();
+		this.point[1] = b.ReadSingle();
+		this.point[2] = b.ReadSingle();
 	}
 }

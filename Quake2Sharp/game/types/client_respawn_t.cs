@@ -17,71 +17,70 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.types
+namespace Quake2Sharp.game.types;
+
+using System.IO;
+using util;
+
+/** Client data that stays across deathmatch respawns.*/
+public class client_respawn_t
 {
-	using System.IO;
-	using util;
+	/** What to set client->pers to on a respawn */
+	public client_persistant_t coop_respawn = new();
 
-	/** Client data that stays across deathmatch respawns.*/
-	public class client_respawn_t
+	/** Level.framenum the client entered the game. */
+	public int enterframe;
+
+	/** frags, etc. */
+	public int score;
+
+	/** angles sent over in the last command. */
+	public float[] cmd_angles = { 0, 0, 0 };
+
+	/** client is a spectator. */
+	public bool spectator;
+
+	/** Copies the client respawn data. */
+	public void set(client_respawn_t from)
 	{
-		/** What to set client->pers to on a respawn */
-		public client_persistant_t coop_respawn = new();
+		this.coop_respawn.set(from.coop_respawn);
+		this.enterframe = from.enterframe;
+		this.score = from.score;
+		Math3D.VectorCopy(from.cmd_angles, this.cmd_angles);
+		this.spectator = from.spectator;
+	}
 
-		/** Level.framenum the client entered the game. */
-		public int enterframe;
+	/** Clears the client reaspawn informations. */
+	public void clear()
+	{
+		this.coop_respawn = new();
+		this.enterframe = 0;
+		this.score = 0;
+		Math3D.VectorClear(this.cmd_angles);
+		this.spectator = false;
+	}
 
-		/** frags, etc. */
-		public int score;
+	/** Reads a client_respawn from a file. */
+	public void read(BinaryReader f)
+	{
+		this.coop_respawn.read(f);
+		this.enterframe = f.ReadInt32();
+		this.score = f.ReadInt32();
+		this.cmd_angles[0] = f.ReadSingle();
+		this.cmd_angles[1] = f.ReadSingle();
+		this.cmd_angles[2] = f.ReadSingle();
+		this.spectator = f.ReadInt32() != 0;
+	}
 
-		/** angles sent over in the last command. */
-		public float[] cmd_angles = { 0, 0, 0 };
-
-		/** client is a spectator. */
-		public bool spectator;
-
-		/** Copies the client respawn data. */
-		public void set(client_respawn_t from)
-		{
-			this.coop_respawn.set(from.coop_respawn);
-			this.enterframe = from.enterframe;
-			this.score = from.score;
-			Math3D.VectorCopy(from.cmd_angles, this.cmd_angles);
-			this.spectator = from.spectator;
-		}
-
-		/** Clears the client reaspawn informations. */
-		public void clear()
-		{
-			this.coop_respawn = new();
-			this.enterframe = 0;
-			this.score = 0;
-			Math3D.VectorClear(this.cmd_angles);
-			this.spectator = false;
-		}
-
-		/** Reads a client_respawn from a file. */
-		public void read(BinaryReader f)
-		{
-			this.coop_respawn.read(f);
-			this.enterframe = f.ReadInt32();
-			this.score = f.ReadInt32();
-			this.cmd_angles[0] = f.ReadSingle();
-			this.cmd_angles[1] = f.ReadSingle();
-			this.cmd_angles[2] = f.ReadSingle();
-			this.spectator = f.ReadInt32() != 0;
-		}
-
-		/** Writes a client_respawn to a file. */
-		public void write(BinaryWriter f)
-		{
-			this.coop_respawn.write(f);
-			f.Write(this.enterframe);
-			f.Write(this.score);
-			f.Write(this.cmd_angles[0]);
-			f.Write(this.cmd_angles[1]);
-			f.Write(this.cmd_angles[2]);
-			f.Write(this.spectator ? 1 : 0);
-		}
+	/** Writes a client_respawn to a file. */
+	public void write(BinaryWriter f)
+	{
+		this.coop_respawn.write(f);
+		f.Write(this.enterframe);
+		f.Write(this.score);
+		f.Write(this.cmd_angles[0]);
+		f.Write(this.cmd_angles[1]);
+		f.Write(this.cmd_angles[2]);
+		f.Write(this.spectator ? 1 : 0);
 	}
 }

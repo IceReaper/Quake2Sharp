@@ -17,17 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types
-{
-	public class laser_t
-	{
-		public readonly entity_t ent = new();
-		public int endtime;
+namespace Quake2Sharp.client.types;
 
-		public void clear()
-		{
-			this.endtime = 0;
-			this.ent.clear();
-		}
+public class laser_t
+{
+	public readonly entity_t ent = new();
+	public int endtime;
+
+	public void clear()
+	{
+		this.endtime = 0;
+		this.ent.clear();
 	}
 }
