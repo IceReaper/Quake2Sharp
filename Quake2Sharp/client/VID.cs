@@ -64,13 +64,13 @@ public class VID
 	==========================================================================
 	*/
 
-	public static void Printf(int print_level, string fmt, params object[] vargs)
+	public static void Printf(int print_level, string msg)
 	{
 		// static qboolean inupdate;
 		if (print_level == Defines.PRINT_ALL)
-			Com.Printf(fmt, vargs);
+			Com.Printf(msg);
 		else
-			Com.DPrintf(fmt, vargs);
+			Com.DPrintf(msg);
 	}
 
 	// ==========================================================================

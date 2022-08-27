@@ -611,7 +611,7 @@ public class SCR
 
 		stop = Timer.Milliseconds();
 		time = (stop - start) / 1000.0f;
-		Com.Printf("%f seconds (%f fps)\n", time, 128.0f / time);
+		Com.Printf($"{time} seconds ({128.0f / time} fps)\n");
 	}
 
 	public static void DirtyScreen()
@@ -1022,7 +1022,7 @@ public class SCR
 					ping = 999;
 
 				// sprintf(block, "%3d %3d %-12.12s", score, ping, ci->name);
-				var block = Com.sprintf("%3d %3d %-12.12s",score, ping, ci.name);
+				var block = $"{score,3} {ping,3} {ci.name,-12}";
 
 				if (value == Globals.cl.playernum)
 					QConsole.DrawAltString(x, y, block);

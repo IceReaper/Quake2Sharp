@@ -359,8 +359,7 @@ public partial class OpenGLRenderApi
 
 			VID.Printf(
 				Defines.PRINT_ALL,
-				" %3i %3i %s: %s\n",
-				image.upload_width, image.upload_height, palstrings[image.paletted ? 1 : 0], image.name
+				$" {image.upload_width,3} {image.upload_height,3} {palstrings[image.paletted ? 1 : 0]}: {image.name}\n"
 			);
 		}
 

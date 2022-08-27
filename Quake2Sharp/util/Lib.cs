@@ -34,7 +34,7 @@ public class Lib
 	/** Converts a vector to a beatiful string. */
 	public static string vtofsbeaty(float[] v)
 	{
-		return Com.sprintf("%8.2f %8.2f %8.2f", v[0], v[1], v[2]);
+		return $"{v[0]:0.00,8} {v[1]:0.00,8} {v[2]:0.00,8}";
 	}
 
 	/** Like in  libc. */

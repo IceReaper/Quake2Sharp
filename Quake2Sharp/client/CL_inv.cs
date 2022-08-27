@@ -133,10 +133,7 @@ public class CL_inv
 				}
 			}
 
-			@string = Com.sprintf(
-				"%6s %3i %s",
-				bind, Globals.cl.inventory[item], Globals.cl.configstrings[Defines.CS_ITEMS + item]
-			);
+			@string = $"{bind,6} {Globals.cl.inventory[item],3} {Globals.cl.configstrings[Defines.CS_ITEMS + item]}";
 
 			if (item != selected)
 				@string = CL_inv.getHighBitString(@string);

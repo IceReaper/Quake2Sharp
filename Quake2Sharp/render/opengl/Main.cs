@@ -854,8 +854,7 @@ public partial class OpenGLRenderApi : RenderAPI
 		{
 			VID.Printf(
 				Defines.PRINT_ALL,
-				"%4i wpoly %4i epoly %i tex %i lmaps\n",
-				this.c_brush_polys, this.c_alias_polys, this.c_visible_textures, this.c_visible_lightmaps
+				$"{this.c_brush_polys,4} wpoly {this.c_alias_polys,4} epoly {this.c_visible_textures} tex {this.c_visible_lightmaps} lmaps\n"
 			);
 		}
 	}
@@ -1333,7 +1332,7 @@ public partial class OpenGLRenderApi : RenderAPI
 		var err = this.gl.glGetError();
 
 		if (err != OpenGL.GL_NO_ERROR)
-			VID.Printf(Defines.PRINT_ALL, "glGetError() = 0x%x\n\t%s\n", err, "" + this.gl.glGetString(err));
+			VID.Printf(Defines.PRINT_ALL, $"glGetError() = 0x{err:x}\n\t{this.gl.glGetString(err)}%s\n");
 
 		return true;
 	}

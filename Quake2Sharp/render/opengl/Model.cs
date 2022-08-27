@@ -165,7 +165,7 @@ public partial class OpenGLRenderApi
 			if (mod.name.Length == 0)
 				continue;
 
-			VID.Printf(Defines.PRINT_ALL, "%8i : %s\n", mod.extradatasize, mod.name);
+			VID.Printf(Defines.PRINT_ALL, $"{mod.extradatasize,8} : {mod.name}\n");
 			total += mod.extradatasize;
 		}
 
@@ -1024,8 +1024,7 @@ public partial class OpenGLRenderApi
 		{
 			Com.Error(
 				Defines.ERR_DROP,
-				"%s has wrong version number (%i should be %i)",
-				mod.name, pheader.version, qfiles.ALIAS_VERSION
+				$"{mod.name} has wrong version number ({pheader.version} should be {qfiles.ALIAS_VERSION})"
 			);
 		}
 
@@ -1143,13 +1142,12 @@ public partial class OpenGLRenderApi
 		{
 			Com.Error(
 				Defines.ERR_DROP,
-				"%s has wrong version number (%i should be %i)",
-				mod.name, sprout.version, qfiles.SPRITE_VERSION
+				$"{mod.name} has wrong version number ({sprout.version} should be {qfiles.SPRITE_VERSION})"
 			);
 		}
 
 		if (sprout.numframes > qfiles.MAX_MD2SKINS)
-			Com.Error(Defines.ERR_DROP, "%s has too many frames (%i > %i)", mod.name, sprout.numframes, qfiles.MAX_MD2SKINS);
+			Com.Error(Defines.ERR_DROP, $"{mod.name} has too many frames ({sprout.numframes} > {qfiles.MAX_MD2SKINS})");
 
 		for (var i = 0; i < sprout.numframes; i++)
 			mod.skins[i] = this.GL_FindImage(sprout.frames[i].name, Base.it_sprite);

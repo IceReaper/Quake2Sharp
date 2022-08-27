@@ -355,7 +355,7 @@ public class SV_CCMDS
 			if (!autosave)
 			{
 				var c = DateTime.Now;
-				comment = Com.sprintf("%2i:%2i %2i/%2i  ", c.Hour, c.Minute, c.Month, c.Day);
+				comment = $"{c.Hour,2}_{c.Minute,2} {c.Month,2}/{c.Day,2}  ";
 				comment += SV_INIT.sv.configstrings[Defines.CS_NAME];
 			}
 			else
@@ -791,8 +791,8 @@ public class SV_CCMDS
 			if (0 == cl.state)
 				continue;
 
-			Com.Printf("%3i ", i);
-			Com.Printf("%5i ", cl.edict.client.ps.stats[Defines.STAT_FRAGS]);
+			Com.Printf($"{i,3} ");
+			Com.Printf($"{cl.edict.client.ps.stats[Defines.STAT_FRAGS],5} ");
 
 			if (cl.state == Defines.cs_connected)
 				Com.Printf("CNCT ");
@@ -801,16 +801,16 @@ public class SV_CCMDS
 			else
 			{
 				ping = cl.ping < 9999 ? cl.ping : 9999;
-				Com.Printf("%4i ", ping);
+				Com.Printf($"{ping,4} ");
 			}
 
-			Com.Printf("%s", cl.name);
+			Com.Printf(cl.name);
 			l = 16 - cl.name.Length;
 
 			for (j = 0; j < l; j++)
 				Com.Printf(" ");
 
-			Com.Printf("%7i ", SV_INIT.svs.realtime - cl.lastmessage);
+			Com.Printf($"{SV_INIT.svs.realtime - cl.lastmessage,7} ");
 
 			s = NET.AdrToString(cl.netchan.remote_address);
 			Com.Printf(s);
@@ -819,7 +819,7 @@ public class SV_CCMDS
 			for (j = 0; j < l; j++)
 				Com.Printf(" ");
 
-			Com.Printf("%5i", cl.netchan.qport);
+			Com.Printf($"{cl.netchan.qport,5}");
 
 			Com.Printf("\n");
 		}

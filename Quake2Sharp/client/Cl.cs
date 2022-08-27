@@ -722,8 +722,7 @@ public class Cl
 			if (time > 0)
 			{
 				Com.Printf(
-					"%i frames, %3.1f seconds: %3.1f fps\n",
-					Globals.cl.timedemo_frames, time / 1000.0, Globals.cl.timedemo_frames * 1000.0 / time
+					$"{Globals.cl.timedemo_frames} frames, {time / 1000.0:0.0,3} seconds: {Globals.cl.timedemo_frames * 1000.0 / time:0.0,3} fps\n"
 				);
 			}
 		}

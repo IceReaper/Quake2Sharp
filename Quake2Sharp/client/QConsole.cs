@@ -557,7 +557,7 @@ public class QConsole
 		Globals.re.DrawStretchPic(0, -height + lines, width, height, "conback");
 		SCR.AddDirtyPoint(0, 0);
 		SCR.AddDirtyPoint(width - 1, lines - 1);
-		var version = Com.sprintf("v%4.2f", Globals.VERSION);
+		var version = $"v{Globals.VERSION:#0.00,4}";
 
 		for (var i1 = 0; i1 < 5; i1++)
 			Globals.re.DrawChar(width - 44 + i1 * 8, lines - 12, 128 + version[i1]);

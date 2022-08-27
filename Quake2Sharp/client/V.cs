@@ -360,7 +360,7 @@ public class V
 		Globals.re.RenderFrame(Globals.cl.refdef);
 
 		if (V.cl_stats.value != 0.0f)
-			Com.Printf("ent:%i  lt:%i  part:%i\n", V.r_numentities, V.r_numdlights, V.r_numparticles);
+			Com.Printf($"ent:{V.r_numentities}  lt:{V.r_numdlights}  part:{V.r_numparticles}\n");
 
 		if (Globals.log_stats.value != 0.0f && Globals.log_stats_file != null)
 		{
@@ -384,11 +384,7 @@ public class V
 	private static readonly Action Viewpos_f = () =>
 	{
 		Com.Printf(
-			"(%i %i %i) : %i\n",
-			(int)Globals.cl.refdef.vieworg[0],
-			(int)Globals.cl.refdef.vieworg[1],
-			(int)Globals.cl.refdef.vieworg[2],
-			(int)Globals.cl.refdef.viewangles[Defines.YAW]
+			$"({(int)Globals.cl.refdef.vieworg[0]} {(int)Globals.cl.refdef.vieworg[1]} {(int)Globals.cl.refdef.vieworg[2]}) : {(int)Globals.cl.refdef.viewangles[Defines.YAW]}\n"
 		);
 	};
 

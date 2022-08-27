@@ -318,17 +318,7 @@ public class CM
 			if (CM.debugloadmap)
 			{
 				Com.DPrintf(
-					"|%6i|%8.2f|%8.2f|%8.2f|  %8.2f|%8.2f|%8.2f|   %8.2f|%8.2f|%8.2f|\n",
-					@out.headnode,
-					@out.origin[0],
-					@out.origin[1],
-					@out.origin[2],
-					@out.mins[0],
-					@out.mins[1],
-					@out.mins[2],
-					@out.maxs[0],
-					@out.maxs[1],
-					@out.maxs[2]
+					$"|{@out.headnode,6}|{@out.origin[0]:0.00,8}|{@out.origin[1]:0.00,8}|{@out.origin[2]:0.00,8}|  {@out.mins[0]:0.00,8}|{@out.mins[1]:0.00,8}|{@out.mins[2]:0.00,8}|   {@out.maxs[0]:0.00,8}|{@out.maxs[1]:0.00,8}|{@out.maxs[2]:0.00,8}|\n"
 				);
 			}
 		}
@@ -372,7 +362,7 @@ public class CM
 			@out.c.value = @in.value;
 
 			if (CM.debugloadmap)
-				Com.DPrintf("|%20s|%20s|%6i|%6i|\n", @out.c.name, @out.rname, @out.c.value, @out.c.flags);
+				Com.DPrintf($"|{@out.c.name,20}|{@out.rname,20}|{@out.c.value,6}|{@out.c.flags,6}|\n");
 		}
 	}
 
@@ -416,7 +406,7 @@ public class CM
 			}
 
 			if (CM.debugloadmap)
-				Com.DPrintf("|%6i| %6i| %6i|\n", @in.planenum, @out.children[0], @out.children[1]);
+				Com.DPrintf($"|{@in.planenum,6}| {@out.children[0],6}| {@out.children[1],6}|\n");
 		}
 	}
 
@@ -451,7 +441,7 @@ public class CM
 			@out.contents = @in.contents;
 
 			if (CM.debugloadmap)
-				Com.DPrintf("| %6i| %6i| %8X|\n", @out.firstbrushside, @out.numsides, @out.contents);
+				Com.DPrintf($"| {@out.firstbrushside,6}| {@out.numsides,6}| {@out.contents:X8}|\n");
 		}
 	}
 
@@ -502,8 +492,7 @@ public class CM
 			if (CM.debugloadmap)
 			{
 				Com.DPrintf(
-					"|%8x|%6i|%6i|%6i|\n",
-					@out.contents, @out.cluster, @out.area, @out.firstleafbrush, @out.numleafbrushes
+					$"|{@out.contents:x8}|{@out.cluster,6}|{@out.area,6}|{@out.firstleafbrush,6}|\n"
 				);
 			}
 		}
@@ -581,8 +570,7 @@ public class CM
 			if (CM.debugloadmap)
 			{
 				Com.DPrintf(
-					"|%6.2f|%6.2f|%6.2f| %10.2f|%3i| %1i|\n",
-					@out.normal[0], @out.normal[1], @out.normal[2], @out.dist, @out.type, @out.signbits
+					$"|{@out.normal[0]:0.00,6}|{@out.normal[1]:0.00,6}|{@out.normal[2]:0.00,6}| {@out.dist:0.00,10}|{@out.type,3}| {@out.signbits,1}|\n"
 				);
 			}
 		}
@@ -620,7 +608,7 @@ public class CM
 			@out[i] = bb.ReadInt16();
 
 			if (CM.debugloadmap)
-				Com.DPrintf("|%6i|%6i|\n", i, @out[i]);
+				Com.DPrintf($"|{i,6}|{@out[i],6}|\n");
 		}
 	}
 
@@ -671,7 +659,7 @@ public class CM
 				@out.surface = CM.map_surfaces[j];
 
 			if (CM.debugloadmap)
-				Com.DPrintf("| %6i| %6i|\n", num, j);
+				Com.DPrintf($"| {num,6}| {j,6}|\n");
 		}
 	}
 
@@ -709,7 +697,7 @@ public class CM
 			@out.floodnum = 0;
 
 			if (CM.debugloadmap)
-				Com.DPrintf("| %6i| %6i|\n", @out.numareaportals, @out.firstareaportal);
+				Com.DPrintf($"| {@out.numareaportals,6}| {@out.firstareaportal,6}|\n");
 		}
 	}
 
@@ -746,7 +734,7 @@ public class CM
 			@out.otherarea = @in.otherarea;
 
 			if (CM.debugloadmap)
-				Com.DPrintf("|%6i|%6i|\n", @out.portalnum, @out.otherarea);
+				Com.DPrintf($"|{@out.portalnum,6}|{@out.otherarea,6}|\n");
 		}
 	}
 

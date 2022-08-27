@@ -88,7 +88,7 @@ public class Qcommon
 			Globals.logfile_active = Cvar.Get("logfile", "0", 0);
 			Globals.showtrace = Cvar.Get("showtrace", "0", 0);
 			Globals.dedicated = Cvar.Get("dedicated", "0", Defines.CVAR_NOSET);
-			var s = Com.sprintf("%4.2f %s %s %s", Globals.VERSION, Qcommon.CPUSTRING, Globals.__DATE__, Qcommon.BUILDSTRING);
+			var s = $"{Globals.VERSION:0.00,4} {Qcommon.CPUSTRING} {Globals.__DATE__} {Qcommon.BUILDSTRING}";
 
 			Cvar.Get("version", s, Defines.CVAR_SERVERINFO | Defines.CVAR_NOSET);
 
@@ -214,7 +214,7 @@ public class Qcommon
 
 			if (Globals.showtrace.value != 0.0f)
 			{
-				Com.Printf("%4i traces  %4i points\n", Globals.c_traces, Globals.c_pointcontents);
+				Com.Printf($"{Globals.c_traces,4} traces  {Globals.c_pointcontents,4} points\n");
 
 				Globals.c_traces = 0;
 				Globals.c_brush_traces = 0;
@@ -241,7 +241,7 @@ public class Qcommon
 				var rf = Globals.time_after_ref - Globals.time_before_ref;
 				sv -= gm;
 
-				Com.Printf("update:%3i gm:%3i rf:%3i\n", sv, gm, rf);
+				Com.Printf($"update:{sv,3} gm:{gm,3} rf:{rf,3}\n");
 			}
 		}
 		catch (Exception e)
@@ -269,7 +269,7 @@ public class Qcommon
 				var rf = Globals.time_after_ref - Globals.time_before_ref;
 				cl -= rf;
 
-				Com.Printf("render:%3i gm:%3i rf:%3i\n", cl, gm, rf);
+				Com.Printf($"render:{cl,3} gm:{gm,3} rf:{rf,3}\n");
 			}
 		}
 		catch (Exception e)

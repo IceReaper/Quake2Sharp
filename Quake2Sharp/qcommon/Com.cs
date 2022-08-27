@@ -262,7 +262,7 @@ public class Com
 
 	public static Action Error_f = () => { Com.Error(Defines.ERR_FATAL, Cmd.Argv(1)); };
 
-	public static void Error(int code, string fmt, params object[] vargs)
+	public static void Error(int code, string msg)
 	{
 		// va_list argptr;
 		// static char msg[MAXPRINTMSG];
@@ -272,7 +272,7 @@ public class Com
 
 		Com.recursive = true;
 
-		Com.msg = Com.sprintf(fmt, vargs);
+		Com.msg = msg;
 
 		if (code == Defines.ERR_DISCONNECT)
 		{
@@ -320,24 +320,22 @@ public class Com
 
 	public static void dprintln(string fmt)
 	{
-		Com.DPrintf(Com._debugContext + fmt + "\n", null);
+		Com.DPrintf(Com._debugContext + fmt + "\n");
 	}
 
-	public static void DPrintf(string fmt, params object[] vargs)
+	public static void DPrintf(string msg)
 	{
 		if (Globals.developer == null || Globals.developer.value == 0)
 			return; // don't confuse non-developers with techie stuff...
 
 		Com._debugContext = Com.debugContext;
-		Com.Printf(fmt, vargs);
+		Com.Printf(msg);
 		Com._debugContext = "";
 	}
 
 	/** Prints out messages, which can also be redirected to a remote client. */
-	public static void Printf(string fmt, params object[] vargs)
+	public static void Printf(string msg)
 	{
-		var msg = Com.sprintf(Com._debugContext + fmt, vargs);
-
 		if (Com.rd_target != 0)
 		{
 			if (msg.Length + Com.rd_buffer.Length > Com.rd_buffersize - 1)
@@ -408,18 +406,6 @@ public class Com
 	public static void Println(string fmt)
 	{
 		Com.Printf(Com._debugContext + fmt + "\n");
-	}
-
-	public static string sprintf(string fmt, params object[] vargs)
-	{
-		var msg = "";
-
-		if (vargs == null || vargs.Length == 0)
-			msg = fmt;
-		else
-			msg = new PrintfFormat(fmt).sprintf(vargs);
-
-		return msg;
 	}
 
 	public static int Argc()

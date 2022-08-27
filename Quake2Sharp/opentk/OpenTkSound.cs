@@ -603,7 +603,7 @@ public class OpenTkSound : Sound
 				else
 					Com.Printf(" ");
 
-				Com.Printf("(%2db) %6i : %s\n", sc.width * 8, size, sfx.name);
+				Com.Printf($"({sc.width * 8,2}b) {size,6} : {sfx.name}\n");
 			}
 			else
 			{
@@ -619,10 +619,10 @@ public class OpenTkSound : Sound
 
 	private void SoundInfo_f()
 	{
-		Com.Printf("%5d stereo\n", 1);
-		Com.Printf("%5d samples\n", 22050);
-		Com.Printf("%5d samplebits\n", 16);
-		Com.Printf("%5d speed\n", 44100);
+		Com.Printf($"{1,5} stereo\n");
+		Com.Printf($"{22050,5} samples\n");
+		Com.Printf($"{16,5} samplebits\n");
+		Com.Printf($"{44100,5} speed\n");
 	}
 
 	static OpenTkSound()

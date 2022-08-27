@@ -570,15 +570,7 @@ public class PlayerHud
 		sb.Append("xv 50 yv 172 string2 \"");
 
 		sb.Append(
-			Com.sprintf(
-				"%3i/%3i     %i/%i       %i/%i\" ",
-				GameBase.level.killed_monsters,
-				GameBase.level.total_monsters,
-				GameBase.level.found_goals,
-				GameBase.level.total_goals,
-				GameBase.level.found_secrets,
-				GameBase.level.total_secrets
-			)
+			$"{GameBase.level.killed_monsters,3}/{GameBase.level.total_monsters,3}     {GameBase.level.found_goals}/{GameBase.level.total_goals}       {GameBase.level.found_secrets}/{GameBase.level.total_secrets}\" "
 		);
 
 		GameBase.gi.WriteByte(Defines.svc_layout);
