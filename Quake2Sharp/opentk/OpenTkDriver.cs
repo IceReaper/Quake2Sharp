@@ -71,7 +71,7 @@ namespace Quake2Sharp.opentk
 
 				this.window = new(GameWindowSettings.Default, new()
 				{
-					Profile = ContextProfile.Compatability, Size = new(displayMode.Width, displayMode.Height), IsFullscreen = true
+					Profile = ContextProfile.Compatability, Size = new(displayMode.Width, displayMode.Height), WindowState = WindowState.Fullscreen
 				});
 
 				VID.Printf(
