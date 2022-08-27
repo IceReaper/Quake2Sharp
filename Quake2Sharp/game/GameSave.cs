@@ -141,7 +141,7 @@ public class GameSave
 		GameBase.gun_y = GameBase.gi.cvar("gun_y", "0", 0);
 		GameBase.gun_z = GameBase.gi.cvar("gun_z", "0", 0);
 
-		//FIXME: sv_ prefix are wrong names for these variables 
+		//FIXME: sv_ prefix are wrong names for these variables
 		GameBase.sv_rollspeed = GameBase.gi.cvar("sv_rollspeed", "200", 0);
 		GameBase.sv_rollangle = GameBase.gi.cvar("sv_rollangle", "2", 0);
 		GameBase.sv_maxvelocity = GameBase.gi.cvar("sv_maxvelocity", "2000", 0);

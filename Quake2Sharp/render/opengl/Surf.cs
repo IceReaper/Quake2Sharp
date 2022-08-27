@@ -1683,7 +1683,7 @@ public partial class OpenGLRenderApi
 	//		if (frame == null) {
 	//			frame = new ImageFrame(null);
 	//			frame.show();
-	//		} 
+	//		}
 	//		frame.showImage(tmp);
 	//		
 	//	}

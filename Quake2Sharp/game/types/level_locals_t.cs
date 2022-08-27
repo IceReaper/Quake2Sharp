@@ -95,7 +95,7 @@ public class level_locals_t
 		f.Write(this.body_que); // dead bodies
 		f.Write(this.power_cubes); // ugly necessity for coop
 
-		// rst's checker :-)		
+		// rst's checker :-)
 		f.Write(4711);
 	}
 
@@ -134,7 +134,7 @@ public class level_locals_t
 
 		this.current_entity = f.ReadEdictRef();
 		this.body_que = f.ReadInt32(); // dead bodies
-		this.power_cubes = f.ReadInt32(); // ugly necessity for coop		
+		this.power_cubes = f.ReadInt32(); // ugly necessity for coop
 
 		// rst's checker :-)
 		if (f.ReadInt32() != 4711)

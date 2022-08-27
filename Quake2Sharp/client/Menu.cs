@@ -158,7 +158,7 @@ public class Menu
 				Com.Error(Defines.ERR_FATAL, "PushMenu: MAX_MENU_DEPTH");
 
 			Menu.m_layers[Menu.m_menudepth].draw = draw; //m_drawfunc;
-			Menu.m_layers[Menu.m_menudepth].key = key; //m_keyfunc;     
+			Menu.m_layers[Menu.m_menudepth].key = key; //m_keyfunc;
 		}
 
 		Menu.m_menudepth++;

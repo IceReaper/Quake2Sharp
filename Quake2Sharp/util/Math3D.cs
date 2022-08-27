@@ -350,7 +350,7 @@ public class Math3D
 		int i;
 		var minelem = 1.0F;
 
-		// find the smallest magnitude axially aligned vector 
+		// find the smallest magnitude axially aligned vector
 		for (pos = 0, i = 0; i < 3; i++)
 		{
 			if (Math.Abs(src[i]) < minelem)
@@ -363,11 +363,11 @@ public class Math3D
 		// project the point onto the plane defined by src
 		Math3D.ProjectPointOnPlane(dst, Math3D.PLANE_XYZ[pos], src);
 
-		//normalize the result 
+		//normalize the result
 		Math3D.VectorNormalize(dst);
 	}
 
-	//=====================================================================	
+	//=====================================================================
 	/** 
 	 stellt fest, auf welcher Seite sich die Kiste befindet, wenn die Ebene 
 	 durch Entfernung und Senkrechten-Normale gegeben ist.    

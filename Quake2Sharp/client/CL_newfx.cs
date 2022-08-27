@@ -420,7 +420,7 @@ public class CL_newfx
 	}
 
 	// stack variable
-	// move, vec, right, up 
+	// move, vec, right, up
 	private static readonly float[] forward = { 0, 0, 0 };
 	private static readonly float[] angle_dir = { 0, 0, 0 };
 

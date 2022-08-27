@@ -37,5 +37,5 @@ public class dvis_t
 	}
 
 	public int numclusters;
-	public int[][] bitofs = new int[8][]; // bitofs[numclusters][2]	
+	public int[][] bitofs = new int[8][]; // bitofs[numclusters][2]
 }

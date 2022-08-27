@@ -38,7 +38,7 @@ public class Defines
 
 	// no acceleration or turning
 	public static readonly int PM_DEAD = 2;
-	public static readonly int PM_GIB = 3; // different bounding box 
+	public static readonly int PM_GIB = 3; // different bounding box
 	public static readonly int PM_FREEZE = 4;
 	public const int EV_NONE = 0;
 	public const int EV_ITEM_RESPAWN = 1;
@@ -50,35 +50,35 @@ public class Defines
 	public const int EV_OTHER_TELEPORT = 7;
 
 	//	angle indexes
-	public static readonly int PITCH = 0; // up / down 
-	public static readonly int YAW = 1; // left / right 
-	public static readonly int ROLL = 2; // fall over 
-	public static readonly int MAX_STRING_CHARS = 1024; // max length of a string passed to Cmd_TokenizeString 
-	public static readonly int MAX_STRING_TOKENS = 80; // max tokens resulting from Cmd_TokenizeString 
-	public static readonly int MAX_TOKEN_CHARS = 1024; // max length of an individual token 
-	public static readonly int MAX_QPATH = 64; // max length of a quake game pathname 
-	public static readonly int MAX_OSPATH = 128; // max length of a filesystem pathname 
+	public static readonly int PITCH = 0; // up / down
+	public static readonly int YAW = 1; // left / right
+	public static readonly int ROLL = 2; // fall over
+	public static readonly int MAX_STRING_CHARS = 1024; // max length of a string passed to Cmd_TokenizeString
+	public static readonly int MAX_STRING_TOKENS = 80; // max tokens resulting from Cmd_TokenizeString
+	public static readonly int MAX_TOKEN_CHARS = 1024; // max length of an individual token
+	public static readonly int MAX_QPATH = 64; // max length of a quake game pathname
+	public static readonly int MAX_OSPATH = 128; // max length of a filesystem pathname
 
 	//	per-level limits
-	public static readonly int MAX_CLIENTS = 256; // absolute limit 
-	public static readonly int MAX_EDICTS = 1024; // must change protocol to increase more 
+	public static readonly int MAX_CLIENTS = 256; // absolute limit
+	public static readonly int MAX_EDICTS = 1024; // must change protocol to increase more
 	public static readonly int MAX_LIGHTSTYLES = 256;
-	public static readonly int MAX_MODELS = 256; // these are sent over the net as bytes 
-	public static readonly int MAX_SOUNDS = 256; // so they cannot be blindly increased 
+	public static readonly int MAX_MODELS = 256; // these are sent over the net as bytes
+	public static readonly int MAX_SOUNDS = 256; // so they cannot be blindly increased
 	public static readonly int MAX_IMAGES = 256;
 	public static readonly int MAX_ITEMS = 256;
-	public static readonly int MAX_GENERAL = Defines.MAX_CLIENTS * 2; // general config strings 
+	public static readonly int MAX_GENERAL = Defines.MAX_CLIENTS * 2; // general config strings
 
 	//	game print flags
-	public static readonly int PRINT_LOW = 0; // pickup messages 
-	public static readonly int PRINT_MEDIUM = 1; // death messages 
-	public static readonly int PRINT_HIGH = 2; // critical messages 
-	public static readonly int PRINT_CHAT = 3; // chat messages 
-	public static readonly int ERR_FATAL = 0; // exit the entire game with a popup window 
-	public static readonly int ERR_DROP = 1; // print to console and disconnect from game 
-	public static readonly int ERR_DISCONNECT = 2; // don't kill server 
+	public static readonly int PRINT_LOW = 0; // pickup messages
+	public static readonly int PRINT_MEDIUM = 1; // death messages
+	public static readonly int PRINT_HIGH = 2; // critical messages
+	public static readonly int PRINT_CHAT = 3; // chat messages
+	public static readonly int ERR_FATAL = 0; // exit the entire game with a popup window
+	public static readonly int ERR_DROP = 1; // print to console and disconnect from game
+	public static readonly int ERR_DISCONNECT = 2; // don't kill server
 	public static readonly int PRINT_ALL = 0;
-	public static readonly int PRINT_DEVELOPER = 1; // only print when "developer 1" 
+	public static readonly int PRINT_DEVELOPER = 1; // only print when "developer 1"
 	public static readonly int PRINT_ALERT = 2;
 
 	//	key / value info strings
@@ -92,17 +92,17 @@ public class Defines
 	public static readonly int SFF_RDONLY = 0x04;
 	public static readonly int SFF_SUBDIR = 0x08;
 	public static readonly int SFF_SYSTEM = 0x10;
-	public static readonly int CVAR_ARCHIVE = 1; // set to cause it to be saved to vars.rc 
-	public static readonly int CVAR_USERINFO = 2; // added to userinfo when changed 
-	public static readonly int CVAR_SERVERINFO = 4; // added to serverinfo when changed 
-	public static readonly int CVAR_NOSET = 8; // don't allow change from console at all, 
+	public static readonly int CVAR_ARCHIVE = 1; // set to cause it to be saved to vars.rc
+	public static readonly int CVAR_USERINFO = 2; // added to userinfo when changed
+	public static readonly int CVAR_SERVERINFO = 4; // added to serverinfo when changed
+	public static readonly int CVAR_NOSET = 8; // don't allow change from console at all,
 
 	// but can be set from the command line
-	public static readonly int CVAR_LATCH = 16; // save changes until server restart 
+	public static readonly int CVAR_LATCH = 16; // save changes until server restart
 
 	// lower bits are stronger, and will eat weaker brushes completely
-	public static readonly int CONTENTS_SOLID = 1; // an eye is never valid in a solid 
-	public static readonly int CONTENTS_WINDOW = 2; // translucent, but not watery 
+	public static readonly int CONTENTS_SOLID = 1; // an eye is never valid in a solid
+	public static readonly int CONTENTS_WINDOW = 2; // translucent, but not watery
 	public static readonly int CONTENTS_AUX = 4;
 	public static readonly int CONTENTS_LAVA = 8;
 	public static readonly int CONTENTS_SLIME = 16;
@@ -122,27 +122,27 @@ public class Defines
 	public static readonly int CONTENTS_CURRENT_270 = 0x200000;
 	public static readonly int CONTENTS_CURRENT_UP = 0x400000;
 	public static readonly int CONTENTS_CURRENT_DOWN = 0x800000;
-	public static readonly int CONTENTS_ORIGIN = 0x1000000; // removed before bsping an entity 
-	public static readonly int CONTENTS_MONSTER = 0x2000000; // should never be on a brush, only in game 
+	public static readonly int CONTENTS_ORIGIN = 0x1000000; // removed before bsping an entity
+	public static readonly int CONTENTS_MONSTER = 0x2000000; // should never be on a brush, only in game
 	public static readonly int CONTENTS_DEADMONSTER = 0x4000000;
-	public static readonly int CONTENTS_DETAIL = 0x8000000; // brushes to be added after vis leafs 
-	public static readonly int CONTENTS_TRANSLUCENT = 0x10000000; // auto set if any surface has trans 
+	public static readonly int CONTENTS_DETAIL = 0x8000000; // brushes to be added after vis leafs
+	public static readonly int CONTENTS_TRANSLUCENT = 0x10000000; // auto set if any surface has trans
 	public static readonly int CONTENTS_LADDER = 0x20000000;
-	public static readonly int SURF_LIGHT = 0x1; // value will hold the light strength 
-	public static readonly int SURF_SLICK = 0x2; // effects game physics 
-	public static readonly int SURF_SKY = 0x4; // don't draw, but add to skybox 
-	public static readonly int SURF_WARP = 0x8; // turbulent water warp 
+	public static readonly int SURF_LIGHT = 0x1; // value will hold the light strength
+	public static readonly int SURF_SLICK = 0x2; // effects game physics
+	public static readonly int SURF_SKY = 0x4; // don't draw, but add to skybox
+	public static readonly int SURF_WARP = 0x8; // turbulent water warp
 	public static readonly int SURF_TRANS33 = 0x10;
 	public static readonly int SURF_TRANS66 = 0x20;
-	public static readonly int SURF_FLOWING = 0x40; // scroll towards angle 
-	public static readonly int SURF_NODRAW = 0x80; // don't bother referencing the texture 
+	public static readonly int SURF_FLOWING = 0x40; // scroll towards angle
+	public static readonly int SURF_NODRAW = 0x80; // don't bother referencing the texture
 
 	//
 	// button bits
 	//
 	public static readonly int BUTTON_ATTACK = 1;
 	public static readonly int BUTTON_USE = 2;
-	public static readonly int BUTTON_ANY = 128; // any key whatsoever 
+	public static readonly int BUTTON_ANY = 128; // any key whatsoever
 	public static readonly int MAXTOUCH = 32;
 
 	// entity_state_t->effects
@@ -150,23 +150,23 @@ public class Defines
 	// that happen constantly on the given entity.
 	// An entity that has effects will be sent to the client
 	// even if it has a zero index model.
-	public static readonly int EF_ROTATE = 0x00000001; // rotate (bonus items) 
-	public static readonly int EF_GIB = 0x00000002; // leave a trail 
-	public static readonly int EF_BLASTER = 0x00000008; // redlight + trail 
-	public static readonly int EF_ROCKET = 0x00000010; // redlight + trail 
+	public static readonly int EF_ROTATE = 0x00000001; // rotate (bonus items)
+	public static readonly int EF_GIB = 0x00000002; // leave a trail
+	public static readonly int EF_BLASTER = 0x00000008; // redlight + trail
+	public static readonly int EF_ROCKET = 0x00000010; // redlight + trail
 	public static readonly int EF_GRENADE = 0x00000020;
 	public static readonly int EF_HYPERBLASTER = 0x00000040;
 	public static readonly int EF_BFG = 0x00000080;
 	public static readonly int EF_COLOR_SHELL = 0x00000100;
 	public static readonly int EF_POWERSCREEN = 0x00000200;
-	public static readonly int EF_ANIM01 = 0x00000400; // automatically cycle between frames 0 and 1 at 2 hz 
-	public static readonly int EF_ANIM23 = 0x00000800; // automatically cycle between frames 2 and 3 at 2 hz 
-	public static readonly int EF_ANIM_ALL = 0x00001000; // automatically cycle through all frames at 2hz 
-	public static readonly int EF_ANIM_ALLFAST = 0x00002000; // automatically cycle through all frames at 10hz 
+	public static readonly int EF_ANIM01 = 0x00000400; // automatically cycle between frames 0 and 1 at 2 hz
+	public static readonly int EF_ANIM23 = 0x00000800; // automatically cycle between frames 2 and 3 at 2 hz
+	public static readonly int EF_ANIM_ALL = 0x00001000; // automatically cycle through all frames at 2hz
+	public static readonly int EF_ANIM_ALLFAST = 0x00002000; // automatically cycle through all frames at 10hz
 	public static readonly int EF_FLIES = 0x00004000;
 	public static readonly int EF_QUAD = 0x00008000;
 	public static readonly int EF_PENT = 0x00010000;
-	public static readonly int EF_TELEPORTER = 0x00020000; // particle fountain 
+	public static readonly int EF_TELEPORTER = 0x00020000; // particle fountain
 	public static readonly int EF_FLAG1 = 0x00040000;
 	public static readonly int EF_FLAG2 = 0x00080000;
 
@@ -189,31 +189,31 @@ public class Defines
 	//ROGUE
 
 	// entity_state_t->renderfx flags
-	public static readonly int RF_MINLIGHT = 1; // allways have some light (viewmodel) 
-	public static readonly int RF_VIEWERMODEL = 2; // don't draw through eyes, only mirrors 
-	public static readonly int RF_WEAPONMODEL = 4; // only draw through eyes 
-	public static readonly int RF_FULLBRIGHT = 8; // allways draw full intensity 
-	public static readonly int RF_DEPTHHACK = 16; // for view weapon Z crunching 
+	public static readonly int RF_MINLIGHT = 1; // allways have some light (viewmodel)
+	public static readonly int RF_VIEWERMODEL = 2; // don't draw through eyes, only mirrors
+	public static readonly int RF_WEAPONMODEL = 4; // only draw through eyes
+	public static readonly int RF_FULLBRIGHT = 8; // allways draw full intensity
+	public static readonly int RF_DEPTHHACK = 16; // for view weapon Z crunching
 	public static readonly int RF_TRANSLUCENT = 32;
 	public static readonly int RF_FRAMELERP = 64;
 	public static readonly int RF_BEAM = 128;
-	public static readonly int RF_CUSTOMSKIN = 256; // skin is an index in image_precache 
-	public static readonly int RF_GLOW = 512; // pulse lighting for bonus items 
+	public static readonly int RF_CUSTOMSKIN = 256; // skin is an index in image_precache
+	public static readonly int RF_GLOW = 512; // pulse lighting for bonus items
 	public static readonly int RF_SHELL_RED = 1024;
 	public static readonly int RF_SHELL_GREEN = 2048;
 	public static readonly int RF_SHELL_BLUE = 4096;
 
 	//ROGUE
-	public static readonly int RF_IR_VISIBLE = 0x00008000; // 32768 
-	public static readonly int RF_SHELL_DOUBLE = 0x00010000; // 65536 
+	public static readonly int RF_IR_VISIBLE = 0x00008000; // 32768
+	public static readonly int RF_SHELL_DOUBLE = 0x00010000; // 65536
 	public static readonly int RF_SHELL_HALF_DAM = 0x00020000;
 	public static readonly int RF_USE_DISGUISE = 0x00040000;
 
 	//ROGUE
 
 	// player_state_t->refdef flags
-	public static readonly int RDF_UNDERWATER = 1; // warp the screen as apropriate 
-	public static readonly int RDF_NOWORLDMODEL = 2; // used for player configuration screen 
+	public static readonly int RDF_UNDERWATER = 1; // warp the screen as apropriate
+	public static readonly int RDF_NOWORLDMODEL = 2; // used for player configuration screen
 
 	//ROGUE
 	public static readonly int RDF_IRGOGGLES = 4;
@@ -243,7 +243,7 @@ public class Defines
 	public const int MZ_IONRIPPER = 16;
 	public const int MZ_BLUEHYPERBLASTER = 17;
 	public const int MZ_PHALANX = 18;
-	public const int MZ_SILENCED = 128; // bit flag ORed with one of the above numbers 
+	public const int MZ_SILENCED = 128; // bit flag ORed with one of the above numbers
 
 	//ROGUE
 	public const int MZ_ETF_RIFLE = 30;
@@ -416,7 +416,7 @@ public class Defines
 	public const int MZ2_WIDOW_DISRUPTOR = 148;
 	public const int MZ2_WIDOW_BLASTER = 149;
 	public const int MZ2_WIDOW_RAIL = 150;
-	public const int MZ2_WIDOW_PLASMABEAM = 151; // PMM - not used 
+	public const int MZ2_WIDOW_PLASMABEAM = 151; // PMM - not used
 	public const int MZ2_CARRIER_MACHINEGUN_L2 = 152;
 	public const int MZ2_CARRIER_MACHINEGUN_R2 = 153;
 	public const int MZ2_WIDOW_RAIL_LEFT = 154;
@@ -497,13 +497,13 @@ public class Defines
 	public static readonly int CHAN_NO_PHS_ADD = 8;
 
 	// send to all clients, not just ones in PHS (ATTN 0 will also do this)
-	public static readonly int CHAN_RELIABLE = 16; // send by reliable message, not datagram 
+	public static readonly int CHAN_RELIABLE = 16; // send by reliable message, not datagram
 
 	//	   sound attenuation values
-	public static readonly int ATTN_NONE = 0; // full volume the entire level 
+	public static readonly int ATTN_NONE = 0; // full volume the entire level
 	public static readonly int ATTN_NORM = 1;
 	public static readonly int ATTN_IDLE = 2;
-	public static readonly int ATTN_STATIC = 3; // diminish very rapidly with distance 
+	public static readonly int ATTN_STATIC = 3; // diminish very rapidly with distance
 
 	//	   player_state->stats[] indexes
 	public static readonly int STAT_HEALTH_ICON = 0;
@@ -521,31 +521,31 @@ public class Defines
 	public static readonly int STAT_SELECTED_ITEM = 12;
 	public static readonly int STAT_LAYOUTS = 13;
 	public static readonly int STAT_FRAGS = 14;
-	public static readonly int STAT_FLASHES = 15; // cleared each frame, 1 = health, 2 = armor 
+	public static readonly int STAT_FLASHES = 15; // cleared each frame, 1 = health, 2 = armor
 	public static readonly int STAT_CHASE = 16;
 	public static readonly int STAT_SPECTATOR = 17;
 	public static readonly int MAX_STATS = 32;
 
 	//	   dmflags->value flags
-	public static readonly int DF_NO_HEALTH = 0x00000001; // 1 
-	public static readonly int DF_NO_ITEMS = 0x00000002; // 2 
-	public static readonly int DF_WEAPONS_STAY = 0x00000004; // 4 
-	public static readonly int DF_NO_FALLING = 0x00000008; // 8 
-	public static readonly int DF_INSTANT_ITEMS = 0x00000010; // 16 
-	public static readonly int DF_SAME_LEVEL = 0x00000020; // 32 
-	public static readonly int DF_SKINTEAMS = 0x00000040; // 64 
-	public static readonly int DF_MODELTEAMS = 0x00000080; // 128 
-	public static readonly int DF_NO_FRIENDLY_FIRE = 0x00000100; // 256 
-	public static readonly int DF_SPAWN_FARTHEST = 0x00000200; // 512 
-	public static readonly int DF_FORCE_RESPAWN = 0x00000400; // 1024 
-	public static readonly int DF_NO_ARMOR = 0x00000800; // 2048 
-	public static readonly int DF_ALLOW_EXIT = 0x00001000; // 4096 
-	public static readonly int DF_INFINITE_AMMO = 0x00002000; // 8192 
-	public static readonly int DF_QUAD_DROP = 0x00004000; // 16384 
-	public static readonly int DF_FIXED_FOV = 0x00008000; // 32768 
+	public static readonly int DF_NO_HEALTH = 0x00000001; // 1
+	public static readonly int DF_NO_ITEMS = 0x00000002; // 2
+	public static readonly int DF_WEAPONS_STAY = 0x00000004; // 4
+	public static readonly int DF_NO_FALLING = 0x00000008; // 8
+	public static readonly int DF_INSTANT_ITEMS = 0x00000010; // 16
+	public static readonly int DF_SAME_LEVEL = 0x00000020; // 32
+	public static readonly int DF_SKINTEAMS = 0x00000040; // 64
+	public static readonly int DF_MODELTEAMS = 0x00000080; // 128
+	public static readonly int DF_NO_FRIENDLY_FIRE = 0x00000100; // 256
+	public static readonly int DF_SPAWN_FARTHEST = 0x00000200; // 512
+	public static readonly int DF_FORCE_RESPAWN = 0x00000400; // 1024
+	public static readonly int DF_NO_ARMOR = 0x00000800; // 2048
+	public static readonly int DF_ALLOW_EXIT = 0x00001000; // 4096
+	public static readonly int DF_INFINITE_AMMO = 0x00002000; // 8192
+	public static readonly int DF_QUAD_DROP = 0x00004000; // 16384
+	public static readonly int DF_FIXED_FOV = 0x00008000; // 32768
 
 	//	   RAFAEL
-	public static readonly int DF_QUADFIRE_DROP = 0x00010000; // 65536 
+	public static readonly int DF_QUADFIRE_DROP = 0x00010000; // 65536
 
 	//	  ROGUE
 	public static readonly int DF_NO_MINES = 0x00020000;
@@ -563,12 +563,12 @@ public class Defines
 	public static readonly int CS_NAME = 0;
 	public static readonly int CS_CDTRACK = 1;
 	public static readonly int CS_SKY = 2;
-	public static readonly int CS_SKYAXIS = 3; // %f %f %f format 
+	public static readonly int CS_SKYAXIS = 3; // %f %f %f format
 	public static readonly int CS_SKYROTATE = 4;
-	public static readonly int CS_STATUSBAR = 5; // display program string 
-	public static readonly int CS_AIRACCEL = 29; // air acceleration control 
+	public static readonly int CS_STATUSBAR = 5; // display program string
+	public static readonly int CS_AIRACCEL = 29; // air acceleration control
 	public static readonly int CS_MAXCLIENTS = 30;
-	public static readonly int CS_MAPCHECKSUM = 31; // for catching cheater maps 
+	public static readonly int CS_MAPCHECKSUM = 31; // for catching cheater maps
 	public static readonly int CS_MODELS = 32;
 	public static readonly int CS_SOUNDS = Defines.CS_MODELS + Defines.MAX_MODELS;
 	public static readonly int CS_IMAGES = Defines.CS_SOUNDS + Defines.MAX_SOUNDS;
@@ -606,7 +606,7 @@ public class Defines
 	public const int TE_MEDIC_CABLE_ATTACK = 19;
 	public const int TE_BFG_EXPLOSION = 20;
 	public const int TE_BFG_BIGEXPLOSION = 21;
-	public const int TE_BOSSTPORT = 22; // used as '22' in a map, so DON'T RENUMBER!!! 
+	public const int TE_BOSSTPORT = 22; // used as '22' in a map, so DON'T RENUMBER!!!
 	public const int TE_BFG_LASER = 23;
 	public const int TE_GRAPPLE_CABLE = 24;
 	public const int TE_WELDING_SPARKS = 25;
@@ -615,7 +615,7 @@ public class Defines
 	public const int TE_PLASMA_EXPLOSION = 28;
 	public const int TE_TUNNEL_SPARKS = 29;
 
-	//ROGUE 
+	//ROGUE
 	public const int TE_BLASTER2 = 30;
 	public const int TE_RAILTRAIL2 = 31;
 	public const int TE_FLAME = 32;
@@ -703,7 +703,7 @@ public class Defines
 	public static readonly int DEFAULT_DEATHMATCH_SHOTGUN_COUNT = 12;
 	public static readonly int DEFAULT_SHOTGUN_COUNT = 12;
 	public static readonly int DEFAULT_SSHOTGUN_COUNT = 20;
-	public static readonly int ANIM_BASIC = 0; // stand / run 
+	public static readonly int ANIM_BASIC = 0; // stand / run
 	public static readonly int ANIM_WAVE = 1;
 	public static readonly int ANIM_JUMP = 2;
 	public static readonly int ANIM_PAIN = 3;
@@ -722,17 +722,17 @@ public class Defines
 	public static readonly float FALL_TIME = 0.3f;
 
 	//	damage flags
-	public static readonly int DAMAGE_RADIUS = 0x00000001; // damage was indirect 
-	public static readonly int DAMAGE_NO_ARMOR = 0x00000002; // armour does not protect from this damage 
-	public static readonly int DAMAGE_ENERGY = 0x00000004; // damage is from an energy based weapon 
-	public static readonly int DAMAGE_NO_KNOCKBACK = 0x00000008; // do not affect velocity, just view angles 
-	public static readonly int DAMAGE_BULLET = 0x00000010; // damage is from a bullet (used for ricochets) 
+	public static readonly int DAMAGE_RADIUS = 0x00000001; // damage was indirect
+	public static readonly int DAMAGE_NO_ARMOR = 0x00000002; // armour does not protect from this damage
+	public static readonly int DAMAGE_ENERGY = 0x00000004; // damage is from an energy based weapon
+	public static readonly int DAMAGE_NO_KNOCKBACK = 0x00000008; // do not affect velocity, just view angles
+	public static readonly int DAMAGE_BULLET = 0x00000010; // damage is from a bullet (used for ricochets)
 	public static readonly int DAMAGE_NO_PROTECTION = 0x00000020;
 
 	// armor, shields, invulnerability, and godmode have no effect
 	public static readonly int DAMAGE_NO = 0;
-	public static readonly int DAMAGE_YES = 1; // will take damage if hit 
-	public static readonly int DAMAGE_AIM = 2; // auto targeting recognizes this 
+	public static readonly int DAMAGE_YES = 1; // will take damage if hit
+	public static readonly int DAMAGE_AIM = 2; // auto targeting recognizes this
 
 	//	means of death
 	public const int MOD_UNKNOWN = 0;
@@ -781,24 +781,24 @@ public class Defines
 
 	//	edict->flags
 	public static readonly int FL_FLY = 0x00000001;
-	public static readonly int FL_SWIM = 0x00000002; // implied immunity to drowining 
+	public static readonly int FL_SWIM = 0x00000002; // implied immunity to drowining
 	public static readonly int FL_IMMUNE_LASER = 0x00000004;
 	public static readonly int FL_INWATER = 0x00000008;
 	public static readonly int FL_GODMODE = 0x00000010;
 	public static readonly int FL_NOTARGET = 0x00000020;
 	public static readonly int FL_IMMUNE_SLIME = 0x00000040;
 	public static readonly int FL_IMMUNE_LAVA = 0x00000080;
-	public static readonly int FL_PARTIALGROUND = 0x00000100; // not all corners are valid 
-	public static readonly int FL_WATERJUMP = 0x00000200; // player jumping out of water 
-	public static readonly int FL_TEAMSLAVE = 0x00000400; // not the first on the team 
+	public static readonly int FL_PARTIALGROUND = 0x00000100; // not all corners are valid
+	public static readonly int FL_WATERJUMP = 0x00000200; // player jumping out of water
+	public static readonly int FL_TEAMSLAVE = 0x00000400; // not the first on the team
 	public static readonly int FL_NO_KNOCKBACK = 0x00000800;
-	public static readonly int FL_POWER_ARMOR = 0x00001000; // power armor (if any) is active 
-	public static readonly int FL_RESPAWN = unchecked((int)0x80000000); // used for item respawning 
+	public static readonly int FL_POWER_ARMOR = 0x00001000; // power armor (if any) is active
+	public static readonly int FL_RESPAWN = unchecked((int)0x80000000); // used for item respawning
 	public static readonly float FRAMETIME = 0.1f;
 
 	//	memory tags to allow dynamic memory to be cleaned up
-	public static readonly int TAG_GAME = 765; // clear when unloading the dll 
-	public static readonly int TAG_LEVEL = 766; // clear when loading a new level 
+	public static readonly int TAG_GAME = 765; // clear when unloading the dll
+	public static readonly int TAG_LEVEL = 766; // clear when loading a new level
 	public static readonly int MELEE_DISTANCE = 80;
 	public static readonly int BODY_QUEUE_SIZE = 8;
 
@@ -875,7 +875,7 @@ public class Defines
 	public static readonly int PNOISE_IMPACT = 2;
 
 	//	gitem_t->flags
-	public static readonly int IT_WEAPON = 1; // use makes active weapon 
+	public static readonly int IT_WEAPON = 1; // use makes active weapon
 	public static readonly int IT_AMMO = 2;
 	public static readonly int IT_ARMOR = 4;
 	public static readonly int IT_STAY_COOP = 8;
@@ -896,15 +896,15 @@ public class Defines
 	public static readonly int WEAP_BFG = 11;
 
 	//	edict->movetype values
-	public const int MOVETYPE_NONE = 0; // never moves 
-	public const int MOVETYPE_NOCLIP = 1; // origin and angles change with no interaction 
-	public const int MOVETYPE_PUSH = 2; // no clip to world, push on box contact 
-	public const int MOVETYPE_STOP = 3; // no clip to world, stops on box contact 
-	public const int MOVETYPE_WALK = 4; // gravity 
-	public const int MOVETYPE_STEP = 5; // gravity, special edge handling 
+	public const int MOVETYPE_NONE = 0; // never moves
+	public const int MOVETYPE_NOCLIP = 1; // origin and angles change with no interaction
+	public const int MOVETYPE_PUSH = 2; // no clip to world, push on box contact
+	public const int MOVETYPE_STOP = 3; // no clip to world, stops on box contact
+	public const int MOVETYPE_WALK = 4; // gravity
+	public const int MOVETYPE_STEP = 5; // gravity, special edge handling
 	public const int MOVETYPE_FLY = 6;
-	public const int MOVETYPE_TOSS = 7; // gravity 
-	public const int MOVETYPE_FLYMISSILE = 8; // extra size to monsters 
+	public const int MOVETYPE_TOSS = 7; // gravity
+	public const int MOVETYPE_FLYMISSILE = 8; // extra size to monsters
 	public const int MOVETYPE_BOUNCE = 9;
 	public const int MULTICAST_ALL = 0;
 	public const int MULTICAST_PHS = 1;
@@ -922,9 +922,9 @@ public class Defines
 	public static readonly int GAME_API_VERSION = 3;
 
 	//	   edict->svflags
-	public static readonly int SVF_NOCLIENT = 0x00000001; // don't send entity to clients, even if it has effects 
-	public static readonly int SVF_DEADMONSTER = 0x00000002; // treat as CONTENTS_DEADMONSTER for collision 
-	public static readonly int SVF_MONSTER = 0x00000004; // treat as CONTENTS_MONSTER for collision 
+	public static readonly int SVF_NOCLIENT = 0x00000001; // don't send entity to clients, even if it has effects
+	public static readonly int SVF_DEADMONSTER = 0x00000002; // treat as CONTENTS_DEADMONSTER for collision
+	public static readonly int SVF_MONSTER = 0x00000004; // treat as CONTENTS_MONSTER for collision
 	public static readonly int MAX_ENT_CLUSTERS = 16;
 	public static readonly int sv_stopspeed = 100;
 	public static readonly int sv_friction = 6;
@@ -942,7 +942,7 @@ public class Defines
 	public static readonly int DOOR_X_AXIS = 64;
 	public static readonly int DOOR_Y_AXIS = 128;
 
-	// R E N D E R E R 
+	// R E N D E R E R
 	////////////////////
 	public static readonly int MAX_DLIGHTS = 32;
 	public static readonly int MAX_ENTITIES = 128;
@@ -983,19 +983,19 @@ public class Defines
 	public const int svc_nop = 6;
 	public const int svc_disconnect = 7;
 	public const int svc_reconnect = 8;
-	public const int svc_sound = 9; // <see code> 
-	public const int svc_print = 10; // [byte] id [string] null terminated string 
+	public const int svc_sound = 9; // <see code>
+	public const int svc_print = 10; // [byte] id [string] null terminated string
 	public const int svc_stufftext = 11;
 
 	// [string] stuffed into client's console buffer, should be \n terminated
-	public const int svc_serverdata = 12; // [long] protocol ... 
-	public const int svc_configstring = 13; // [short] [string] 
+	public const int svc_serverdata = 12; // [long] protocol ...
+	public const int svc_configstring = 13; // [short] [string]
 	public const int svc_spawnbaseline = 14;
-	public const int svc_centerprint = 15; // [string] to put in center of the screen 
-	public const int svc_download = 16; // [short] size [size bytes] 
-	public const int svc_playerinfo = 17; // variable 
-	public const int svc_packetentities = 18; // [...] 
-	public const int svc_deltapacketentities = 19; // [...] 
+	public const int svc_centerprint = 15; // [string] to put in center of the screen
+	public const int svc_download = 16; // [short] size [size bytes]
+	public const int svc_playerinfo = 17; // variable
+	public const int svc_packetentities = 18; // [...]
+	public const int svc_deltapacketentities = 19; // [...]
 	public const int svc_frame = 20;
 	public static readonly int NUMVERTEXNORMALS = 162;
 	public static readonly int PROTOCOL_VERSION = 34;
@@ -1010,7 +1010,7 @@ public class Defines
 	public static readonly int PS_M_FLAGS = 1 << 4;
 	public static readonly int PS_M_GRAVITY = 1 << 5;
 	public static readonly int PS_M_DELTA_ANGLES = 1 << 6;
-	public static readonly int UPDATE_BACKUP = 16; // copies of entity_state_t to keep buffered 
+	public static readonly int UPDATE_BACKUP = 16; // copies of entity_state_t to keep buffered
 
 	// must be power of two
 	public static readonly int UPDATE_MASK = Defines.UPDATE_BACKUP - 1;
@@ -1036,32 +1036,32 @@ public class Defines
 	public static readonly int U_ORIGIN2 = 1 << 1;
 	public static readonly int U_ANGLE2 = 1 << 2;
 	public static readonly int U_ANGLE3 = 1 << 3;
-	public static readonly int U_FRAME8 = 1 << 4; // frame is a byte 
+	public static readonly int U_FRAME8 = 1 << 4; // frame is a byte
 	public static readonly int U_EVENT = 1 << 5;
-	public static readonly int U_REMOVE = 1 << 6; // REMOVE this entity, don't add it 
-	public static readonly int U_MOREBITS1 = 1 << 7; // read one additional byte 
+	public static readonly int U_REMOVE = 1 << 6; // REMOVE this entity, don't add it
+	public static readonly int U_MOREBITS1 = 1 << 7; // read one additional byte
 
 	// second byte
-	public static readonly int U_NUMBER16 = 1 << 8; // NUMBER8 is implicit if not set 
+	public static readonly int U_NUMBER16 = 1 << 8; // NUMBER8 is implicit if not set
 	public static readonly int U_ORIGIN3 = 1 << 9;
 	public static readonly int U_ANGLE1 = 1 << 10;
 	public static readonly int U_MODEL = 1 << 11;
-	public static readonly int U_RENDERFX8 = 1 << 12; // fullbright, etc 
-	public static readonly int U_EFFECTS8 = 1 << 14; // autorotate, trails, etc 
-	public static readonly int U_MOREBITS2 = 1 << 15; // read one additional byte 
+	public static readonly int U_RENDERFX8 = 1 << 12; // fullbright, etc
+	public static readonly int U_EFFECTS8 = 1 << 14; // autorotate, trails, etc
+	public static readonly int U_MOREBITS2 = 1 << 15; // read one additional byte
 
 	// third byte
 	public static readonly int U_SKIN8 = 1 << 16;
-	public static readonly int U_FRAME16 = 1 << 17; // frame is a short 
-	public static readonly int U_RENDERFX16 = 1 << 18; // 8 + 16 = 32 
-	public static readonly int U_EFFECTS16 = 1 << 19; // 8 + 16 = 32 
-	public static readonly int U_MODEL2 = 1 << 20; // weapons, flags, etc 
+	public static readonly int U_FRAME16 = 1 << 17; // frame is a short
+	public static readonly int U_RENDERFX16 = 1 << 18; // 8 + 16 = 32
+	public static readonly int U_EFFECTS16 = 1 << 19; // 8 + 16 = 32
+	public static readonly int U_MODEL2 = 1 << 20; // weapons, flags, etc
 	public static readonly int U_MODEL3 = 1 << 21;
 	public static readonly int U_MODEL4 = 1 << 22;
-	public static readonly int U_MOREBITS3 = 1 << 23; // read one additional byte 
+	public static readonly int U_MOREBITS3 = 1 << 23; // read one additional byte
 
 	// fourth byte
-	public static readonly int U_OLDORIGIN = 1 << 24; // FIXME: get rid of this 
+	public static readonly int U_OLDORIGIN = 1 << 24; // FIXME: get rid of this
 	public static readonly int U_SKIN16 = 1 << 25;
 	public static readonly int U_SOUND = 1 << 26;
 	public static readonly int U_SOLID = 1 << 27;
@@ -1085,11 +1085,11 @@ public class Defines
 	public const int NA_IP = 2;
 	public const int NA_IPX = 3;
 	public const int NA_BROADCAST_IPX = 4;
-	public static readonly int SND_VOLUME = 1 << 0; // a byte 
-	public static readonly int SND_ATTENUATION = 1 << 1; // a byte 
-	public static readonly int SND_POS = 1 << 2; // three coordinates 
-	public static readonly int SND_ENT = 1 << 3; // a short 0-2: channel, 3-12: entity 
-	public static readonly int SND_OFFSET = 1 << 4; // a byte, msec offset from frame start 
+	public static readonly int SND_VOLUME = 1 << 0; // a byte
+	public static readonly int SND_ATTENUATION = 1 << 1; // a byte
+	public static readonly int SND_POS = 1 << 2; // three coordinates
+	public static readonly int SND_ENT = 1 << 3; // a short 0-2: channel, 3-12: entity
+	public static readonly int SND_OFFSET = 1 << 4; // a byte, msec offset from frame start
 	public static readonly float DEFAULT_SOUND_PACKET_VOLUME = 1.0f;
 	public static readonly float DEFAULT_SOUND_PACKET_ATTENUATION = 1.0f;
 
@@ -1097,7 +1097,7 @@ public class Defines
 	// client.h
 	public static readonly int MAX_PARSE_ENTITIES = 1024;
 	public static readonly int MAX_CLIENTWEAPONMODELS = 20;
-	public static int CMD_BACKUP = 64; // allow a lot of command backups for very fast systems	
+	public static int CMD_BACKUP = 64; // allow a lot of command backups for very fast systems
 	public static readonly int ca_uninitialized = 0;
 	public static readonly int ca_disconnected = 1;
 	public static readonly int ca_connecting = 2;
@@ -1114,7 +1114,7 @@ public class Defines
 	public static readonly int BSPVERSION = 38;
 
 	// --------
-	// qfiles.h 
+	// qfiles.h
 
 	// upper design bounds
 	// leaffaces, leafbrushes, planes, and verts are still bounded by

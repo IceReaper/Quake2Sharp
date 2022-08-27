@@ -1206,7 +1206,7 @@ public class PMove
 		}
 		else if ((PMove.pm.s.pm_flags & pmove_t.PMF_TIME_WATERJUMP) != 0)
 		{
-			// waterjump has no control, but falls 
+			// waterjump has no control, but falls
 			PMove.pml.velocity[2] -= PMove.pm.s.gravity * PMove.pml.frametime;
 
 			if (PMove.pml.velocity[2] < 0)

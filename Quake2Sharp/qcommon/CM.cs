@@ -250,7 +250,7 @@ public class CM
 		CM.cmod_base = buf;
 
 		// load into heap
-		CM.CMod_LoadSurfaces(header.lumps[Defines.LUMP_TEXINFO]); // ok        
+		CM.CMod_LoadSurfaces(header.lumps[Defines.LUMP_TEXINFO]); // ok
 		CM.CMod_LoadLeafs(header.lumps[Defines.LUMP_LEAFS]);
 		CM.CMod_LoadLeafBrushes(header.lumps[Defines.LUMP_LEAFBRUSHES]);
 		CM.CMod_LoadPlanes(header.lumps[Defines.LUMP_PLANES]);

@@ -72,7 +72,7 @@ public interface refexport_t
 	// will return 0 0 if not found
 	void DrawPic(int x, int y, string name);
 	void DrawStretchPic(int x, int y, int w, int h, string name);
-	void DrawChar(int x, int y, int num); // num is 8 bit ASCII 
+	void DrawChar(int x, int y, int num); // num is 8 bit ASCII
 	void DrawTileClear(int x, int y, int w, int h, string name);
 	void DrawFill(int x, int y, int w, int h, int c);
 	void DrawFadeScreen();

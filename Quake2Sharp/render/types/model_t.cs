@@ -41,7 +41,7 @@ public class model_t
 	public float radius;
 
 	//
-	// solid volume for clipping 
+	// solid volume for clipping
 	//
 	public bool clipbox;
 	public float[] clipmins = { 0, 0, 0 }, clipmaxs = { 0, 0, 0 };
@@ -101,7 +101,7 @@ public class model_t
 		this.radius = 0;
 
 		//
-		// solid volume for clipping 
+		// solid volume for clipping
 		//
 		this.clipbox = false;
 		Math3D.VectorClear(this.clipmins);

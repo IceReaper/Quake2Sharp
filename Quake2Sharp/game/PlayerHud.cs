@@ -115,7 +115,7 @@ public class PlayerHud
 					// strip players of all keys between units
 					for (n = 1; n < GameItemList.itemlist.Length; n++)
 					{
-						// null pointer exception fixed. (RST) 
+						// null pointer exception fixed. (RST)
 						if (GameItemList.itemlist[n] != null)
 						{
 							if ((GameItemList.itemlist[n].flags & Defines.IT_KEY) != 0)

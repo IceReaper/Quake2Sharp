@@ -21,7 +21,7 @@ public class Channel
 	private static readonly Channel[] channels = new Channel[Channel.MAX_CHANNELS];
 	private static readonly int[] sources = new int[Channel.MAX_CHANNELS];
 
-	// a reference of JOALSoundImpl.buffers 
+	// a reference of JOALSoundImpl.buffers
 	private static int[] buffers;
 	private static readonly Dictionary<int, Channel> looptable = new();
 	private static int numChannels;
@@ -82,13 +82,13 @@ public class Channel
 				AL.GenSources(1, Channel.tmp);
 				sourceId = Channel.tmp[0];
 
-				// can't generate more sources 
+				// can't generate more sources
 				if (sourceId <= 0)
 					break;
 			}
 			catch (Exception)
 			{
-				// can't generate more sources 
+				// can't generate more sources
 				break;
 			}
 

@@ -35,5 +35,5 @@ public class console_t
 	public int vislines;
 	public float[] times = new float[Defines.NUM_CON_TIMES]; // cls.realtime time the line was generated
 
-	// for transparent notify lines	
+	// for transparent notify lines
 }

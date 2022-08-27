@@ -24,10 +24,10 @@ using System.IO;
 
 public class client_static_t
 {
-	// was enum connstate_t 
+	// was enum connstate_t
 	public int state;
 
-	// was enum keydest_t 
+	// was enum keydest_t
 	public int key_dest;
 	public int framecount;
 	public int realtime; // always increasing, no clamping, etc
@@ -56,7 +56,7 @@ public class client_static_t
 	public string downloadname = "";
 	public int downloadnumber;
 
-	// was enum dltype_t 
+	// was enum dltype_t
 	public int downloadtype;
 	public int downloadpercent;
 

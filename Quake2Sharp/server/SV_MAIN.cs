@@ -487,7 +487,7 @@ public class SV_MAIN
 
 		c = Cmd.Argv(0);
 
-		//for debugging purposes 
+		//for debugging purposes
 		//Com.Printf("Packet " + NET.AdrToString(Netchan.net_from) + " : " + c + "\n");
 		//Com.Printf(Lib.hexDump(net_message.data, 64, false) + "\n");
 

@@ -471,7 +471,7 @@ public partial class OpenGLRenderApi
 
 		count = l.filelen / medge_t.DISK_SIZE;
 
-		// out = Hunk_Alloc ( (count + 1) * sizeof(*out));	
+		// out = Hunk_Alloc ( (count + 1) * sizeof(*out));
 		edges = new medge_t[count + 1];
 
 		this.loadmodel.edges = edges;
@@ -732,7 +732,7 @@ public partial class OpenGLRenderApi
 
 		count = l.filelen / dnode_t.SIZE;
 
-		// out = Hunk_Alloc ( count*sizeof(*out));	
+		// out = Hunk_Alloc ( count*sizeof(*out));
 		@out = new mnode_t[count];
 
 		this.loadmodel.nodes = @out;
@@ -742,7 +742,7 @@ public partial class OpenGLRenderApi
 
 		// initialize the tree array
 		for (i = 0; i < count; i++)
-			@out[i] = new(); // do first before linking 
+			@out[i] = new(); // do first before linking
 
 		// fill and link the nodes
 		for (i = 0; i < count; i++)
@@ -836,7 +836,7 @@ public partial class OpenGLRenderApi
 
 		count = l.filelen / Defines.SIZE_OF_SHORT;
 
-		// out = Hunk_Alloc ( count*sizeof(*out));	
+		// out = Hunk_Alloc ( count*sizeof(*out));
 		@out = new msurface_t[count];
 
 		this.loadmodel.marksurfaces = @out;

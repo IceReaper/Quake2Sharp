@@ -29,7 +29,7 @@ public abstract class glpoly_t
 	public int numverts;
 	public int flags; // for SURF_UNDERWATER (not needed anymore?)
 
-	// the array position (glDrawArrays) 
+	// the array position (glDrawArrays)
 	public int pos = 0;
 
 	protected glpoly_t()

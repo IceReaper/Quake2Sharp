@@ -596,7 +596,7 @@ public class GameAI
 			return;
 		}
 
-		// coop will change to another enemy if visible           
+		// coop will change to another enemy if visible
 		if (GameBase.coop.value != 0)
 		{
 			// FIXME: insane guys get mad with this, which causes crashes!
@@ -623,7 +623,7 @@ public class GameAI
 		{
 			// just lost sight of the player, decide where to go first
 			// dprint("lost sight of player, last seen at ");
-			// dprint(vtos(self.last_sighting)); 
+			// dprint(vtos(self.last_sighting));
 			// dprint("\n");
 			self.monsterinfo.aiflags |= Defines.AI_LOST_SIGHT | Defines.AI_PURSUIT_LAST_SEEN;
 			self.monsterinfo.aiflags &= ~(Defines.AI_PURSUE_NEXT | Defines.AI_PURSUE_TEMP);
@@ -634,10 +634,10 @@ public class GameAI
 		{
 			self.monsterinfo.aiflags &= ~Defines.AI_PURSUE_NEXT;
 
-			// dprint("reached current goal: "); 
+			// dprint("reached current goal: ");
 			// dprint(vtos(self.origin));
-			// dprint(" "); 
-			// dprint(vtos(self.last_sighting)); 
+			// dprint(" ");
+			// dprint(vtos(self.last_sighting));
 			// dprint(" ");
 			// dprint(ftos(vlen(self.origin - self.last_sighting)));
 			// dprint("\n");
@@ -667,7 +667,7 @@ public class GameAI
 				self.monsterinfo.trail_time = marker.timestamp;
 				self.s.angles[Defines.YAW] = self.ideal_yaw = marker.s.angles[Defines.YAW];
 
-				// dprint("heading is "); 
+				// dprint("heading is ");
 				// dprint(ftos(self.ideal_yaw));
 				// dprint("\n");
 				// debug_drawline(self.origin, self.last_sighting, 52);

@@ -392,7 +392,7 @@ public class SV_USER
 
 		SV_MAIN.sv_client.download = FS.LoadFile(name);
 
-		// rst: this handles loading errors, no message yet visible 
+		// rst: this handles loading errors, no message yet visible
 		if (SV_MAIN.sv_client.download == null)
 			return;
 

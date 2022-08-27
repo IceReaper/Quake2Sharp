@@ -54,7 +54,7 @@ public class VID
 	private static cvar_t vid_fullscreen;
 
 	// Global variables used internally by this module
-	// void *reflib_library;		// Handle to refresh DLL 
+	// void *reflib_library;		// Handle to refresh DLL
 	private static bool reflib_active;
 
 	// const char so_file[] = "/etc/quake2.conf";

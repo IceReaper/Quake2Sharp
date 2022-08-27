@@ -23,7 +23,7 @@ using System.IO;
 
 public class dvertex_t
 {
-	public static readonly int SIZE = 3 * 4; // 3 mal 32 bit float 
+	public static readonly int SIZE = 3 * 4; // 3 mal 32 bit float
 	public float[] point = { 0, 0, 0 };
 
 	public dvertex_t(BinaryReader b)
