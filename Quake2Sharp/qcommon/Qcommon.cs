@@ -23,10 +23,6 @@ using client;
 using game;
 using server;
 using sys;
-using System;
-using System.IO;
-using util;
-using Console = System.Console;
 
 /**
  * Qcommon contains some  basic routines for the game engine

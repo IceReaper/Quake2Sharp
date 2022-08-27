@@ -20,8 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Quake2Sharp.qcommon;
 
 using game.types;
-using System;
-using System.IO;
 using System.Text;
 using types;
 using util;

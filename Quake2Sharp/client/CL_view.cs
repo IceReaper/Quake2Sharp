@@ -147,7 +147,7 @@ public class CL_view
 		Globals.re.EndRegistration();
 
 		// clear any lines of console text
-		Console.ClearNotify();
+		QConsole.ClearNotify();
 		SCR.UpdateScreen();
 		Globals.cl.refresh_prepped = true;
 		Globals.cl.force_refdef = true; // make sure we have a valid refdef

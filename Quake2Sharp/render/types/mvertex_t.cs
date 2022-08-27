@@ -19,8 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 namespace Quake2Sharp.render.types;
 
-using System.IO;
-
 public class mvertex_t
 {
 	public static readonly int DISK_SIZE = 3 * Defines.SIZE_OF_FLOAT;

@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Quake2Sharp.client.types;
 
 using qcommon.types;
-using System.IO;
 
 public class client_static_t
 {

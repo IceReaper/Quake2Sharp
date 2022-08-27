@@ -25,11 +25,9 @@ using qcommon;
 using render;
 using sound;
 using sys;
-using System;
 using System.Drawing;
 using System.Text;
 using types;
-using util;
 
 public class VID
 {
@@ -287,7 +285,7 @@ public class VID
 				{
 					try
 					{
-						Console.ToggleConsole_f();
+						QConsole.ToggleConsole_f();
 					}
 					catch (Exception)
 					{

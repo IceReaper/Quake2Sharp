@@ -21,8 +21,6 @@ namespace Quake2Sharp.game.types;
 
 using adapters;
 using qcommon;
-using System;
-using System.IO;
 using util;
 
 public class edict_t

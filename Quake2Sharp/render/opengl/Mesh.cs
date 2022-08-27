@@ -24,7 +24,6 @@ using client.types;
 using qcommon;
 using qcommon.types;
 using render.types;
-using System;
 using util;
 
 public partial class OpenGLRenderApi

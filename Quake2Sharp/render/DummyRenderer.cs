@@ -21,7 +21,6 @@ namespace Quake2Sharp.render;
 
 using client.types;
 using sys;
-using System;
 using System.Drawing;
 using types;
 

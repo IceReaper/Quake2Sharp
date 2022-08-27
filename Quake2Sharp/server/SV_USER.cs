@@ -22,7 +22,6 @@ namespace Quake2Sharp.server;
 using game;
 using game.types;
 using qcommon;
-using System;
 using types;
 using util;
 

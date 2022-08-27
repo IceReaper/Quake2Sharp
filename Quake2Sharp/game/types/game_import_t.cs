@@ -21,7 +21,6 @@ namespace Quake2Sharp.game.types;
 
 using qcommon;
 using server;
-using System;
 
 //
 //	collection of functions provided by the main engine

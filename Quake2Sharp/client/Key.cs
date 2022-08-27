@@ -21,9 +21,6 @@ namespace Quake2Sharp.client;
 
 using game;
 using qcommon;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using util;
 
@@ -308,7 +305,7 @@ public class Key
 			if (!down)
 				return;
 
-			client.Console.ToggleConsole_f();
+			QConsole.ToggleConsole_f();
 
 			return;
 		}

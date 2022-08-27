@@ -21,7 +21,6 @@ namespace Quake2Sharp.qcommon;
 
 using game.types;
 using server;
-using System;
 using util;
 
 public class PMove

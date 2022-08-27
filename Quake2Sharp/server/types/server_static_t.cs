@@ -21,7 +21,6 @@ namespace Quake2Sharp.server.types;
 
 using game.types;
 using qcommon.types;
-using System.IO;
 
 public class server_static_t
 {

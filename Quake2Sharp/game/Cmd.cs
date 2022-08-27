@@ -23,8 +23,6 @@ using monsters;
 using qcommon;
 using qcommon.types;
 using server;
-using System;
-using System.Collections.Generic;
 using System.Text;
 using types;
 using util;

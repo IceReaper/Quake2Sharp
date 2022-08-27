@@ -22,9 +22,6 @@ namespace Quake2Sharp.sound;
 using game.types;
 using opentk;
 using qcommon;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Runtime.CompilerServices;
 using types;
 

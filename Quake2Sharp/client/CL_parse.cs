@@ -25,8 +25,6 @@ using qcommon;
 using render.types;
 using sound;
 using sys;
-using System;
-using System.IO;
 using types;
 
 /**

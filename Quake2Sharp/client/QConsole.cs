@@ -21,15 +21,12 @@ namespace Quake2Sharp.client;
 
 using game;
 using qcommon;
-using System;
-using System.IO;
 using System.Text;
-using util;
 
 /**
  * Console
  */
-public class Console
+public class QConsole
 {
 	public static Action ToggleConsole_f = () =>
 	{
@@ -51,7 +48,7 @@ public class Console
 		}
 
 		Key.ClearTyping();
-		Console.ClearNotify();
+		QConsole.ClearNotify();
 
 		if (Globals.cls.key_dest == Defines.key_console)
 		{
@@ -156,19 +153,19 @@ public class Console
 	public static void Init()
 	{
 		Globals.con.linewidth = -1;
-		Console.CheckResize();
+		QConsole.CheckResize();
 		Com.Printf("Console initialized.\n");
 
 		//
 		// register our commands
 		//
 		Globals.con_notifytime = Cvar.Get("con_notifytime", "3", 0);
-		Cmd.AddCommand("toggleconsole", Console.ToggleConsole_f);
-		Cmd.AddCommand("togglechat", Console.ToggleChat_f);
-		Cmd.AddCommand("messagemode", Console.MessageMode_f);
-		Cmd.AddCommand("messagemode2", Console.MessageMode2_f);
-		Cmd.AddCommand("clear", Console.Clear_f);
-		Cmd.AddCommand("condump", Console.Dump_f);
+		Cmd.AddCommand("toggleconsole", QConsole.ToggleConsole_f);
+		Cmd.AddCommand("togglechat", QConsole.ToggleChat_f);
+		Cmd.AddCommand("messagemode", QConsole.MessageMode_f);
+		Cmd.AddCommand("messagemode2", QConsole.MessageMode2_f);
+		Cmd.AddCommand("clear", QConsole.Clear_f);
+		Cmd.AddCommand("condump", QConsole.Dump_f);
 		Globals.con.initialized = true;
 	}
 
@@ -222,7 +219,7 @@ public class Console
 				}
 			}
 
-			Console.ClearNotify();
+			QConsole.ClearNotify();
 		}
 
 		Globals.con.current = Globals.con.totallines - 1;
@@ -273,7 +270,7 @@ public class Console
 		else
 			Globals.cls.key_dest = Defines.key_console;
 
-		Console.ClearNotify();
+		QConsole.ClearNotify();
 	};
 
 	/*
@@ -356,15 +353,15 @@ public class Console
 
 			txtpos++;
 
-			if (Console.cr != 0)
+			if (QConsole.cr != 0)
 			{
 				Globals.con.current--;
-				Console.cr = 0;
+				QConsole.cr = 0;
 			}
 
 			if (Globals.con.x == 0)
 			{
-				Console.Linefeed();
+				QConsole.Linefeed();
 
 				// mark time for transparent overlay
 				if (Globals.con.current >= 0)
@@ -380,7 +377,7 @@ public class Console
 
 				case '\r':
 					Globals.con.x = 0;
-					Console.cr = 1;
+					QConsole.cr = 1;
 
 					break;
 
@@ -416,7 +413,7 @@ public class Console
 		sb.Append(text);
 		sb.Append('\n');
 		sb.Length = 1024;
-		Console.Print(sb.ToString());
+		QConsole.Print(sb.ToString());
 	}
 
 	/*
@@ -511,12 +508,12 @@ public class Console
 		{
 			if (Globals.chat_team)
 			{
-				Console.DrawString(8, v, "say_team:");
+				QConsole.DrawString(8, v, "say_team:");
 				skip = 11;
 			}
 			else
 			{
-				Console.DrawString(8, v, "say:");
+				QConsole.DrawString(8, v, "say:");
 				skip = 5;
 			}
 
@@ -657,6 +654,6 @@ public class Console
 		// ZOID
 
 		// draw the input prompt, user text, and cursor if desired
-		Console.DrawInput();
+		QConsole.DrawInput();
 	}
 }

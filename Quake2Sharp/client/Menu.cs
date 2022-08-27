@@ -25,10 +25,7 @@ using qcommon;
 using qcommon.types;
 using sound;
 using sys;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Text;
 using types;
 using util;
@@ -1172,7 +1169,7 @@ public class Menu
 		}
 
 		Key.ClearTyping();
-		Console.ClearNotify();
+		QConsole.ClearNotify();
 		Menu.ForceMenuOff();
 		Globals.cls.key_dest = Defines.key_console;
 	}

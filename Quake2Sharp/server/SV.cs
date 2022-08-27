@@ -23,7 +23,6 @@ using client;
 using game;
 using game.types;
 using qcommon;
-using System;
 using util;
 
 /**

@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Quake2Sharp.game.monsters;
 
 using adapters;
-using System;
 using types;
 using util;
 

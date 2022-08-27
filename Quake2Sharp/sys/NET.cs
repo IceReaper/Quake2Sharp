@@ -21,8 +21,6 @@ namespace Quake2Sharp.sys;
 
 using qcommon;
 using qcommon.types;
-using System;
-using System.IO;
 using System.Net;
 using System.Text;
 using util;

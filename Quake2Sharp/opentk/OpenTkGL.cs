@@ -3,7 +3,6 @@ namespace Quake2Sharp.opentk;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using render.opengl;
-using System;
 
 public class OpenTkGL : IOpenGL
 {

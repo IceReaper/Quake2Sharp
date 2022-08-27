@@ -21,7 +21,6 @@ namespace Quake2Sharp.game;
 
 using adapters;
 using monsters;
-using System;
 using types;
 using util;
 

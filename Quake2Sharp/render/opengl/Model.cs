@@ -24,8 +24,6 @@ using game.types;
 using qcommon;
 using qcommon.types;
 using render.types;
-using System;
-using System.IO;
 using System.Text;
 using util;
 

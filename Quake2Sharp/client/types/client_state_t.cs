@@ -22,7 +22,6 @@ namespace Quake2Sharp.client.types;
 using game.types;
 using render.types;
 using sound.types;
-using System.IO;
 
 public class client_state_t
 {

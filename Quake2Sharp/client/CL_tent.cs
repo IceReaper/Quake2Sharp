@@ -24,7 +24,6 @@ using qcommon;
 using render.types;
 using sound;
 using sound.types;
-using System;
 using types;
 using util;
 

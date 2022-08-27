@@ -23,11 +23,8 @@ using client;
 using game;
 using server;
 using sys;
-using System;
-using System.IO;
 using System.Text;
 using util;
-using Console = client.Console;
 
 /**
  * Com
@@ -354,7 +351,7 @@ public class Com
 			return;
 		}
 
-		Console.Print(msg);
+		QConsole.Print(msg);
 
 		// also echo to debugging console
 		Sys.ConsoleOutput(msg);
@@ -376,7 +373,7 @@ public class Com
 					}
 					catch (Exception e)
 					{
-						System.Console.WriteLine(e);
+						Console.WriteLine(e);
 					}
 				}
 				else
@@ -387,7 +384,7 @@ public class Com
 					}
 					catch (Exception e1)
 					{
-						System.Console.WriteLine(e1);
+						Console.WriteLine(e1);
 					}
 				}
 			}
@@ -400,7 +397,7 @@ public class Com
 				}
 				catch (Exception e)
 				{
-					System.Console.WriteLine(e);
+					Console.WriteLine(e);
 				}
 			}
 

@@ -23,7 +23,6 @@ using game.monsters;
 using game.types;
 using qcommon;
 using sound;
-using System;
 using types;
 using util;
 

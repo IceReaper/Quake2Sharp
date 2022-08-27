@@ -6,9 +6,6 @@ using OpenTK.Audio.OpenAL;
 using OpenTK.Audio.OpenAL.Extensions.Creative.EFX;
 using qcommon;
 using sound.types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using util;
 
 public class Channel

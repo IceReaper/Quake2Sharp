@@ -22,8 +22,6 @@ namespace Quake2Sharp.render;
 using client.types;
 using opengl;
 using opentk;
-using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 public class Renderer

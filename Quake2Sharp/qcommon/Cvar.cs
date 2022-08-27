@@ -21,10 +21,7 @@ namespace Quake2Sharp.qcommon;
 
 using game;
 using game.types;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using util;
 
 /**

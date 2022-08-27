@@ -26,8 +26,6 @@ using qcommon.types;
 using server;
 using sound;
 using sys;
-using System;
-using System.IO;
 using System.Text;
 using types;
 using util;
@@ -1614,7 +1612,7 @@ public class Cl
 	{
 		if (Cl.isdown)
 		{
-			System.Console.Write("recursive shutdown\n");
+			Console.Write("recursive shutdown\n");
 
 			return;
 		}
@@ -1635,7 +1633,7 @@ public class Cl
 			return; // nothing running on the client
 
 		// all archived variables will now be loaded
-		Console.Init(); //ok
+		QConsole.Init(); //ok
 		S.Init(); //empty
 		VID.Init();
 		V.Init();

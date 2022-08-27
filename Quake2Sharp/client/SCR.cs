@@ -25,12 +25,10 @@ using qcommon;
 using qcommon.types;
 using sound;
 using sys;
-using System;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
 using types;
-using util;
 
 /**
  * SCR
@@ -222,7 +220,7 @@ public class SCR
 			"\n\n\035\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\036\037\n\n"
 		);
 
-		Console.ClearNotify();
+		QConsole.ClearNotify();
 	}
 
 	private static void DrawCenterString()
@@ -492,7 +490,7 @@ public class SCR
 	 */
 	private static void DrawConsole()
 	{
-		Console.CheckResize();
+		QConsole.CheckResize();
 
 		if (Globals.cls.state == Defines.ca_disconnected || Globals.cls.state == Defines.ca_connecting)
 		{
@@ -500,7 +498,7 @@ public class SCR
 			// full
 			// screen
 			// console
-			Console.DrawConsole(1.0f);
+			QConsole.DrawConsole(1.0f);
 
 			return;
 		}
@@ -509,18 +507,18 @@ public class SCR
 		{
 			// connected, but
 			// can't render
-			Console.DrawConsole(0.5f);
+			QConsole.DrawConsole(0.5f);
 			Globals.re.DrawFill(0, Globals.viddef.getHeight() / 2, Globals.viddef.getWidth(), Globals.viddef.getHeight() / 2, 0);
 
 			return;
 		}
 
 		if (SCR.scr_con_current != 0)
-			Console.DrawConsole(SCR.scr_con_current);
+			QConsole.DrawConsole(SCR.scr_con_current);
 		else
 		{
 			if (Globals.cls.key_dest == Defines.key_game || Globals.cls.key_dest == Defines.key_message)
-				Console.DrawNotify(); // only draw notify in game
+				QConsole.DrawNotify(); // only draw notify in game
 		}
 	}
 
@@ -562,7 +560,7 @@ public class SCR
 	public static void EndLoadingPlaque()
 	{
 		Globals.cls.disable_screen = 0;
-		Console.ClearNotify();
+		QConsole.ClearNotify();
 	}
 
 	/*
@@ -984,11 +982,11 @@ public class SCR
 				ping = parser.tokenAsInt();
 				parser.next();
 				time = parser.tokenAsInt();
-				Console.DrawAltString(x + 32, y, ci.name);
-				Console.DrawString(x + 32, y + 8, "Score: ");
-				Console.DrawAltString(x + 32 + 7 * 8, y + 8, "" + score);
-				Console.DrawString(x + 32, y + 16, "Ping:  " + ping);
-				Console.DrawString(x + 32, y + 24, "Time:  " + time);
+				QConsole.DrawAltString(x + 32, y, ci.name);
+				QConsole.DrawString(x + 32, y + 8, "Score: ");
+				QConsole.DrawAltString(x + 32 + 7 * 8, y + 8, "" + score);
+				QConsole.DrawString(x + 32, y + 16, "Ping:  " + ping);
+				QConsole.DrawString(x + 32, y + 24, "Time:  " + time);
 
 				if (ci.icon == null)
 					ci = Globals.cl.baseclientinfo;
@@ -1027,9 +1025,9 @@ public class SCR
 				var block = Com.sprintf("%3d %3d %-12.12s",score, ping, ci.name);
 
 				if (value == Globals.cl.playernum)
-					Console.DrawAltString(x, y, block);
+					QConsole.DrawAltString(x, y, block);
 				else
-					Console.DrawString(x, y, block);
+					QConsole.DrawString(x, y, block);
 
 				continue;
 			}
@@ -1134,7 +1132,7 @@ public class SCR
 				if (index < 0 || index >= Defines.MAX_CONFIGSTRINGS)
 					Com.Error(Defines.ERR_DROP, "Bad stat_string index");
 
-				Console.DrawString(x, y, Globals.cl.configstrings[index]);
+				QConsole.DrawString(x, y, Globals.cl.configstrings[index]);
 
 				continue;
 			}
@@ -1150,7 +1148,7 @@ public class SCR
 			if (parser.tokenEquals("string"))
 			{
 				parser.next();
-				Console.DrawString(x, y, parser.token());
+				QConsole.DrawString(x, y, parser.token());
 
 				continue;
 			}
@@ -1166,7 +1164,7 @@ public class SCR
 			if (parser.tokenEquals("string2"))
 			{
 				parser.next();
-				Console.DrawAltString(x, y, parser.token());
+				QConsole.DrawAltString(x, y, parser.token());
 
 				continue;
 			}

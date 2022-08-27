@@ -21,7 +21,6 @@ namespace Quake2Sharp.util;
 
 using game.types;
 using qcommon;
-using System;
 
 public class Math3D
 {

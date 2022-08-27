@@ -22,7 +22,6 @@ namespace Quake2Sharp.client.types;
 using render;
 using render.types;
 using sys;
-using System;
 using System.Drawing;
 
 public interface refexport_t

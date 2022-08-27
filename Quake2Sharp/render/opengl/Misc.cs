@@ -21,8 +21,6 @@ namespace Quake2Sharp.render.opengl;
 
 using client;
 using qcommon;
-using System;
-using System.IO;
 using System.Text;
 
 public partial class OpenGLRenderApi

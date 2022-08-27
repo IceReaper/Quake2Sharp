@@ -21,7 +21,6 @@ namespace Quake2Sharp.render.types;
 
 using game.types;
 using qcommon.types;
-using System;
 using util;
 
 public class model_t

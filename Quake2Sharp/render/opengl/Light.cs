@@ -23,7 +23,6 @@ using client.types;
 using game.types;
 using qcommon;
 using render.types;
-using System;
 using util;
 
 public partial class OpenGLRenderApi

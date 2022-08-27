@@ -24,8 +24,6 @@ using game;
 using game.types;
 using qcommon;
 using sys;
-using System;
-using System.IO;
 using types;
 using util;
 

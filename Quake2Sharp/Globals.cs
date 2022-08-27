@@ -24,8 +24,6 @@ using game.types;
 using qcommon.types;
 using render;
 using render.types;
-using System;
-using System.IO;
 
 /**
  * Globals ist the collection of global variables and constants.

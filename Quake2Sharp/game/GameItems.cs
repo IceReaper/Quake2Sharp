@@ -21,7 +21,6 @@ namespace Quake2Sharp.game;
 
 using adapters;
 using qcommon;
-using System;
 using System.Text.RegularExpressions;
 using types;
 using util;

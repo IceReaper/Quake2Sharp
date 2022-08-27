@@ -27,7 +27,6 @@ using opentk;
 using qcommon;
 using qcommon.types;
 using render.types;
-using System;
 using System.Drawing;
 using types;
 using util;

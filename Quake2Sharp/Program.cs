@@ -21,7 +21,6 @@ namespace Quake2Sharp;
 
 using qcommon;
 using sys;
-using System;
 
 public class Program
 {

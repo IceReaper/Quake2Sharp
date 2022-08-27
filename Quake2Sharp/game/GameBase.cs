@@ -22,7 +22,6 @@ namespace Quake2Sharp.game;
 using client;
 using qcommon;
 using server;
-using System;
 using System.Text.RegularExpressions;
 using types;
 using util;

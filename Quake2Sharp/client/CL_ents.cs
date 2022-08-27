@@ -21,7 +21,6 @@ namespace Quake2Sharp.client;
 
 using game.types;
 using qcommon;
-using System;
 using types;
 using util;
 

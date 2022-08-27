@@ -1,6 +1,5 @@
 namespace Quake2Sharp.opentk;
 
-using System;
 using util;
 
 public class PlaySound

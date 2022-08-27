@@ -7,9 +7,6 @@ using OpenTK.Audio.OpenAL.Extensions.Creative.EFX;
 using qcommon;
 using sound;
 using sound.types;
-using System;
-using System.IO;
-using util;
 
 public class OpenTkSound : Sound
 {

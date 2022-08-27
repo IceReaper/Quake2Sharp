@@ -19,8 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 namespace Quake2Sharp.game;
 
-using System;
-
 public abstract class EndianHandler
 {
 	private static readonly int mask = 0xFF;

@@ -24,7 +24,6 @@ using game.types;
 using qcommon;
 using qcommon.types;
 using sys;
-using System;
 using types;
 using util;
 

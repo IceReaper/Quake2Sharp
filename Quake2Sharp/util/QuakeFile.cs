@@ -22,7 +22,6 @@ namespace Quake2Sharp.util;
 using game;
 using game.types;
 using qcommon;
-using System.IO;
 using System.Text;
 
 public static class QuakeFile

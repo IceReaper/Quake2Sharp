@@ -7,9 +7,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using qcommon;
 using render;
 using render.opengl;
-using System;
 using System.Drawing;
-using System.Linq;
 
 public abstract class OpenTkDriver : OpenTkGL, GLDriver
 {

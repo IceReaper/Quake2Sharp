@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 namespace Quake2Sharp.render.opengl.types;
 
-using System;
 using System.Globalization;
 
 public class glconfig_t
