@@ -26,6 +26,7 @@ public class Program
 {
 	public static Action<int> UpdateLoop;
 	private static int last = Timer.Milliseconds();
+	public static bool Exit;
 
 	public static void Main(string[] args)
 	{
@@ -62,7 +63,7 @@ public class Program
 
 		Globals.nostdout = Cvar.Get("nostdout", "0", 0);
 
-		while (true)
+		while (!Program.Exit)
 		{
 			// find time spending rendering last frame
 			var now = Timer.Milliseconds();
