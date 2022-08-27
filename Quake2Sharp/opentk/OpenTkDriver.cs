@@ -7,6 +7,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using qcommon;
 using render;
 using render.opengl;
+using System.ComponentModel;
 using System.Drawing;
 
 public abstract class OpenTkDriver : OpenTkGL, GLDriver
@@ -88,7 +89,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		}
 
 		this.window.Focus();
-		this.window.Closed += OpenTkDriver.QuitOnClose;
+		this.window.Closing += OpenTkDriver.QuitOnClose;
 
 		OpenTkKBD.Window = this.window;
 		this.window.KeyDown += OpenTkKBD.Listener.KeyDown;
@@ -146,7 +147,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		return Base.rserr_ok;
 	}
 
-	private static void QuitOnClose()
+	private static void QuitOnClose(CancelEventArgs args)
 	{
 		Program.UpdateLoop = null;
 		Cbuf.ExecuteText(Defines.EXEC_APPEND, "quit");
@@ -157,7 +158,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		if (this.window == null)
 			return;
 
-		this.window.Closed -= OpenTkDriver.QuitOnClose;
+		this.window.Closing -= OpenTkDriver.QuitOnClose;
 		this.window.Close();
 		OpenTkKBD.Window = null;
 		this.window = null;

@@ -2,6 +2,7 @@ namespace Quake2Sharp.opentk;
 
 using client;
 using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using sys;
@@ -162,12 +163,12 @@ public class OpenTkKBD : KBD
 	public override void installGrabs()
 	{
 		if (OpenTkKBD.Window != null)
-			OpenTkKBD.Window.CursorGrabbed = true;
+			OpenTkKBD.Window.CursorState = CursorState.Grabbed;
 	}
 
 	public override void uninstallGrabs()
 	{
 		if (OpenTkKBD.Window != null)
-			OpenTkKBD.Window.CursorGrabbed = false;
+			OpenTkKBD.Window.CursorState = CursorState.Normal;
 	}
 }
