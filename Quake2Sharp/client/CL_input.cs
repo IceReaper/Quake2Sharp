@@ -609,6 +609,7 @@ public class CL_input
 			// of
 			// the
 			// cinematic
+			SCR.StopCinematic();
 			SCR.FinishCinematic();
 		}
 

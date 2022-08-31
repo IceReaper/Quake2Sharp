@@ -70,7 +70,8 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 
 			this.window = new(GameWindowSettings.Default, new()
 			{
-				Profile = ContextProfile.Compatability, Size = new(displayMode.Width, displayMode.Height), WindowState = WindowState.Fullscreen
+				Profile = ContextProfile.Compatability, Size = new(displayMode.Width, displayMode.Height), WindowState = WindowState.Fullscreen,
+				Title = "Quake2Sharp"
 			});
 
 			VID.Printf(
@@ -82,7 +83,8 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		{
 			this.window = new(GameWindowSettings.Default, new()
 			{
-				Profile = ContextProfile.Compatability, Size = new(windowSize.Width, windowSize.Height)
+				Profile = ContextProfile.Compatability, Size = new(windowSize.Width, windowSize.Height),
+				Title = "Quake2Sharp"
 			});
 
 			VID.Printf(Defines.PRINT_ALL, $"...setting window {windowSize.Width}x{windowSize.Height}\n");
@@ -144,6 +146,9 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 			VID.NewWindow(this.window.ClientSize.X, this.window.ClientSize.Y);
 		};
 
+		Base.setVid(this.window.ClientSize.X, this.window.ClientSize.Y);
+		VID.NewWindow(this.window.ClientSize.X, this.window.ClientSize.Y);
+
 		return Base.rserr_ok;
 	}
 
@@ -159,7 +164,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 			return;
 
 		this.window.Closing -= OpenTkDriver.QuitOnClose;
-		this.window.Close();
+		this.window.Dispose();
 		OpenTkKBD.Window = null;
 		this.window = null;
 		Program.UpdateLoop = null;

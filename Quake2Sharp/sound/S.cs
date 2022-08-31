@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
 namespace Quake2Sharp.sound;
 
 using game.types;
@@ -235,7 +236,10 @@ public class S
 		var names = new string[S.drivers.Count];
 
 		for (var i = 0; i < names.Length; i++)
-			names[i] = ((Sound)S.drivers[i]).getName();
+		{
+			if (S.drivers[i] is not DummyDriver)
+				names[i] = ((Sound)S.drivers[i]).getName();
+		}
 
 		return names;
 	}
