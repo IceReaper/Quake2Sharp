@@ -23,6 +23,7 @@ namespace Quake2Sharp.sound;
 using game.types;
 using opentk;
 using qcommon;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using types;
 
@@ -185,7 +186,12 @@ public class S
 	 * if pos is NULL, the sound will be dynamically sourced from the entity
 	 * Entchannel 0 will never override a playing sound
 	 */
-	public static void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs)
+	public static void StartSound(Vector3? origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs)
+	{
+		S.StartSound(origin == null ? null : new[] { origin.Value.X, origin.Value.Y, origin.Value.Z}, entnum, entchannel, sfx, fvol, attenuation, timeofs);
+	}
+
+	public static void StartSound(float[]? origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs)
 	{
 		S.impl.StartSound(origin, entnum, entchannel, sfx, fvol, attenuation, timeofs);
 	}

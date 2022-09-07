@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Quake2Sharp.qcommon;
 
 using game.types;
+using System.Numerics;
 using System.Text;
 using types;
 using util;
@@ -222,6 +223,14 @@ public class MSG
 	}
 
 	//should be ok.
+	public static Vector3 ReadDir(sizebuf_t sb)
+	{
+		var dir = new float[3];
+		MSG.ReadDir(sb, dir);
+
+		return new(dir[0], dir[1], dir[2]);
+	}
+
 	public static void ReadDir(sizebuf_t sb, float[] dir)
 	{
 		int b;
@@ -589,6 +598,14 @@ public class MSG
 	public static float ReadCoord(sizebuf_t msg_read)
 	{
 		return MSG.ReadShort(msg_read) * (1.0f / 8);
+	}
+
+	public static Vector3 ReadPos(sizebuf_t msg_read)
+	{
+		var pos = new float[3];
+		MSG.ReadPos(msg_read, pos);
+
+		return new(pos[0], pos[1], pos[2]);
 	}
 
 	public static void ReadPos(sizebuf_t msg_read, float[] pos)

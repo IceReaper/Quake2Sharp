@@ -67,7 +67,7 @@ public class CL_view
 		SCR.UpdateScreen();
 		SCR.TouchPics();
 		Com.Printf("                                     \r");
-		CL_tent.RegisterTEntModels();
+		TemporaryEntities.RegisterModels();
 		CL_view.num_cl_weaponmodels = 1;
 		CL_view.cl_weaponmodels[0] = "weapon.md2";
 

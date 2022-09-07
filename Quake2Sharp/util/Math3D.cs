@@ -21,6 +21,7 @@ namespace Quake2Sharp.util;
 
 using game.types;
 using qcommon;
+using System.Numerics;
 
 public class Math3D
 {
@@ -41,6 +42,13 @@ public class Math3D
 		c[2] = a[2] - b[2];
 	}
 
+	public static void VectorSubtract(Vector3 a, float[] b, float[] c)
+	{
+		c[0] = a.X - b[0];
+		c[1] = a.Y - b[1];
+		c[2] = a.Z - b[2];
+	}
+
 	public static void VectorSubtract(short[] a, short[] b, int[] c)
 	{
 		c[0] = a[0] - b[0];
@@ -55,11 +63,32 @@ public class Math3D
 		to[2] = a[2] + b[2];
 	}
 
+	public static void VectorAdd(Vector3 a, Vector3 b, float[] to)
+	{
+		to[0] = a.X + b.X;
+		to[1] = a.Y + b.Y;
+		to[2] = a.Z + b.Z;
+	}
+
 	public static void VectorCopy(float[] from, float[] to)
 	{
 		to[0] = from[0];
 		to[1] = from[1];
 		to[2] = from[2];
+	}
+
+	public static void VectorCopy(Vector3 from, float[] to)
+	{
+		to[0] = from.X;
+		to[1] = from.Y;
+		to[2] = from.Z;
+	}
+
+	public static void VectorCopy(float[] from, ref Vector3 to)
+	{
+		to.X = from[0];
+		to.Y = from[1];
+		to.Z = from[2];
 	}
 
 	public static void VectorCopy(short[] from, short[] to)
@@ -96,6 +125,14 @@ public class Math3D
 		return true;
 	}
 
+	public static bool VectorEquals(Vector3 v1, float[] v2)
+	{
+		if (v1.X != v2[0] || v1.Y != v2[1] || v1.Z != v2[2])
+			return false;
+
+		return true;
+	}
+
 	public static void VectorNegate(float[] from, float[] to)
 	{
 		to[0] = -from[0];
@@ -115,6 +152,13 @@ public class Math3D
 		to[0] = veca[0] + scale * vecb[0];
 		to[1] = veca[1] + scale * vecb[1];
 		to[2] = veca[2] + scale * vecb[2];
+	}
+
+	public static void VectorMA(Vector3 veca, float scale, float[] vecb, float[] to)
+	{
+		to[0] = veca.X + scale * vecb[0];
+		to[1] = veca.Y + scale * vecb[1];
+		to[2] = veca.Z + scale * vecb[2];
 	}
 
 	public static float VectorNormalize(float[] v)

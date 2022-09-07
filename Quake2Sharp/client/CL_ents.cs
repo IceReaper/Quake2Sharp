@@ -1041,7 +1041,7 @@ public class CL_ents
 
 			if ((effects & Defines.EF_POWERSCREEN) != 0)
 			{
-				CL_ents.ent.model = CL_tent.cl_mod_powerscreen;
+				CL_ents.ent.model = Globals.re.RegisterModel("models/items/armor/effect/tris.md2");
 				CL_ents.ent.oldframe = 0;
 				CL_ents.ent.frame = 0;
 				CL_ents.ent.flags |= Defines.RF_TRANSLUCENT | Defines.RF_SHELL_GREEN;
@@ -1391,7 +1391,7 @@ public class CL_ents
 		// PMM - moved this here so the heat beam has the right values for the
 		// vieworg, and can lock the beam to the gun
 		CL_ents.AddPacketEntities(Globals.cl.frame);
-		CL_tent.AddTEnts();
+		TemporaryEntities.Add();
 		CL_fx.AddParticles();
 		CL_fx.AddDLights();
 		CL_fx.AddLightStyles();

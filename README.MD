@@ -30,11 +30,12 @@ This project should contain all platform specific implementations.
 
 ## Ideas
 - Maybe implement Silk.Net
+- Maybe implement a Vulkan renderer
 - Maybe implement .png loading support
 - Maybe implement gltf model format as alternative to .MD2
 - Maybe implement loading raw trenchbroom .MAP files as alternative to .BSP
 - Maybe implement modern renderer
-- Maybe implement powerfull ui library for more complex menus and uis
+- Maybe implement powerful ui library for more complex menus and uis
 - Maybe implement doom3-style ui textures
 
 ## Credits

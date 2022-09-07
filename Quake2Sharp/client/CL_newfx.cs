@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 namespace Quake2Sharp.client;
 
+using System.Numerics;
 using types;
 using util;
 
@@ -27,6 +28,11 @@ using util;
  */
 public class CL_newfx
 {
+	public static void Flashlight(int ent, Vector3 pos)
+	{
+		CL_newfx.Flashlight(ent, new[] { pos.X, pos.Y, pos.Z });
+	}
+
 	public static void Flashlight(int ent, float[] pos)
 	{
 		CL_fx.cdlight_t dl;
@@ -43,6 +49,11 @@ public class CL_newfx
 	/*
 	 * ====== CL_ColorFlash - flash of light ======
 	 */
+	public static void ColorFlash(Vector3 pos, int ent, int intensity, float r, float g, float b)
+	{
+		CL_newfx.ColorFlash(new[] { pos.X, pos.Y, pos.Z }, ent, intensity, r, g, b);
+	}
+
 	public static void ColorFlash(float[] pos, int ent, int intensity, float r, float g, float b)
 	{
 		CL_fx.cdlight_t dl;
@@ -74,6 +85,11 @@ public class CL_newfx
 	/*
 	 * ====== CL_DebugTrail ======
 	 */
+	public static void DebugTrail(Vector3 start, Vector3 end)
+	{
+		CL_newfx.DebugTrail(new[] { start.X, start.Y, start.Z }, new[] { end.X, end.Y, end.Z });
+	}
+
 	public static void DebugTrail(float[] start, float[] end)
 	{
 		float len;
@@ -128,6 +144,11 @@ public class CL_newfx
 
 	// stack variable
 	// move, vec
+	public static void ForceWall(Vector3 start, Vector3 end, int color)
+	{
+		CL_newfx.ForceWall(new[] { start.X, start.Y, start.Z }, new[] { end.X, end.Y, end.Z }, color);
+	}
+
 	public static void ForceWall(float[] start, float[] end, int color)
 	{
 		float len;
@@ -181,6 +202,11 @@ public class CL_newfx
 	 * 
 	 * ===============
 	 */
+	public static void BubbleTrail2(Vector3 start, Vector3 end, int dist)
+	{
+		CL_newfx.BubbleTrail2(new[] { start.X, start.Y, start.Z }, new[] { end.X, end.Y, end.Z }, dist);
+	}
+
 	public static void BubbleTrail2(float[] start, float[] end, int dist)
 	{
 		float len;
@@ -335,6 +361,11 @@ public class CL_newfx
 	 * Puffs with velocity along direction, with some randomness thrown in
 	 * ===============
 	 */
+	public static void ParticleSteamEffect(Vector3 org, Vector3 dir, int color, int count, int magnitude)
+	{
+		CL_newfx.ParticleSteamEffect(new[] { org.X, org.Y, org.Z }, new[] { dir.X, dir.Y, dir.Z }, color, count, magnitude);
+	}
+
 	public static void ParticleSteamEffect(float[] org, float[] dir, int color, int count, int magnitude)
 	{
 		int i, j;
@@ -375,7 +406,7 @@ public class CL_newfx
 
 	// stack variable
 	// r, u, dir
-	public static void ParticleSteamEffect2(cl_sustain_t self)
+	public static void ParticleSteamEffect2(Sustain self)
 
 		//	  float[] org, float[] dir, int color, int count, int magnitude)
 	{
@@ -385,10 +416,10 @@ public class CL_newfx
 
 		//		vectoangles2 (dir, angle_dir);
 		//		AngleVectors (angle_dir, f, r, u);
-		Math3D.VectorCopy(self.dir, CL_newfx.dir);
+		Math3D.VectorCopy(self.Direction, CL_newfx.dir);
 		Math3D.MakeNormalVectors(CL_newfx.dir, CL_newfx.r, CL_newfx.u);
 
-		for (i = 0; i < self.count; i++)
+		for (i = 0; i < self.Count; i++)
 		{
 			if (CL_fx.free_particles == null)
 				return;
@@ -398,16 +429,17 @@ public class CL_newfx
 			p.next = CL_fx.active_particles;
 			CL_fx.active_particles = p;
 			p.time = Globals.cl.time;
-			p.color = self.color + (Lib.rand() & 7);
+			p.color = self.Color + (Lib.rand() & 7);
 
-			for (j = 0; j < 3; j++)
-				p.org[j] = self.org[j] + self.magnitude * 0.1f * Lib.crand();
+			p.org[0] = self.Position.X + self.Magnitude * 0.1f * Lib.crand();
+			p.org[1] = self.Position.Y + self.Magnitude * 0.1f * Lib.crand();
+			p.org[2] = self.Position.Z + self.Magnitude * 0.1f * Lib.crand();
 
 			//				p.vel[j] = dir[j]*magnitude;
-			Math3D.VectorScale(CL_newfx.dir, self.magnitude, p.vel);
-			d = Lib.crand() * self.magnitude / 3;
+			Math3D.VectorScale(CL_newfx.dir, self.Magnitude, p.vel);
+			d = Lib.crand() * self.Magnitude / 3;
 			Math3D.VectorMA(p.vel, d, CL_newfx.r, p.vel);
-			d = Lib.crand() * self.magnitude / 3;
+			d = Lib.crand() * self.Magnitude / 3;
 			Math3D.VectorMA(p.vel, d, CL_newfx.u, p.vel);
 			p.accel[0] = p.accel[1] = 0;
 			p.accel[2] = -CL_fx.PARTICLE_GRAVITY / 2;
@@ -415,7 +447,7 @@ public class CL_newfx
 			p.alphavel = -1.0f / (0.5f + (float)Globals.rnd.NextDouble() * 0.3f);
 		}
 
-		self.nextthink += self.thinkinterval;
+		self.NextThink += self.ThinkInterval;
 	}
 
 	// stack variable
@@ -502,6 +534,11 @@ public class CL_newfx
 
 	// stack variable
 	// dir
+	public static void MonsterPlasma_Shell(Vector3 origin)
+	{
+		CL_newfx.MonsterPlasma_Shell(new[] { origin.X, origin.Y, origin.Z });
+	}
+
 	public static void MonsterPlasma_Shell(float[] origin)
 	{
 		cparticle_t p;
@@ -535,12 +572,12 @@ public class CL_newfx
 
 	// stack variable
 	// dir
-	public static void Widowbeamout(cl_sustain_t self)
+	public static void Widowbeamout(Sustain self)
 	{
 		int i;
 		cparticle_t p;
 		float ratio;
-		ratio = 1.0f - ((float)self.endtime - (float)Globals.cl.time) / 2100.0f;
+		ratio = 1.0f - ((float)self.EndTime - (float)Globals.cl.time) / 2100.0f;
 
 		for (i = 0; i < 300; i++)
 		{
@@ -560,7 +597,7 @@ public class CL_newfx
 			CL_newfx.dir[1] = Lib.crand();
 			CL_newfx.dir[2] = Lib.crand();
 			Math3D.VectorNormalize(CL_newfx.dir);
-			Math3D.VectorMA(self.org, 45.0f * ratio, CL_newfx.dir, p.org);
+			Math3D.VectorMA(self.Position, 45.0f * ratio, CL_newfx.dir, p.org);
 
 			//			VectorMA(origin, 10*(((rand () & 0x7fff) / ((float)0x7fff))),
 			// dir, p.org);
@@ -571,12 +608,12 @@ public class CL_newfx
 
 	// stack variable
 	// dir
-	public static void Nukeblast(cl_sustain_t self)
+	public static void Nukeblast(Sustain self)
 	{
 		int i;
 		cparticle_t p;
 		float ratio;
-		ratio = 1.0f - ((float)self.endtime - (float)Globals.cl.time) / 1000.0f;
+		ratio = 1.0f - ((float)self.EndTime - (float)Globals.cl.time) / 1000.0f;
 
 		for (i = 0; i < 700; i++)
 		{
@@ -596,7 +633,7 @@ public class CL_newfx
 			CL_newfx.dir[1] = Lib.crand();
 			CL_newfx.dir[2] = Lib.crand();
 			Math3D.VectorNormalize(CL_newfx.dir);
-			Math3D.VectorMA(self.org, 200.0f * ratio, CL_newfx.dir, p.org);
+			Math3D.VectorMA(self.Position, 200.0f * ratio, CL_newfx.dir, p.org);
 
 			//			VectorMA(origin, 10*(((rand () & 0x7fff) / ((float)0x7fff))),
 			// dir, p.org);
@@ -607,6 +644,11 @@ public class CL_newfx
 
 	// stack variable
 	// dir
+	public static void WidowSplash(Vector3 origin)
+	{
+		CL_newfx.WidowSplash(new[] { origin.X, origin.Y, origin.Z });
+	}
+
 	public static void WidowSplash(float[] org)
 	{
 		int i;
@@ -685,6 +727,11 @@ public class CL_newfx
 	/*
 	 * =============== CL_ColorExplosionParticles ===============
 	 */
+	public static void ColorExplosionParticles(Vector3 org, int color, int run)
+	{
+		CL_newfx.ColorExplosionParticles(new[] { org.X, org.Y, org.Z }, color, run);
+	}
+
 	public static void ColorExplosionParticles(float[] org, int color, int run)
 	{
 		int i, j;
@@ -721,6 +768,11 @@ public class CL_newfx
 	 * =============== CL_ParticleSmokeEffect - like the steam effect, but
 	 * unaffected by gravity ===============
 	 */
+	public static void ParticleSmokeEffect(Vector3 org, Vector3 dir, int color, int count, int magnitude)
+	{
+		CL_newfx.ParticleSmokeEffect(new[] { org.X, org.Y, org.Z }, new[] { dir.X, dir.Y, dir.Z }, color, count, magnitude);
+	}
+
 	public static void ParticleSmokeEffect(float[] org, float[] dir, int color, int count, int magnitude)
 	{
 		int i, j;
@@ -760,6 +812,11 @@ public class CL_newfx
 	 * 
 	 * Wall impact puffs (Green) ===============
 	 */
+	public static void BlasterParticles2(Vector3 org, Vector3 dir, long color)
+	{
+		CL_newfx.BlasterParticles2(new[] { org.X, org.Y, org.Z }, new[] { dir.X, dir.Y, dir.Z }, color);
+	}
+
 	public static void BlasterParticles2(float[] org, float[] dir, long color)
 	{
 		int i, j;

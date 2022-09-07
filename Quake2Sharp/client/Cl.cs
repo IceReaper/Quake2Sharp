@@ -689,7 +689,7 @@ public class Cl
 	{
 		S.StopAllSounds();
 		CL_fx.ClearEffects();
-		CL_tent.ClearTEnts();
+		TemporaryEntities.Clear();
 
 		// wipe the entire cl structure
 		Globals.cl = new();
@@ -1367,7 +1367,7 @@ public class Cl
 		Globals.cl_yawspeed = Cvar.Get("cl_yawspeed", "140", 0);
 		Globals.cl_pitchspeed = Cvar.Get("cl_pitchspeed", "150", 0);
 		Globals.cl_anglespeedkey = Cvar.Get("cl_anglespeedkey", "1.5", 0);
-		Globals.cl_run = Cvar.Get("cl_run", "0", Defines.CVAR_ARCHIVE);
+		Globals.cl_run = Cvar.Get("cl_run", "1", Defines.CVAR_ARCHIVE);
 		Globals.lookspring = Cvar.Get("lookspring", "0", Defines.CVAR_ARCHIVE);
 		Globals.lookstrafe = Cvar.Get("lookstrafe", "0", Defines.CVAR_ARCHIVE);
 		Globals.sensitivity = Cvar.Get("sensitivity", "3", Defines.CVAR_ARCHIVE);

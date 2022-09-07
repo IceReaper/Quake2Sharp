@@ -4,6 +4,16 @@
     "Quake2Sharp": {
       "commandName": "Project",
       "workingDirectory": "$(SolutionDir)"
+    },
+    "Quake2Sharp - Rogue": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)",
+      "commandLineArgs": "+set game rogue"
+    },
+    "Quake2Sharp - Xatrix": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)",
+      "commandLineArgs": "+set game xatrix"
     }
   }
 }

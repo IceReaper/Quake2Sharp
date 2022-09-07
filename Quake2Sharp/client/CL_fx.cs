@@ -23,6 +23,7 @@ using game.monsters;
 using game.types;
 using qcommon;
 using sound;
+using System.Numerics;
 using types;
 using util;
 
@@ -295,7 +296,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/blastf1a.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/blastf1a.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -303,7 +304,7 @@ public class CL_fx
 				dl.color[0] = 0;
 				dl.color[1] = 0;
 				dl.color[2] = 1;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/hyprbf1a.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/hyprbf1a.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -311,7 +312,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/hyprbf1a.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/hyprbf1a.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -323,7 +324,7 @@ public class CL_fx
 				//Com_sprintf(soundname, sizeof(soundname),
 				// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 				soundname = "weapons/machgf" + (Globals.rnd.Next(5) + 1) + "b.wav";
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -331,8 +332,8 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/shotgf1b.wav"), volume, Defines.ATTN_NORM, 0);
-				S.StartSound(null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/shotgr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/shotgf1b.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/shotgr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
 
 				break;
 
@@ -340,7 +341,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/sshotf1b.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/sshotf1b.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -353,7 +354,7 @@ public class CL_fx
 				//Com_sprintf(soundname, sizeof(soundname),
 				// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 				soundname = "weapons/machgf" + (Globals.rnd.Next(5) + 1) + "b.wav";
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -367,12 +368,12 @@ public class CL_fx
 				//Com_sprintf(soundname, sizeof(soundname),
 				// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 				soundname = "weapons/machgf" + (Globals.rnd.Next(5) + 1) + "b.wav";
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
 
 				//Com_sprintf(soundname, sizeof(soundname),
 				// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 				soundname = "weapons/machgf" + (Globals.rnd.Next(5) + 1) + "b.wav";
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.05f);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.05f);
 
 				break;
 
@@ -386,17 +387,17 @@ public class CL_fx
 				//Com_sprintf(soundname, sizeof(soundname),
 				// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 				soundname = "weapons/machgf" + (Globals.rnd.Next(5) + 1) + "b.wav";
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
 
 				//Com_sprintf(soundname, sizeof(soundname),
 				// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 				soundname = "weapons/machgf" + (Globals.rnd.Next(5) + 1) + "b.wav";
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.033f);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.033f);
 
 				//Com_sprintf(soundname, sizeof(soundname),
 				// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 				soundname = "weapons/machgf" + (Globals.rnd.Next(5) + 1) + "b.wav";
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.066f);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.066f);
 
 				break;
 
@@ -404,7 +405,7 @@ public class CL_fx
 				dl.color[0] = 0.5f;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 1.0f;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/railgf1a.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/railgf1a.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -412,8 +413,8 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 0.2f;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/rocklf1a.wav"), volume, Defines.ATTN_NORM, 0);
-				S.StartSound(null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/rocklr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/rocklf1a.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/rocklr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
 
 				break;
 
@@ -421,8 +422,8 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 0;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), volume, Defines.ATTN_NORM, 0);
-				S.StartSound(null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/grenlr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/grenlr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
 
 				break;
 
@@ -430,7 +431,7 @@ public class CL_fx
 				dl.color[0] = 0;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/bfg__f1y.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/bfg__f1y.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -439,7 +440,7 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				dl.die = Globals.cl.time + 1.0f;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
 				CL_fx.LogoutEffect(pl.current.origin, weapon);
 
 				break;
@@ -449,7 +450,7 @@ public class CL_fx
 				dl.color[1] = 0;
 				dl.color[2] = 0;
 				dl.die = Globals.cl.time + 1.0f;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
 				CL_fx.LogoutEffect(pl.current.origin, weapon);
 
 				break;
@@ -459,7 +460,7 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				dl.die = Globals.cl.time + 1.0f;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
 				CL_fx.LogoutEffect(pl.current.origin, weapon);
 
 				break;
@@ -469,7 +470,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 0.5f;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/plasshot.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/plasshot.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -478,7 +479,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 0.5f;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/rippfire.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/rippfire.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -488,7 +489,7 @@ public class CL_fx
 				dl.color[0] = 0.9f;
 				dl.color[1] = 0.7f;
 				dl.color[2] = 0;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/nail1.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/nail1.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -496,7 +497,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/shotg2.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/shotg2.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -516,7 +517,7 @@ public class CL_fx
 				dl.color[2] = 0;
 
 				// FIXME - different sound for blaster2 ??
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/blastf1a.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/blastf1a.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -525,7 +526,7 @@ public class CL_fx
 				dl.color[0] = -1;
 				dl.color[1] = -1;
 				dl.color[2] = -1;
-				S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/disint2.wav"), volume, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/disint2.wav"), volume, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -625,8 +626,8 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NORM, 0);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -642,8 +643,8 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck3.wav"), 1, Defines.ATTN_NORM, 0);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck3.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -659,8 +660,8 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("gunner/gunatck2.wav"), 1, Defines.ATTN_NORM, 0);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("gunner/gunatck2.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -676,8 +677,8 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NORM, 0);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -692,8 +693,8 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NONE, 0);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NONE, 0);
 
 				break;
 
@@ -709,7 +710,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck2.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck2.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -718,7 +719,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("flyer/flyatck3.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("flyer/flyatck3.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -726,7 +727,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("medic/medatck1.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("medic/medatck1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -734,7 +735,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("hover/hovatck1.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("hover/hovatck1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -742,7 +743,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("floater/fltatck1.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("floater/fltatck1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -757,8 +758,8 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				CL_tent.SmokeAndFlash(CL_fx.origin);
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck1.wav"), 1, Defines.ATTN_NORM, 0);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -768,7 +769,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck3.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck3.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -795,12 +796,12 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
 
 				//Com_sprintf(soundname, sizeof(soundname), "tank/tnkatk2%c.wav",
 				// 'a' + rand() % 5);
 				soundname = "tank/tnkatk2" + (char)('a' + Globals.rnd.Next(5)) + ".wav";
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound(soundname), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound(soundname), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -809,7 +810,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 0.2f;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("chick/chkatck2.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("chick/chkatck2.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -819,7 +820,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 0.2f;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck1.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -837,7 +838,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 0.2f;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/rocket.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/rocket.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -848,7 +849,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 0.5f;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("gunner/gunatck3.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("gunner/gunatck3.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -893,7 +894,7 @@ public class CL_fx
 				dl.color[0] = 1;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("makron/blaster.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("makron/blaster.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -907,8 +908,8 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("boss3/xfire.wav"), 1, Defines.ATTN_NORM, 0);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("boss3/xfire.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -922,7 +923,7 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
 
 				break;
 
@@ -944,7 +945,7 @@ public class CL_fx
 				dl.color[1] = 1;
 				dl.color[2] = 0;
 				CL_fx.ParticleEffect(CL_fx.origin, Globals.vec3_origin, 0, 40);
-				CL_tent.SmokeAndFlash(CL_fx.origin);
+				TemporaryEntities.SmokeAndFlash(new(CL_fx.origin[0], CL_fx.origin[1], CL_fx.origin[2]));
 
 				break;
 
@@ -992,7 +993,7 @@ public class CL_fx
 				dl.color[0] = 0;
 				dl.color[1] = 1;
 				dl.color[2] = 0;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck3.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck3.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -1000,7 +1001,7 @@ public class CL_fx
 				dl.color[0] = -1;
 				dl.color[1] = -1;
 				dl.color[2] = -1;
-				S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("weapons/disint2.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent, Defines.CHAN_WEAPON, S.RegisterSound("weapons/disint2.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
@@ -1104,6 +1105,11 @@ public class CL_fx
 	 * 
 	 * Wall impact puffs ===============
 	 */
+	public static void ParticleEffect(Vector3 org, Vector3 dir, int color, int count)
+	{
+		CL_fx.ParticleEffect(new[] { org.X, org.Y, org.Z }, new[] { dir.X, dir.Y, dir.Z }, color, count);
+	}
+
 	public static void ParticleEffect(float[] org, float[] dir, int color, int count)
 	{
 		int j;
@@ -1139,6 +1145,11 @@ public class CL_fx
 	/*
 	 * =============== CL_ParticleEffect2 ===============
 	 */
+	public static void ParticleEffect2(Vector3 org, Vector3 dir, int color, int count)
+	{
+		CL_fx.ParticleEffect2(new[] { org.X, org.Y, org.Z }, new[] { dir.X, dir.Y, dir.Z }, color, count);
+	}
+
 	public static void ParticleEffect2(float[] org, float[] dir, int color, int count)
 	{
 		int j;
@@ -1175,6 +1186,11 @@ public class CL_fx
 	/*
 	 * =============== CL_ParticleEffect3 ===============
 	 */
+	public static void ParticleEffect3(Vector3 org, Vector3 dir, int color, int count)
+	{
+		CL_fx.ParticleEffect3(new[] { org.X, org.Y, org.Z }, new[] { dir.X, dir.Y, dir.Z }, color, count);
+	}
+
 	public static void ParticleEffect3(float[] org, float[] dir, int color, int count)
 	{
 		int j;
@@ -1322,6 +1338,11 @@ public class CL_fx
 	/*
 	 * =============== CL_ExplosionParticles ===============
 	 */
+	public static void ExplosionParticles(Vector3 org)
+	{
+		CL_fx.ExplosionParticles(new[] { org.X, org.Y, org.Z });
+	}
+
 	public static void ExplosionParticles(float[] org)
 	{
 		int j;
@@ -1350,6 +1371,11 @@ public class CL_fx
 			p.alpha = 1.0f;
 			p.alphavel = -0.8f / (0.5f + (float)Globals.rnd.NextDouble() * 0.3f);
 		}
+	}
+
+	public static void BigTeleportParticles(Vector3 org)
+	{
+		CL_fx.BigTeleportParticles(new[] { org.X, org.Y, org.Z });
 	}
 
 	public static void BigTeleportParticles(float[] org)
@@ -1389,6 +1415,11 @@ public class CL_fx
 	 * 
 	 * Wall impact puffs ===============
 	 */
+	public static void BlasterParticles(Vector3 org, Vector3 dir)
+	{
+		CL_fx.BlasterParticles(new[] { org.X, org.Y, org.Z }, new[] { dir.X, dir.Y, dir.Z });
+	}
+
 	public static void BlasterParticles(float[] org, float[] dir)
 	{
 		int j;
@@ -1688,6 +1719,11 @@ public class CL_fx
 	 * 
 	 * ===============
 	 */
+	public static void RailTrail(Vector3 start, Vector3 end)
+	{
+		CL_fx.RailTrail(new[] { start.X, start.Y, start.Z }, new[] { end.X, end.Y, end.Z });
+	}
+
 	public static void RailTrail(float[] start, float[] end)
 	{
 		float len;
@@ -1831,6 +1867,11 @@ public class CL_fx
 	 * 
 	 * ===============
 	 */
+	public static void BubbleTrail(Vector3 start, Vector3 end)
+	{
+		CL_fx.BubbleTrail(new[] { start.X, start.Y, start.Z }, new[] { end.X, end.Y, end.Z });
+	}
+
 	public static void BubbleTrail(float[] start, float[] end)
 	{
 		float len;
@@ -2126,6 +2167,11 @@ public class CL_fx
 	 * =============== CL_BFGExplosionParticles ===============
 	 */
 	//	  FIXME combined with CL_ExplosionParticles
+	public static void BFGExplosionParticles(Vector3 org)
+	{
+		CL_fx.BFGExplosionParticles(new[] { org.X, org.Y, org.Z });
+	}
+
 	public static void BFGExplosionParticles(float[] org)
 	{
 		int j;
@@ -2164,6 +2210,11 @@ public class CL_fx
 	 * 
 	 * ===============
 	 */
+	public static void TeleportParticles(Vector3 org)
+	{
+		CL_fx.TeleportParticles(new[] { org.X, org.Y, org.Z });
+	}
+
 	public static void TeleportParticles(float[] org)
 	{
 		cparticle_t p;
@@ -2280,35 +2331,35 @@ public class CL_fx
 		switch (ent.@event)
 		{
 			case Defines.EV_ITEM_RESPAWN:
-				S.StartSound(null, ent.number, Defines.CHAN_WEAPON, S.RegisterSound("items/respawn1.wav"), 1, Defines.ATTN_IDLE, 0);
+				S.StartSound((Vector3?)null, ent.number, Defines.CHAN_WEAPON, S.RegisterSound("items/respawn1.wav"), 1, Defines.ATTN_IDLE, 0);
 				CL_fx.ItemRespawnParticles(ent.origin);
 
 				break;
 
 			case Defines.EV_PLAYER_TELEPORT:
-				S.StartSound(null, ent.number, Defines.CHAN_WEAPON, S.RegisterSound("misc/tele1.wav"), 1, Defines.ATTN_IDLE, 0);
+				S.StartSound((Vector3?)null, ent.number, Defines.CHAN_WEAPON, S.RegisterSound("misc/tele1.wav"), 1, Defines.ATTN_IDLE, 0);
 				CL_fx.TeleportParticles(ent.origin);
 
 				break;
 
 			case Defines.EV_FOOTSTEP:
 				if (Globals.cl_footsteps.value != 0.0f)
-					S.StartSound(null, ent.number, Defines.CHAN_BODY, CL_tent.cl_sfx_footsteps[Lib.rand() & 3], 1, Defines.ATTN_NORM, 0);
+					S.StartSound((Vector3?)null, ent.number, Defines.CHAN_BODY, TemporaryEntities.cl_sfx_footsteps[Lib.rand() & 3], 1, Defines.ATTN_NORM, 0);
 
 				break;
 
 			case Defines.EV_FALLSHORT:
-				S.StartSound(null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("player/land1.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("player/land1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
 			case Defines.EV_FALL:
-				S.StartSound(null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("*fall2.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("*fall2.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 
 			case Defines.EV_FALLFAR:
-				S.StartSound(null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("*fall1.wav"), 1, Defines.ATTN_NORM, 0);
+				S.StartSound((Vector3?)null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("*fall1.wav"), 1, Defines.ATTN_NORM, 0);
 
 				break;
 		}

@@ -549,6 +549,7 @@ public class FS
 	{
 		int i;
 		searchpath_t search;
+		searchpath_t pakSearch;
 		pack_t pak;
 		string pakfile;
 
@@ -583,11 +584,11 @@ public class FS
 			if (pak == null)
 				continue;
 
-			search = new();
-			search.pack = pak;
-			search.filename = "";
-			search.next = FS.fs_searchpaths;
-			FS.fs_searchpaths = search;
+			pakSearch = new();
+			pakSearch.pack = pak;
+			pakSearch.filename = "";
+			pakSearch.next = search.next;
+			search.next = pakSearch;
 		}
 	}
 

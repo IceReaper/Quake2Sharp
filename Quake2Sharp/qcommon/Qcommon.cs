@@ -281,16 +281,8 @@ public class Qcommon
 	private static void reconfigure(bool clear)
 	{
 		Cbuf.AddText("exec default.cfg\n");
-		Cbuf.AddText("bind MWHEELUP weapnext\n");
-		Cbuf.AddText("bind MWHEELDOWN weapprev\n");
-		Cbuf.AddText("bind w +forward\n");
-		Cbuf.AddText("bind s +back\n");
-		Cbuf.AddText("bind a +moveleft\n");
-		Cbuf.AddText("bind d +moveright\n");
 		Cbuf.Execute();
-		Cvar.Set("vid_fullscreen", "0");
 		Cbuf.AddText("exec config.cfg\n");
-
 		Cbuf.AddEarlyCommands(clear);
 		Cbuf.Execute();
 	}

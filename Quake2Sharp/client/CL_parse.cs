@@ -186,7 +186,7 @@ public class CL_parse
 	public static void RegisterSounds()
 	{
 		S.BeginRegistration();
-		CL_tent.RegisterTEntSounds();
+		TemporaryEntities.RegisterSounds();
 
 		for (var i = 1; i < Defines.MAX_SOUNDS; i++)
 		{
@@ -793,7 +793,7 @@ public class CL_parse
 					break;
 
 				case Defines.svc_temp_entity:
-					CL_tent.ParseTEnt();
+					TemporaryEntities.Parse();
 
 					break;
 

@@ -17,30 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
 namespace Quake2Sharp.client.types;
 
-/**
- * cl_sustain_t
- */
-public class cl_sustain_t
+using render.types;
+using System.Numerics;
+
+public class Beam
 {
-	public int id;
-	private int type;
-	public int endtime;
-	public int nextthink;
-	public int thinkinterval;
-	public float[] org = new float[3];
-	public float[] dir = new float[3];
-	public int color;
-	public int count;
-	public int magnitude;
-	public Action<cl_sustain_t> think;
-
-	public void clear()
-	{
-		this.org[0] = this.org[1] = this.org[2] = this.dir[0] = this.dir[1] = this.dir[2] =
-			this.id = this.type = this.endtime = this.nextthink = this.thinkinterval = this.color = this.count = this.magnitude = 0;
-
-		this.think = null;
-	}
+	public int Entity;
+	public int EntityTarget;
+	public model_t? Model;
+	public int EndTime;
+	public Vector3 Offset;
+	public Vector3 Start;
+	public Vector3 End;
 }

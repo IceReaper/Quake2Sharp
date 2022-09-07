@@ -26,7 +26,7 @@ using util;
 public class entity_t
 {
 	//ptr
-	public model_t model; // opaque type outside refresh
+	public model_t? model; // opaque type outside refresh
 	public float[] angles = { 0, 0, 0 };
 
 	/*

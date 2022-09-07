@@ -968,7 +968,7 @@ public partial class OpenGLRenderApi : RenderAPI
 		this.gl_playermip = Cvar.Get("gl_playermip", "0", 0);
 		this.gl_monolightmap = Cvar.Get("gl_monolightmap", "0", 0);
 		this.gl_driver = Cvar.Get("gl_driver", "opengl32", Defines.CVAR_ARCHIVE);
-		this.gl_texturemode = Cvar.Get("gl_texturemode", "GL_LINEAR_MIPMAP_NEAREST", Defines.CVAR_ARCHIVE);
+		this.gl_texturemode = Cvar.Get("gl_texturemode", "GL_NEAREST_MIPMAP_NEAREST", Defines.CVAR_ARCHIVE);
 		this.gl_texturealphamode = Cvar.Get("gl_texturealphamode", "default", Defines.CVAR_ARCHIVE);
 		this.gl_texturesolidmode = Cvar.Get("gl_texturesolidmode", "default", Defines.CVAR_ARCHIVE);
 		this.gl_lockpvs = Cvar.Get("gl_lockpvs", "0", 0);

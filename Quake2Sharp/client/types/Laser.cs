@@ -17,25 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
 namespace Quake2Sharp.client.types;
 
-using render.types;
-
-public class beam_t
+public class Laser
 {
-	public int entity;
-	public int dest_entity;
-	public model_t model;
-	public int endtime;
-	public readonly float[] offset = new float[3];
-	public readonly float[] start = new float[3];
-	public readonly float[] end = new float[3];
-
-	public void clear()
-	{
-		this.offset[0] = this.offset[1] = this.offset[2] = this.start[0] =
-			this.start[1] = this.start[2] = this.end[0] = this.end[1] = this.end[2] = this.entity = this.dest_entity = this.endtime = 0;
-
-		this.model = null;
-	}
+	public readonly entity_t Entity = new();
+	public int EndTime;
 }
