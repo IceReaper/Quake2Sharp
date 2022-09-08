@@ -100,6 +100,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		this.window.MouseUp += OpenTkKBD.Listener.MouseUp;
 		this.window.MouseMove += OpenTkKBD.Listener.MouseMove;
 		this.window.MouseWheel += OpenTkKBD.Listener.MouseWheel;
+		this.window.TextInput += OpenTkKBD.Listener.TextInput;
 
 		Program.UpdateLoop = _ => this.window.Run();
 

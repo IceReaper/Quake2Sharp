@@ -177,8 +177,8 @@ public class Key
 	{
 		for (var i = 0; i < 32; i++)
 		{
-			Globals.key_lines[i][0] = (byte)']';
-			Globals.key_lines[i][1] = 0;
+			Globals.key_lines[i][0] = ']';
+			Globals.key_lines[i][1] = (char)0;
 		}
 
 		Globals.key_linepos = 1;
@@ -261,14 +261,14 @@ public class Key
 
 	public static void ClearTyping()
 	{
-		Globals.key_lines[Globals.edit_line][1] = 0; // clear any typing
+		Globals.key_lines[Globals.edit_line][1] = (char)0; // clear any typing
 		Globals.key_linepos = 1;
 	}
 
 	/**
 	 * Called by the system between frames for both key up and key down events.
 	 */
-	public static void Event(int key, bool down, int time)
+	public static void Event(int key, bool down, int time, string? text)
 	{
 		string kb;
 		string cmd;
@@ -331,12 +331,12 @@ public class Key
 			switch (Globals.cls.key_dest)
 			{
 				case Defines.key_message:
-					Key.Message(key);
+					Key.Message(key, null);
 
 					break;
 
 				case Defines.key_menu:
-					Menu.Keydown(key);
+					Menu.Keydown(key, null);
 
 					break;
 
@@ -431,18 +431,18 @@ public class Key
 		switch (Globals.cls.key_dest)
 		{
 			case Defines.key_message:
-				Key.Message(key);
+				Key.Message(key, text);
 
 				break;
 
 			case Defines.key_menu:
-				Menu.Keydown(key);
+				Menu.Keydown(key, text);
 
 				break;
 
 			case Defines.key_game:
 			case Defines.key_console:
-				Key.Console(key);
+				Key.Console(key, text);
 
 				break;
 
@@ -493,7 +493,7 @@ public class Key
 		return -1;
 	}
 
-	public static void Message(int key)
+	public static void Message(int key, string? text)
 	{
 		if (key == Key.K_ENTER || key == Key.K_KP_ENTER)
 		{
@@ -518,9 +518,6 @@ public class Key
 			return;
 		}
 
-		if (key < 32 || key > 127)
-			return; // non printable
-
 		if (key == Key.K_BACKSPACE)
 		{
 			if (Globals.chat_buffer.Length > 2)
@@ -534,110 +531,31 @@ public class Key
 		if (Globals.chat_buffer.Length > Defines.MAXCMDLINE)
 			return; // all full
 
-		Globals.chat_buffer += (char)key;
+		if (text == null)
+			return; // non printable
+
+		foreach (var character in text)
+			Globals.chat_buffer += character;
 	}
 
 	/**
 	 * Interactive line editing and console scrollback.
 	 */
-	public static void Console(int key)
+	public static void Console(int key, string? text)
 	{
-		switch (key)
-		{
-			case Key.K_KP_SLASH:
-				key = '/';
-
-				break;
-
-			case Key.K_KP_MINUS:
-				key = '-';
-
-				break;
-
-			case Key.K_KP_PLUS:
-				key = '+';
-
-				break;
-
-			case Key.K_KP_HOME:
-				key = '7';
-
-				break;
-
-			case Key.K_KP_UPARROW:
-				key = '8';
-
-				break;
-
-			case Key.K_KP_PGUP:
-				key = '9';
-
-				break;
-
-			case Key.K_KP_LEFTARROW:
-				key = '4';
-
-				break;
-
-			case Key.K_KP_5:
-				key = '5';
-
-				break;
-
-			case Key.K_KP_RIGHTARROW:
-				key = '6';
-
-				break;
-
-			case Key.K_KP_END:
-				key = '1';
-
-				break;
-
-			case Key.K_KP_DOWNARROW:
-				key = '2';
-
-				break;
-
-			case Key.K_KP_PGDN:
-				key = '3';
-
-				break;
-
-			case Key.K_KP_INS:
-				key = '0';
-
-				break;
-
-			case Key.K_KP_DEL:
-				key = '.';
-
-				break;
-		}
-
-		if (key == 'l')
-		{
-			if (Globals.keydown[Key.K_CTRL])
-			{
-				Cbuf.AddText("clear\n");
-
-				return;
-			}
-		}
-
 		if (key == Key.K_ENTER || key == Key.K_KP_ENTER)
 		{
 			// backslash text are commands, else chat
 			if (Globals.key_lines[Globals.edit_line][1] == '\\' || Globals.key_lines[Globals.edit_line][1] == '/')
-				Cbuf.AddText(Encoding.ASCII.GetString(Globals.key_lines[Globals.edit_line], 2, Lib.strlen(Globals.key_lines[Globals.edit_line]) - 2));
+				Cbuf.AddText(new string(Globals.key_lines[Globals.edit_line], 2, Lib.strlen(Globals.key_lines[Globals.edit_line]) - 2));
 			else
-				Cbuf.AddText(Encoding.ASCII.GetString(Globals.key_lines[Globals.edit_line], 1, Lib.strlen(Globals.key_lines[Globals.edit_line]) - 1));
+				Cbuf.AddText(new string(Globals.key_lines[Globals.edit_line], 1, Lib.strlen(Globals.key_lines[Globals.edit_line]) - 1));
 
 			Cbuf.AddText("\n");
-			Com.Printf(Encoding.ASCII.GetString(Globals.key_lines[Globals.edit_line], 0, Lib.strlen(Globals.key_lines[Globals.edit_line])) + "\n");
+			Com.Printf(new string(Globals.key_lines[Globals.edit_line], 0, Lib.strlen(Globals.key_lines[Globals.edit_line])) + "\n");
 			Globals.edit_line = (Globals.edit_line + 1) & 31;
 			Key.history_line = Globals.edit_line;
-			Globals.key_lines[Globals.edit_line][0] = (byte)']';
+			Globals.key_lines[Globals.edit_line][0] = ']';
 			Globals.key_linepos = 1;
 
 			if (Globals.cls.state == Defines.ca_disconnected)
@@ -654,7 +572,7 @@ public class Key
 			return;
 		}
 
-		if (key == Key.K_BACKSPACE || key == Key.K_LEFTARROW || key == Key.K_KP_LEFTARROW || (key == 'h' && Globals.keydown[Key.K_CTRL]))
+		if (key == Key.K_BACKSPACE || key == Key.K_LEFTARROW || key == Key.K_KP_LEFTARROW)
 		{
 			if (Globals.key_linepos > 1)
 				Globals.key_linepos--;
@@ -662,7 +580,7 @@ public class Key
 			return;
 		}
 
-		if (key == Key.K_UPARROW || key == Key.K_KP_UPARROW || (key == 'p' && Globals.keydown[Key.K_CTRL]))
+		if (key == Key.K_UPARROW || key == Key.K_KP_UPARROW)
 		{
 			do
 				Key.history_line = (Key.history_line - 1) & 31;
@@ -678,7 +596,7 @@ public class Key
 			return;
 		}
 
-		if (key == Key.K_DOWNARROW || key == Key.K_KP_DOWNARROW || (key == 'n' && Globals.keydown[Key.K_CTRL]))
+		if (key == Key.K_DOWNARROW || key == Key.K_KP_DOWNARROW)
 		{
 			if (Key.history_line == Globals.edit_line)
 				return;
@@ -689,7 +607,7 @@ public class Key
 
 			if (Key.history_line == Globals.edit_line)
 			{
-				Globals.key_lines[Globals.edit_line][0] = (byte)']';
+				Globals.key_lines[Globals.edit_line][0] = ']';
 				Globals.key_linepos = 1;
 			}
 			else
@@ -733,14 +651,17 @@ public class Key
 			return;
 		}
 
-		if (key < 32 || key > 127)
+		if (text == null)
 			return; // non printable
 
-		if (Globals.key_linepos < Defines.MAXCMDLINE - 1)
+		foreach (var character in text)
 		{
-			Globals.key_lines[Globals.edit_line][Globals.key_linepos] = (byte)key;
-			Globals.key_linepos++;
-			Globals.key_lines[Globals.edit_line][Globals.key_linepos] = 0;
+			if (Globals.key_linepos < Defines.MAXCMDLINE - 1)
+			{
+				Globals.key_lines[Globals.edit_line][Globals.key_linepos] = character;
+				Globals.key_linepos++;
+				Globals.key_lines[Globals.edit_line][Globals.key_linepos] = (char)0;
+			}
 		}
 	}
 
@@ -766,7 +687,7 @@ public class Key
 		while (Globals.key_lines[Globals.edit_line][end] != 0)
 			end++;
 
-		var s = Encoding.ASCII.GetString(Globals.key_lines[Globals.edit_line], start, end - start);
+		var s = new string(Globals.key_lines[Globals.edit_line], start, end - start);
 		var cmds = Cmd.CompleteCommand(s);
 		var vars = Cvar.CompleteVariable(s);
 		var c = cmds.Count;
@@ -790,12 +711,12 @@ public class Key
 		else
 			return;
 
-		Globals.key_lines[Globals.edit_line][1] = (byte)'/';
+		Globals.key_lines[Globals.edit_line][1] = '/';
 		var bytes = Lib.stringToBytes(s);
 		Array.Copy(bytes, 0, Globals.key_lines[Globals.edit_line], 2, bytes.Length);
 		Globals.key_linepos = bytes.Length + 2;
-		Globals.key_lines[Globals.edit_line][Globals.key_linepos++] = (byte)' ';
-		Globals.key_lines[Globals.edit_line][Globals.key_linepos] = 0;
+		Globals.key_lines[Globals.edit_line][Globals.key_linepos++] = ' ';
+		Globals.key_lines[Globals.edit_line][Globals.key_linepos] = (char)0;
 
 		return;
 	}
@@ -906,7 +827,7 @@ public class Key
 		for (i = 0; i < 256; i++)
 		{
 			if (Globals.keydown[i] || Key.key_repeats[i] != 0)
-				Key.Event(i, false, 0);
+				Key.Event(i, false, 0, null);
 
 			Globals.keydown[i] = false;
 			Key.key_repeats[i] = 0;

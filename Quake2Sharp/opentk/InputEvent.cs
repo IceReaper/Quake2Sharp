@@ -10,6 +10,7 @@ public class InputEvent
 	public const int WheelMoved = 5;
 	public readonly int Type;
 	public readonly object Value;
+	public string? Text;
 
 	public InputEvent(int type, object value)
 	{

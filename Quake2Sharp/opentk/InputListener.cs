@@ -45,4 +45,9 @@ public class InputListener
 	{
 		this.queue.Add(new(InputEvent.WheelMoved, args.Offset));
 	}
+
+	public void TextInput(TextInputEventArgs args)
+	{
+		this.queue[^1].Text = args.AsString;
+	}
 }

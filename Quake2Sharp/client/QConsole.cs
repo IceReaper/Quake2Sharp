@@ -433,7 +433,7 @@ public class QConsole
 	private static void DrawInput()
 	{
 		int i;
-		byte[] text;
+		char[] text;
 		var start = 0;
 
 		if (Globals.cls.key_dest == Defines.key_menu)
@@ -445,11 +445,11 @@ public class QConsole
 		text = Globals.key_lines[Globals.edit_line];
 
 		// add the cursor frame
-		text[Globals.key_linepos] = (byte)(10 + ((int)(Globals.cls.realtime >> 8) & 1));
+		text[Globals.key_linepos] = (char)(10 + ((int)(Globals.cls.realtime >> 8) & 1));
 
 		// fill out remainder with spaces
 		for (i = Globals.key_linepos + 1; i < Globals.con.linewidth; i++)
-			text[i] = (byte)' ';
+			text[i] = ' ';
 
 		// prestep if horizontally scrolling
 		if (Globals.key_linepos >= Globals.con.linewidth)
@@ -462,7 +462,7 @@ public class QConsole
 			Globals.re.DrawChar((i + 1) << 3, Globals.con.vislines - 22, text[i]);
 
 		// remove cursor
-		Globals.key_lines[Globals.edit_line][Globals.key_linepos] = 0;
+		Globals.key_lines[Globals.edit_line][Globals.key_linepos] = (char)0;
 	}
 
 	/*

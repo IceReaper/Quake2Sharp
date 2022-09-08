@@ -31,7 +31,7 @@ public class OpenTkKBD : KBD
 			{
 				case InputEvent.KeyPress:
 				case InputEvent.KeyRelease:
-					this.Do_Key_Event(OpenTkKBD.MapKey((Keys)@event.Value), @event.Type == InputEvent.KeyPress);
+					this.Do_Key_Event(OpenTkKBD.MapKey((Keys)@event.Value), @event.Type == InputEvent.KeyPress, @event.Text);
 
 					break;
 
@@ -52,7 +52,7 @@ public class OpenTkKBD : KBD
 				case InputEvent.ButtonPress:
 				case InputEvent.ButtonRelease:
 					key = OpenTkKBD.MapMouseButton((MouseButton)@event.Value);
-					this.Do_Key_Event(key, @event.Type == InputEvent.ButtonPress);
+					this.Do_Key_Event(key, @event.Type == InputEvent.ButtonPress, null);
 
 					break;
 
@@ -61,13 +61,13 @@ public class OpenTkKBD : KBD
 
 					if (dir > 0)
 					{
-						this.Do_Key_Event(Key.K_MWHEELDOWN, true);
-						this.Do_Key_Event(Key.K_MWHEELDOWN, false);
+						this.Do_Key_Event(Key.K_MWHEELDOWN, true, null);
+						this.Do_Key_Event(Key.K_MWHEELDOWN, false, null);
 					}
 					else
 					{
-						this.Do_Key_Event(Key.K_MWHEELUP, true);
-						this.Do_Key_Event(Key.K_MWHEELUP, false);
+						this.Do_Key_Event(Key.K_MWHEELUP, true, null);
+						this.Do_Key_Event(Key.K_MWHEELUP, false, null);
 					}
 
 					break;
@@ -154,10 +154,10 @@ public class OpenTkKBD : KBD
 		return key;
 	}
 
-	public override void Do_Key_Event(int key, bool down)
+	public override void Do_Key_Event(int key, bool down, string? text)
 	{
 		if (key != -1)
-			Key.Event(key, down, Timer.Milliseconds());
+			Key.Event(key, down, Timer.Milliseconds(), text);
 	}
 
 	public override void installGrabs()

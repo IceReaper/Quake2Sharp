@@ -46,7 +46,7 @@ public class Menu
 
 	// won't disrupt the sound
 	private static Action m_drawfunc;
-	private static Func<int, string> m_keyfunc;
+	private static Func<int, string?, string> m_keyfunc;
 
 	//	  =============================================================================
 	/* Support Routines */
@@ -55,7 +55,7 @@ public class Menu
 	public class menulayer_t
 	{
 		public Action draw;
-		public Func<int, string> key;
+		public Func<int, string?, string> key;
 	}
 
 	public class menuframework_s
@@ -132,7 +132,7 @@ public class Menu
 		Globals.re.DrawPic(Globals.viddef.getWidth() / 2 - dim.Width / 2, Globals.viddef.getHeight() / 2 - 110, name);
 	}
 
-	private static void PushMenu(Action draw, Func<int, string> key)
+	private static void PushMenu(Action draw, Func<int, string?, string> key)
 	{
 		//, string(*key)
 		// (int k) ) {
@@ -193,7 +193,7 @@ public class Menu
 			Menu.ForceMenuOff();
 	}
 
-	private static string Default_MenuKey(menuframework_s m, int key)
+	private static string Default_MenuKey(menuframework_s m, int key, string? text)
 	{
 		string sound = null;
 		menucommon_s item;
@@ -204,7 +204,7 @@ public class Menu
 			{
 				if (item.type == Defines.MTYPE_FIELD)
 				{
-					if (Menu.Field_Key((menufield_s)item, key))
+					if (Menu.Field_Key((menufield_s)item, key, text))
 						return null;
 				}
 			}
@@ -533,7 +533,7 @@ public class Menu
 
 	public static void Menu_Main_f()
 	{
-		Menu.PushMenu(() => { Menu.Main_Draw(); }, key => { return Menu.Main_Key(key); });
+		Menu.PushMenu(() => { Menu.Main_Draw(); }, (key, text) => { return Menu.Main_Key(key); });
 	}
 
 	/*
@@ -599,9 +599,9 @@ public class Menu
 		Menu.Menu_Center(Menu.s_multiplayer_menu);
 	}
 
-	private static string Multiplayer_MenuKey(int key)
+	private static string Multiplayer_MenuKey(int key, string? text)
 	{
-		return Menu.Default_MenuKey(Menu.s_multiplayer_menu, key);
+		return Menu.Default_MenuKey(Menu.s_multiplayer_menu, key, text);
 	}
 
 	private static readonly Action Menu_Multiplayer = () => { Menu.Menu_Multiplayer_f(); };
@@ -609,7 +609,7 @@ public class Menu
 	private static void Menu_Multiplayer_f()
 	{
 		Menu.Multiplayer_MenuInit();
-		Menu.PushMenu(() => { Menu.Multiplayer_MenuDraw(); }, key => { return Menu.Multiplayer_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.Multiplayer_MenuDraw(); }, (key, text) => { return Menu.Multiplayer_MenuKey(key, text); });
 	}
 
 	/*
@@ -964,9 +964,9 @@ public class Menu
 		Menu.Menu_Draw(Menu.s_keys_menu);
 	}
 
-	private static Func<int, string> Keys_MenuKey = key => { return Menu.Keys_MenuKey_f(key); };
+	private static Func<int, string?, string> Keys_MenuKey = (key, text) => { return Menu.Keys_MenuKey_f(key, text); };
 
-	private static string Keys_MenuKey_f(int key)
+	private static string Keys_MenuKey_f(int key, string? text)
 	{
 		var item = (menuaction_s)Menu.Menu_ItemAtCursor(Menu.s_keys_menu);
 
@@ -1005,7 +1005,7 @@ public class Menu
 				return Menu.menu_out_sound;
 
 			default:
-				return Menu.Default_MenuKey(Menu.s_keys_menu, key);
+				return Menu.Default_MenuKey(Menu.s_keys_menu, key, text);
 		}
 	}
 
@@ -1014,7 +1014,7 @@ public class Menu
 	private static void Menu_Keys_f()
 	{
 		Menu.Keys_MenuInit();
-		Menu.PushMenu(() => { Menu.Keys_MenuDraw_f(); }, key => { return Menu.Keys_MenuKey_f(key); });
+		Menu.PushMenu(() => { Menu.Keys_MenuDraw_f(); }, (key, text) => { return Menu.Keys_MenuKey_f(key, text); });
 	}
 
 	/*
@@ -1359,9 +1359,9 @@ public class Menu
 		Menu.Menu_Draw(Menu.s_options_menu);
 	}
 
-	private static string Options_MenuKey(int key)
+	private static string Options_MenuKey(int key, string? text)
 	{
-		return Menu.Default_MenuKey(Menu.s_options_menu, key);
+		return Menu.Default_MenuKey(Menu.s_options_menu, key, text);
 	}
 
 	private static readonly Action Menu_Options = () => { Menu.Menu_Options_f(); };
@@ -1369,7 +1369,7 @@ public class Menu
 	private static void Menu_Options_f()
 	{
 		Menu.Options_MenuInit();
-		Menu.PushMenu(() => { Menu.Options_MenuDraw(); }, key => { return Menu.Options_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.Options_MenuDraw(); }, (key, text) => { return Menu.Options_MenuKey(key, text); });
 	}
 
 	/*
@@ -1384,7 +1384,7 @@ public class Menu
 	private static void Menu_Video_f()
 	{
 		VID.MenuInit();
-		Menu.PushMenu(() => { VID.MenuDraw(); }, key => { return VID.MenuKey(key); });
+		Menu.PushMenu(() => { VID.MenuDraw(); }, (key, text) => { return VID.MenuKey(key); });
 	}
 
 	/*
@@ -1835,7 +1835,7 @@ public class Menu
 		}
 
 		Menu.credits_start_time = Globals.cls.realtime;
-		Menu.PushMenu(() => { Menu.Credits_MenuDraw(); }, key => { return Menu.Credits_Key(key); });
+		Menu.PushMenu(() => { Menu.Credits_MenuDraw(); }, (key, text) => { return Menu.Credits_Key(key); });
 	}
 
 	/*
@@ -1960,9 +1960,9 @@ public class Menu
 		Menu.Menu_Draw(Menu.s_game_menu);
 	}
 
-	private static string Game_MenuKey(int key)
+	private static string Game_MenuKey(int key, string? text)
 	{
-		return Menu.Default_MenuKey(Menu.s_game_menu, key);
+		return Menu.Default_MenuKey(Menu.s_game_menu, key, text);
 	}
 
 	private static readonly Action Menu_Game = () => { Menu.Menu_Game_f(); };
@@ -1970,7 +1970,7 @@ public class Menu
 	private static void Menu_Game_f()
 	{
 		Menu.Game_MenuInit();
-		Menu.PushMenu(() => { Menu.Game_MenuDraw(); }, key => { return Menu.Game_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.Game_MenuDraw(); }, (key, text) => { return Menu.Game_MenuKey(key, text); });
 	}
 
 	/*
@@ -2087,7 +2087,7 @@ public class Menu
 		Menu.Menu_Draw(Menu.s_loadgame_menu);
 	}
 
-	private static string LoadGame_MenuKey(int key)
+	private static string LoadGame_MenuKey(int key, string? text)
 	{
 		if (key == Key.K_ESCAPE || key == Key.K_ENTER)
 		{
@@ -2097,7 +2097,7 @@ public class Menu
 				Menu.s_savegame_menu.cursor = 0;
 		}
 
-		return Menu.Default_MenuKey(Menu.s_loadgame_menu, key);
+		return Menu.Default_MenuKey(Menu.s_loadgame_menu, key, text);
 	}
 
 	private static readonly Action Menu_LoadGame = () => { Menu.Menu_LoadGame_f(); };
@@ -2105,7 +2105,7 @@ public class Menu
 	private static void Menu_LoadGame_f()
 	{
 		Menu.LoadGame_MenuInit();
-		Menu.PushMenu(() => { Menu.LoadGame_MenuDraw(); }, key => { return Menu.LoadGame_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.LoadGame_MenuDraw(); }, (key, text) => { return Menu.LoadGame_MenuKey(key, text); });
 	}
 
 	/*
@@ -2160,7 +2160,7 @@ public class Menu
 		}
 	}
 
-	private static string SaveGame_MenuKey(int key)
+	private static string SaveGame_MenuKey(int key, string? text)
 	{
 		if (key == Key.K_ENTER || key == Key.K_ESCAPE)
 		{
@@ -2170,7 +2170,7 @@ public class Menu
 				Menu.s_loadgame_menu.cursor = 0;
 		}
 
-		return Menu.Default_MenuKey(Menu.s_savegame_menu, key);
+		return Menu.Default_MenuKey(Menu.s_savegame_menu, key, text);
 	}
 
 	private static readonly Action Menu_SaveGame = () => { Menu.Menu_SaveGame_f(); };
@@ -2181,7 +2181,7 @@ public class Menu
 			return; // not playing a game
 
 		Menu.SaveGame_MenuInit();
-		Menu.PushMenu(() => { Menu.SaveGame_MenuDraw(); }, key => { return Menu.SaveGame_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.SaveGame_MenuDraw(); }, (key, text) => { return Menu.SaveGame_MenuKey(key, text); });
 		Menu.Create_Savestrings();
 	}
 
@@ -2341,9 +2341,9 @@ public class Menu
 		Menu.Menu_Draw(Menu.s_joinserver_menu);
 	}
 
-	private static string JoinServer_MenuKey(int key)
+	private static string JoinServer_MenuKey(int key, string? text)
 	{
-		return Menu.Default_MenuKey(Menu.s_joinserver_menu, key);
+		return Menu.Default_MenuKey(Menu.s_joinserver_menu, key, text);
 	}
 
 	private static readonly Action Menu_JoinServer = () => { Menu.Menu_JoinServer_f(); };
@@ -2351,7 +2351,7 @@ public class Menu
 	private static void Menu_JoinServer_f()
 	{
 		Menu.JoinServer_MenuInit();
-		Menu.PushMenu(() => { Menu.JoinServer_MenuDraw(); }, key => { return Menu.JoinServer_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.JoinServer_MenuDraw(); }, (key, text) => { return Menu.JoinServer_MenuKey(key, text); });
 	}
 
 	/*
@@ -2688,7 +2688,7 @@ public class Menu
 		Menu.Menu_Draw(Menu.s_startserver_menu);
 	}
 
-	private static string StartServer_MenuKey(int key)
+	private static string StartServer_MenuKey(int key, string? text)
 	{
 		if (key == Key.K_ESCAPE)
 		{
@@ -2704,12 +2704,12 @@ public class Menu
 			Menu.nummaps = 0;
 		}
 
-		return Menu.Default_MenuKey(Menu.s_startserver_menu, key);
+		return Menu.Default_MenuKey(Menu.s_startserver_menu, key, text);
 	}
 
 	private static readonly Action Menu_StartServer = () => { Menu.Menu_StartServer_f(); };
 	private static readonly Action startServer_MenuDraw = () => { Menu.StartServer_MenuDraw(); };
-	private static readonly Func<int, string> startServer_MenuKey = key => { return Menu.StartServer_MenuKey(key); };
+	private static readonly Func<int, string?, string> startServer_MenuKey = (key, text) => { return Menu.StartServer_MenuKey(key, text); };
 
 	private static void Menu_StartServer_f()
 	{
@@ -3077,9 +3077,9 @@ public class Menu
 		Menu.Menu_Draw(Menu.s_dmoptions_menu);
 	}
 
-	private static string DMOptions_MenuKey(int key)
+	private static string DMOptions_MenuKey(int key, string? text)
 	{
-		return Menu.Default_MenuKey(Menu.s_dmoptions_menu, key);
+		return Menu.Default_MenuKey(Menu.s_dmoptions_menu, key, text);
 	}
 
 	private static readonly Action Menu_DMOptions = () => { Menu.Menu_DMOptions_f(); };
@@ -3087,7 +3087,7 @@ public class Menu
 	private static void Menu_DMOptions_f()
 	{
 		Menu.DMOptions_MenuInit();
-		Menu.PushMenu(() => { Menu.DMOptions_MenuDraw(); }, key => { return Menu.DMOptions_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.DMOptions_MenuDraw(); }, (key, text) => { return Menu.DMOptions_MenuKey(key, text); });
 	}
 
 	/*
@@ -3185,9 +3185,9 @@ public class Menu
 		Menu.Menu_Draw(Menu.s_downloadoptions_menu);
 	}
 
-	private static string DownloadOptions_MenuKey(int key)
+	private static string DownloadOptions_MenuKey(int key, string? text)
 	{
-		return Menu.Default_MenuKey(Menu.s_downloadoptions_menu, key);
+		return Menu.Default_MenuKey(Menu.s_downloadoptions_menu, key, text);
 	}
 
 	private static readonly Action Menu_DownloadOptions = () => { Menu.Menu_DownloadOptions_f(); };
@@ -3195,7 +3195,7 @@ public class Menu
 	private static void Menu_DownloadOptions_f()
 	{
 		Menu.DownloadOptions_MenuInit();
-		Menu.PushMenu(() => { Menu.DownloadOptions_MenuDraw(); }, key => { return Menu.DownloadOptions_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.DownloadOptions_MenuDraw(); }, (key, text) => { return Menu.DownloadOptions_MenuKey(key, text); });
 	}
 
 	/*
@@ -3239,9 +3239,9 @@ public class Menu
 		}
 	}
 
-	private static Func<int, string> AddressBook_MenuKey = key => { return Menu.AddressBook_MenuKey_f(key); };
+	private static Func<int, string?, string> AddressBook_MenuKey = (key, text) => { return Menu.AddressBook_MenuKey_f(key, text); };
 
-	private static string AddressBook_MenuKey_f(int key)
+	private static string AddressBook_MenuKey_f(int key, string? text)
 	{
 		if (key == Key.K_ESCAPE)
 		{
@@ -3249,7 +3249,7 @@ public class Menu
 				Cvar.Set("adr" + index, Menu.s_addressbook_fields[index].buffer.ToString());
 		}
 
-		return Menu.Default_MenuKey(Menu.s_addressbook_menu, key);
+		return Menu.Default_MenuKey(Menu.s_addressbook_menu, key, text);
 	}
 
 	private static Action AddressBook_MenuDraw = () => { Menu.AddressBook_MenuDraw_f(); };
@@ -3265,7 +3265,7 @@ public class Menu
 	private static void Menu_AddressBook_f()
 	{
 		Menu.AddressBook_MenuInit();
-		Menu.PushMenu(() => { Menu.AddressBook_MenuDraw_f(); }, key => { return Menu.AddressBook_MenuKey_f(key); });
+		Menu.PushMenu(() => { Menu.AddressBook_MenuDraw_f(); }, (key, text) => { return Menu.AddressBook_MenuKey_f(key, text); });
 	}
 
 	/*
@@ -3749,7 +3749,7 @@ public class Menu
 		}
 	}
 
-	private static string PlayerConfig_MenuKey(int key)
+	private static string PlayerConfig_MenuKey(int key, string? text)
 	{
 		int i;
 
@@ -3779,7 +3779,7 @@ public class Menu
 			}
 		}
 
-		return Menu.Default_MenuKey(Menu.s_player_config_menu, key);
+		return Menu.Default_MenuKey(Menu.s_player_config_menu, key, text);
 	}
 
 	private static readonly Action Menu_PlayerConfig = () => { Menu.Menu_PlayerConfig_f(); };
@@ -3794,7 +3794,7 @@ public class Menu
 		}
 
 		Menu.Menu_SetStatusBar(Menu.s_multiplayer_menu, null);
-		Menu.PushMenu(() => { Menu.PlayerConfig_MenuDraw(); }, key => { return Menu.PlayerConfig_MenuKey(key); });
+		Menu.PushMenu(() => { Menu.PlayerConfig_MenuDraw(); }, (key, text) => { return Menu.PlayerConfig_MenuKey(key, text); });
 	}
 
 	/*
@@ -3844,7 +3844,7 @@ public class Menu
 
 	private static void Menu_Quit_f()
 	{
-		Menu.PushMenu(() => { Menu.Quit_Draw(); }, key => { return Menu.Quit_Key(key); });
+		Menu.PushMenu(() => { Menu.Quit_Draw(); }, (key, text) => { return Menu.Quit_Key(key); });
 	}
 
 	//	  =============================================================================
@@ -3908,13 +3908,13 @@ public class Menu
 	/*
 	 * ================= Keydown =================
 	 */
-	public static void Keydown(int key)
+	public static void Keydown(int key, string? text)
 	{
 		string s;
 
 		if (Menu.m_keyfunc != null)
 		{
-			if ((s = Menu.m_keyfunc(key)) != null)
+			if ((s = Menu.m_keyfunc(key, text)) != null)
 				S.StartLocalSound(s);
 		}
 	}
@@ -4000,82 +4000,9 @@ public class Menu
 		}
 	}
 
-	public static bool Field_Key(menufield_s f, int k)
+	public static bool Field_Key(menufield_s f, int k, string? text)
 	{
 		var key = (char)k;
-
-		switch (k)
-		{
-			case Key.K_KP_SLASH:
-				key = '/';
-
-				break;
-
-			case Key.K_KP_MINUS:
-				key = '-';
-
-				break;
-
-			case Key.K_KP_PLUS:
-				key = '+';
-
-				break;
-
-			case Key.K_KP_HOME:
-				key = '7';
-
-				break;
-
-			case Key.K_KP_UPARROW:
-				key = '8';
-
-				break;
-
-			case Key.K_KP_PGUP:
-				key = '9';
-
-				break;
-
-			case Key.K_KP_LEFTARROW:
-				key = '4';
-
-				break;
-
-			case Key.K_KP_5:
-				key = '5';
-
-				break;
-
-			case Key.K_KP_RIGHTARROW:
-				key = '6';
-
-				break;
-
-			case Key.K_KP_END:
-				key = '1';
-
-				break;
-
-			case Key.K_KP_DOWNARROW:
-				key = '2';
-
-				break;
-
-			case Key.K_KP_PGDN:
-				key = '3';
-
-				break;
-
-			case Key.K_KP_INS:
-				key = '0';
-
-				break;
-
-			case Key.K_KP_DEL:
-				key = '.';
-
-				break;
-		}
 
 		if (key > 127)
 		{
@@ -4149,16 +4076,19 @@ public class Menu
 
 			case Key.K_SPACE:
 			default:
-				if (!char.IsDigit(key) && (f.flags & Defines.QMF_NUMBERSONLY) != 0)
+				if (!char.IsDigit(key) && (f.flags & Defines.QMF_NUMBERSONLY) != 0 || text == null)
 					return false;
 
-				if (f.cursor < f.length)
+				foreach (var character in text)
 				{
-					f.buffer.Append(key);
-					f.cursor++;
+					if (f.cursor < f.length)
+					{
+						f.buffer.Append(character);
+						f.cursor++;
 
-					if (f.cursor > f.visible_length)
-						f.visible_offset++;
+						if (f.cursor > f.visible_length)
+							f.visible_offset++;
+					}
 				}
 
 				break;

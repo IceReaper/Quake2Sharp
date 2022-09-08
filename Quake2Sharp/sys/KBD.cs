@@ -33,7 +33,7 @@ public abstract class KBD
 	public abstract void Init();
 	public abstract void Update();
 	public abstract void Close();
-	public abstract void Do_Key_Event(int key, bool down);
+	public abstract void Do_Key_Event(int key, bool down, string? text);
 	public abstract void installGrabs();
 	public abstract void uninstallGrabs();
 

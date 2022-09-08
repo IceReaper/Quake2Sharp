@@ -332,13 +332,13 @@ public class Globals
 	public static bool[] keydown = new bool[256];
 	public static bool chat_team = false;
 	public static string chat_buffer = "";
-	public static byte[][] key_lines = new byte[32][];
+	public static char[][] key_lines = new char[32][];
 	public static int key_linepos;
 
 	private static void Globals3()
 	{
 		for (var i = 0; i < Globals.key_lines.Length; i++)
-			Globals.key_lines[i] = new byte[Defines.MAXCMDLINE];
+			Globals.key_lines[i] = new char[Defines.MAXCMDLINE];
 	}
 
 	public static int edit_line;
