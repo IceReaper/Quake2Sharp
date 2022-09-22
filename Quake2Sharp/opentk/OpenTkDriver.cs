@@ -15,9 +15,9 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 	private DisplayMode oldDisplayMode;
 	private GameWindow window;
 
-	public unsafe DisplayMode[] getModeList()
+	public DisplayMode[] getModeList()
 	{
-		return GLFW.GetVideoModes(GLFW.GetPrimaryMonitor())
+		return Monitors.GetPrimaryMonitor().SupportedVideoModes
 			.Where(videoMode => videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits == this.oldDisplayMode.BitDepth)
 			.GroupBy(videoMode => $"{videoMode.Height},{videoMode.Height}")
 			.Select(videoModes => videoModes.OrderBy(videoMode => videoMode.RefreshRate).Last())
@@ -34,7 +34,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 			.ToArray();
 	}
 
-	public unsafe int setMode(Size dim, int mode, bool fullscreen)
+	public int setMode(Size dim, int mode, bool fullscreen)
 	{
 		var windowSize = new Size();
 
@@ -44,7 +44,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		if (this.oldDisplayMode == null)
 		{
 			GLFW.Init();
-			var videoMode = GLFW.GetVideoMode(GLFW.GetPrimaryMonitor())[0];
+			var videoMode = Monitors.GetPrimaryMonitor().SupportedVideoModes[0];
 
 			this.oldDisplayMode =
 				new(videoMode.Width, videoMode.Height, videoMode.RefreshRate, videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits);
