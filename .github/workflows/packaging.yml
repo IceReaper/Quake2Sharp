@@ -1,0 +1,40 @@
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - platform: win-x64
+            input_file: Quake2Sharp.exe
+            output_file: Quake2Sharp-win-x64.exe
+          - platform: win-arm64
+            input_file: Quake2Sharp.exe
+            output_file: Quake2Sharp-win-arm64.exe
+          - platform: linux-x64
+            input_file: Quake2Sharp
+            output_file: Quake2Sharp-linux-x64
+          - platform: linux-arm64
+            input_file: Quake2Sharp
+            output_file: Quake2Sharp-linux-arm64
+          - platform: osx-x64
+            input_file: Quake2Sharp
+            output_file: Quake2Sharp-osx-x64
+          - platform: osx-arm64
+            input_file: Quake2Sharp
+            output_file: Quake2Sharp-osx-arm64
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+      - run: dotnet publish -c Release --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false -r ${{ matrix.platform }} -p:TargetPlatform=${{ matrix.platform }}
+      - uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          file: Quake2Sharp/bin/Release/net6.0/${{ matrix.platform }}/publish/${{ matrix.input_file }}
+          asset_name: ${{ matrix.output_file }}
