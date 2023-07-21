@@ -1,3 +1,5 @@
+using IdTech.common;
+
 namespace Quake2Sharp.opentk;
 
 using game;
@@ -32,26 +34,26 @@ public class OpenTkSound : Sound
 		}
 		catch (Exception e)
 		{
-			Com.Printf(e.Message + '\n');
+			clientserver.Com_Printf(e.Message + '\n');
 
 			return false;
 		}
 
 		// set the master volume
-		this.s_volume = Cvar.Get("s_volume", "0.7", Defines.CVAR_ARCHIVE);
+		this.s_volume = cvar.Cvar_Get("s_volume", "0.7", Defines.CVAR_ARCHIVE);
 
 		AL.GenBuffers(this.buffers.Length, this.buffers);
 		var count = Channel.init(this.buffers, OpenTkSound.efxSlot);
-		Com.Printf("... using " + count + " channels\n");
+		clientserver.Com_Printf("... using " + count + " channels\n");
 		AL.DistanceModel(ALDistanceModel.InverseDistanceClamped);
 
-		Cmd.AddCommand("play", () => { this.Play(); });
+		cmdparser.Cmd_AddCommand("play", () => { this.Play(); });
 
-		Cmd.AddCommand("stopsound", () => { this.StopAllSounds(); });
+		cmdparser.Cmd_AddCommand("stopsound", () => { this.StopAllSounds(); });
 
-		Cmd.AddCommand("soundlist", () => { this.SoundList(); });
+		cmdparser.Cmd_AddCommand("soundlist", () => { this.SoundList(); });
 
-		Cmd.AddCommand("soundinfo", () => { this.SoundInfo_f(); });
+		cmdparser.Cmd_AddCommand("soundinfo", () => { this.SoundInfo_f(); });
 
 		OpenTkSound.num_sfx = 0;
 
@@ -131,7 +133,7 @@ public class OpenTkSound : Sound
 
 	private void checkError()
 	{
-		Com.DPrintf("AL Error: " + this.alErrorString() + '\n');
+		clientserver.Com_DPrintf("AL Error: " + this.alErrorString() + '\n');
 	}
 
 	private string alErrorString()
@@ -186,10 +188,10 @@ public class OpenTkSound : Sound
 			ALC.EFX.DeleteAuxiliaryEffectSlot(OpenTkSound.efxSlot);
 		}
 
-		Cmd.RemoveCommand("play");
-		Cmd.RemoveCommand("stopsound");
-		Cmd.RemoveCommand("soundlist");
-		Cmd.RemoveCommand("soundinfo");
+		cmdparser.Cmd_RemoveCommand("play");
+		cmdparser.Cmd_RemoveCommand("stopsound");
+		cmdparser.Cmd_RemoveCommand("soundlist");
+		cmdparser.Cmd_RemoveCommand("soundinfo");
 
 		// free all sounds
 		for (var i = 0; i < OpenTkSound.num_sfx; i++)
@@ -370,7 +372,7 @@ public class OpenTkSound : Sound
 		// fall back strategies
 		//
 		// not found , so see if it exists
-		if (FS.FileLength(sexedFilename[1..]) > 0)
+		if (filesystem.FS_FileLength(sexedFilename[1..]) > 0)
 		{
 			// yes, register it
 			return this.RegisterSound(sexedFilename);
@@ -381,7 +383,7 @@ public class OpenTkSound : Sound
 		{
 			var femaleFilename = "player/female/" + @base[1..];
 
-			if (FS.FileLength("sound/" + femaleFilename) > 0)
+			if (filesystem.FS_FileLength("sound/" + femaleFilename) > 0)
 				return this.AliasName(sexedFilename, femaleFilename);
 		}
 
@@ -400,13 +402,13 @@ public class OpenTkSound : Sound
 		sfx_t sfx = null;
 
 		if (name == null)
-			Com.Error(Defines.ERR_FATAL, "S_FindName: NULL\n");
+			clientserver.Com_Error(Defines.ERR_FATAL, "S_FindName: NULL\n");
 
 		if (name.Length == 0)
-			Com.Error(Defines.ERR_FATAL, "S_FindName: empty name\n");
+			clientserver.Com_Error(Defines.ERR_FATAL, "S_FindName: empty name\n");
 
 		if (name.Length >= Defines.MAX_QPATH)
-			Com.Error(Defines.ERR_FATAL, "Sound name too long: " + name);
+			clientserver.Com_Error(Defines.ERR_FATAL, "Sound name too long: " + name);
 
 		// see if already loaded
 		for (i = 0; i < OpenTkSound.num_sfx; i++)
@@ -430,7 +432,7 @@ public class OpenTkSound : Sound
 		if (i == OpenTkSound.num_sfx)
 		{
 			if (OpenTkSound.num_sfx == OpenTkSound.MAX_SFX)
-				Com.Error(Defines.ERR_FATAL, "S_FindName: out of sfx_t");
+				clientserver.Com_Error(Defines.ERR_FATAL, "S_FindName: out of sfx_t");
 
 			OpenTkSound.num_sfx++;
 		}
@@ -468,7 +470,7 @@ public class OpenTkSound : Sound
 		if (i == OpenTkSound.num_sfx)
 		{
 			if (OpenTkSound.num_sfx == OpenTkSound.MAX_SFX)
-				Com.Error(Defines.ERR_FATAL, "S_FindName: out of sfx_t");
+				clientserver.Com_Error(Defines.ERR_FATAL, "S_FindName: out of sfx_t");
 
 			OpenTkSound.num_sfx++;
 		}
@@ -515,7 +517,7 @@ public class OpenTkSound : Sound
 
 		if (sfx == null)
 		{
-			Com.Printf("S_StartLocalSound: can't cache " + sound + "\n");
+			clientserver.Com_Printf("S_StartLocalSound: can't cache " + sound + "\n");
 
 			return;
 		}
@@ -561,9 +563,9 @@ public class OpenTkSound : Sound
 		var i = 1;
 		string name;
 
-		while (i < Cmd.Argc())
+		while (i < cmdparser.Cmd_Argc())
 		{
-			name = new(Cmd.Argv(i));
+			name = new(cmdparser.Cmd_Argv(i));
 
 			if (name.IndexOf('.') == -1)
 				name += ".wav";
@@ -598,30 +600,30 @@ public class OpenTkSound : Sound
 				total += size;
 
 				if (sc.loopstart >= 0)
-					Com.Printf("L");
+					clientserver.Com_Printf("L");
 				else
-					Com.Printf(" ");
+					clientserver.Com_Printf(" ");
 
-				Com.Printf($"({sc.width * 8,2}b) {size,6} : {sfx.name}\n");
+				clientserver.Com_Printf($"({sc.width * 8,2}b) {size,6} : {sfx.name}\n");
 			}
 			else
 			{
 				if (sfx.name[0] == '*')
-					Com.Printf("  placeholder : " + sfx.name + "\n");
+					clientserver.Com_Printf("  placeholder : " + sfx.name + "\n");
 				else
-					Com.Printf("  not loaded  : " + sfx.name + "\n");
+					clientserver.Com_Printf("  not loaded  : " + sfx.name + "\n");
 			}
 		}
 
-		Com.Printf("Total resident: " + total + "\n");
+		clientserver.Com_Printf("Total resident: " + total + "\n");
 	}
 
 	private void SoundInfo_f()
 	{
-		Com.Printf($"{1,5} stereo\n");
-		Com.Printf($"{22050,5} samples\n");
-		Com.Printf($"{16,5} samplebits\n");
-		Com.Printf($"{44100,5} speed\n");
+		clientserver.Com_Printf($"{1,5} stereo\n");
+		clientserver.Com_Printf($"{22050,5} samples\n");
+		clientserver.Com_Printf($"{16,5} samplebits\n");
+		clientserver.Com_Printf($"{44100,5} speed\n");
 	}
 
 	static OpenTkSound()

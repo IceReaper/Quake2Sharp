@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.common;
 using Quake2Sharp.opentk;
 using Quake2Sharp.render;
 using Quake2Sharp.render.opengl;
@@ -30,8 +31,8 @@ using sys;
 
 public class Program
 {
-	public static Action<int> UpdateLoop;
-	private static int last = Timer.Milliseconds();
+	public static Action UpdateLoop;
+	private static int last = Timer.Sys_Milliseconds();
 	public static bool Exit;
 
 	public static void Main(string[] args)
@@ -56,14 +57,12 @@ public class Program
 			if (!args[n].Equals("1") && !args[n].Equals("\"1\""))
 				continue;
 
-			Com.Printf("Starting in dedicated mode.\n");
+			clientserver.Com_Printf("Starting in dedicated mode.\n");
 			dedicated = true;
 		}
 
-		Globals.dedicated = Cvar.Get("dedicated", "0", Defines.CVAR_NOSET);
-
 		if (dedicated)
-			Globals.dedicated.value = 1.0f;
+			frame.dedicated.value = 1.0f;
 		else
 		{
 			Renderer.register(new OpenTkRenderer());
@@ -71,23 +70,21 @@ public class Program
 			S.register(new OpenTkSound());
 		}
 
-		Qcommon.Init(args);
+		Globals.nostdout = cvar.Cvar_Get("nostdout", "0", 0);
 
-		Globals.nostdout = Cvar.Get("nostdout", "0", 0);
+		frame.Qcommon_Init(args);
+
 
 		while (!Program.Exit)
 		{
 			// find time spending rendering last frame
-			var now = Timer.Milliseconds();
+			var now = Timer.Sys_Milliseconds();
 			var delta = now - Program.last;
 
 			if (Program.UpdateLoop != null)
-				Program.UpdateLoop(delta);
+				Program.UpdateLoop();
 			else if (delta > 0)
-			{
-				Qcommon.FrameUpdate(delta);
-				Qcommon.FrameRender(delta);
-			}
+				frame.Qcommon_Mainloop();
 
 			Program.last = now;
 		}

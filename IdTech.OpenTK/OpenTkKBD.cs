@@ -157,7 +157,7 @@ public class OpenTkKBD : KBD
 	public override void Do_Key_Event(int key, bool down, string? text)
 	{
 		if (key != -1)
-			Key.Event(key, down, Timer.Milliseconds(), text);
+			Key.Event(key, down, Timer.Sys_Milliseconds(), text);
 	}
 
 	public override void installGrabs()

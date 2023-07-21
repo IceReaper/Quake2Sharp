@@ -1,3 +1,5 @@
+using IdTech.common;
+
 namespace Quake2Sharp.opentk;
 
 using client;
@@ -102,25 +104,9 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		this.window.MouseWheel += OpenTkKBD.Listener.MouseWheel;
 		this.window.TextInput += OpenTkKBD.Listener.TextInput;
 
-		Program.UpdateLoop = _ => this.window.Run();
+		Program.UpdateLoop = this.window.Run;
 
 		var initialized = false;
-
-		var updateAccumulator = 0.0;
-		var renderAccumulator = 0.0;
-
-		this.window.UpdateFrame += args =>
-		{
-			updateAccumulator += args.Time * 1000;
-
-			var elapsed = (int)updateAccumulator;
-
-			if (elapsed <= 0)
-				return;
-
-			Qcommon.FrameUpdate(elapsed);
-			updateAccumulator -= elapsed;
-		};
 
 		this.window.RenderFrame += args =>
 		{
@@ -130,15 +116,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 				initialized = true;
 			}
 
-			renderAccumulator += args.Time * 1000;
-
-			var elapsed = (int)renderAccumulator;
-
-			if (elapsed <= 0)
-				return;
-
-			Qcommon.FrameRender(elapsed);
-			renderAccumulator -= elapsed;
+			frame.Qcommon_Mainloop();
 		};
 
 		this.window.Resize += args =>
@@ -156,7 +134,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 	private static void QuitOnClose(CancelEventArgs args)
 	{
 		Program.UpdateLoop = null;
-		Cbuf.ExecuteText(Defines.EXEC_APPEND, "quit");
+		cmdparser.Cbuf_ExecuteText(Defines.EXEC_APPEND, "quit");
 	}
 
 	public void shutdown()
@@ -211,5 +189,15 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 
 	protected void activate()
 	{
+	}
+
+	public bool IsVSyncActive()
+	{
+		return window.VSync != VSyncMode.Off;
+	}
+
+	public int GetRefreshRate()
+	{
+		return (int)window.UpdateFrequency;
 	}
 }

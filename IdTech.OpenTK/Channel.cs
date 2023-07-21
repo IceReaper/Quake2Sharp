@@ -1,3 +1,5 @@
+using IdTech.common;
+
 namespace Quake2Sharp.opentk;
 
 using client;
@@ -141,7 +143,7 @@ public class Channel
 		AL.Source(source, ALSourcef.Gain, 1.0f);
 		Channel.channels[Channel.numChannels].volumeChanged = true;
 
-		Com.DPrintf("streaming enabled\n");
+		clientserver.Com_DPrintf("streaming enabled\n");
 	}
 
 	public static void disableStreaming()
@@ -156,7 +158,7 @@ public class Channel
 		// free the last source
 		Channel.numChannels++;
 		Channel.streamingEnabled = false;
-		Com.DPrintf("streaming disabled\n");
+		clientserver.Com_DPrintf("streaming disabled\n");
 	}
 
 	private static void unqueueStreams()
@@ -170,7 +172,7 @@ public class Channel
 		AL.SourceStop(source);
 		int count;
 		AL.GetSource(source, ALGetSourcei.BuffersQueued, out count);
-		Com.DPrintf("unqueue " + count + " buffers\n");
+		clientserver.Com_DPrintf("unqueue " + count + " buffers\n");
 
 		while (count-- > 0)
 			AL.SourceUnqueueBuffers(source, 1, Channel.tmp);
@@ -195,7 +197,7 @@ public class Channel
 		{
 			Channel.unqueueStreams();
 			buffer[0] = Channel.buffers[OpenTkSound.MAX_SFX + Channel.streamQueue++];
-			Com.DPrintf("queue " + (Channel.streamQueue - 1) + '\n');
+			clientserver.Com_DPrintf("queue " + (Channel.streamQueue - 1) + '\n');
 		}
 		else if (processed < 2)
 		{
@@ -204,7 +206,7 @@ public class Channel
 				return;
 
 			buffer[0] = Channel.buffers[OpenTkSound.MAX_SFX + Channel.streamQueue++];
-			Com.DPrintf("queue " + (Channel.streamQueue - 1) + '\n');
+			clientserver.Com_DPrintf("queue " + (Channel.streamQueue - 1) + '\n');
 		}
 		else
 		{
@@ -217,7 +219,7 @@ public class Channel
 
 		if (Channel.streamQueue > 1 && !playing)
 		{
-			Com.DPrintf("start sound\n");
+			clientserver.Com_DPrintf("start sound\n");
 			AL.SourcePlay(source);
 		}
 	}
