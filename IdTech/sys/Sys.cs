@@ -32,14 +32,13 @@ public class Sys
 
 		//StackTrace();
 		Console.WriteLine(new Exception(error));
-		Program.Exit = true;
+		Environment.Exit(0);
 	}
 
 	public static void Quit()
 	{
 		Cl.Shutdown();
 		Environment.Exit(0);
-		Program.Exit = true;
 	}
 
 	//ok!

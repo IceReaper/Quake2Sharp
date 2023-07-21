@@ -1,12 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quake2Sharp", "Quake2Sharp\Quake2Sharp.csproj", "{EA3A0822-CD9B-4A56-B4A6-28257FA28DDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdTech", "IdTech\IdTech.csproj", "{EA3A0822-CD9B-4A56-B4A6-28257FA28DDC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{01FD5072-2ED6-4C9B-9FDB-4122B9688EB5}"
 	ProjectSection(SolutionItems) = preProject
 		README.MD = README.MD
 		.github\workflows\ci.yml = .github\workflows\ci.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{A792495E-D8D4-4D5A-BD71-330FA61065D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quake2", "Quake2\Quake2.csproj", "{A25B49BC-6AC1-46AB-942A-903E79952F56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{F8AEE317-6419-4F85-A0B7-23678A7A1982}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdTech.OpenTK", "IdTech.OpenTK\IdTech.OpenTK.csproj", "{FDFC68DF-5BCE-4FBD-A236-4A87BECCF0F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +26,17 @@ Global
 		{EA3A0822-CD9B-4A56-B4A6-28257FA28DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA3A0822-CD9B-4A56-B4A6-28257FA28DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA3A0822-CD9B-4A56-B4A6-28257FA28DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A25B49BC-6AC1-46AB-942A-903E79952F56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A25B49BC-6AC1-46AB-942A-903E79952F56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A25B49BC-6AC1-46AB-942A-903E79952F56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A25B49BC-6AC1-46AB-942A-903E79952F56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDFC68DF-5BCE-4FBD-A236-4A87BECCF0F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDFC68DF-5BCE-4FBD-A236-4A87BECCF0F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDFC68DF-5BCE-4FBD-A236-4A87BECCF0F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDFC68DF-5BCE-4FBD-A236-4A87BECCF0F6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A25B49BC-6AC1-46AB-942A-903E79952F56} = {A792495E-D8D4-4D5A-BD71-330FA61065D5}
+		{FDFC68DF-5BCE-4FBD-A236-4A87BECCF0F6} = {F8AEE317-6419-4F85-A0B7-23678A7A1982}
 	EndGlobalSection
 EndGlobal

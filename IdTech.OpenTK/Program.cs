@@ -17,6 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
+using Quake2Sharp.opentk;
+using Quake2Sharp.render;
+using Quake2Sharp.render.opengl;
+using Quake2Sharp.sound;
+
 namespace Quake2Sharp;
 
 using qcommon;
@@ -58,6 +64,12 @@ public class Program
 
 		if (dedicated)
 			Globals.dedicated.value = 1.0f;
+		else
+		{
+			Renderer.register(new OpenTkRenderer());
+			Renderer.renderApi = new OpenGLRenderApi(new OpenTkGL());
+			S.register(new OpenTkSound());
+		}
 
 		Qcommon.Init(args);
 

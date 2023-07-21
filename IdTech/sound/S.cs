@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Quake2Sharp.sound;
 
 using game.types;
-using opentk;
 using qcommon;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -53,17 +52,6 @@ public class S
 		catch (Exception)
 		{
 			Com.DPrintf("could not init dummy sound driver class.");
-		}
-
-		// prefered driver
-		try
-		{
-			RuntimeHelpers.RunClassConstructor(typeof(OpenTkSound).TypeHandle);
-		}
-		catch (Exception)
-		{
-			// ignore the OpenTK driver if runtime not in classpath
-			Com.DPrintf("could not init OpenTK sound driver class.");
 		}
 	}
 

@@ -21,31 +21,11 @@ namespace Quake2Sharp.render;
 
 using client.types;
 using opengl;
-using opentk;
-using System.Runtime.CompilerServices;
 
 public class Renderer
 {
-	private static readonly RenderAPI renderApi = new OpenGLRenderApi();
+	public static RenderAPI renderApi;
 	private static readonly List<Ref> drivers = new();
-
-	static Renderer()
-	{
-		try
-		{
-			try
-			{
-				RuntimeHelpers.RunClassConstructor(typeof(OpenTkRenderer).TypeHandle);
-			}
-			catch (Exception)
-			{
-			}
-		}
-		catch (Exception e)
-		{
-			Console.WriteLine(e);
-		}
-	}
 
 	public static void register(Ref impl)
 	{

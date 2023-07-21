@@ -23,7 +23,6 @@ using client;
 using client.types;
 using game;
 using game.types;
-using opentk;
 using qcommon;
 using qcommon.types;
 using render.types;
@@ -1597,9 +1596,9 @@ public partial class OpenGLRenderApi : RenderAPI
 
 	private IOpenGL gl;
 
-	public OpenGLRenderApi()
+	public OpenGLRenderApi(IOpenGL gl)
 	{
-		this.gl = new OpenTkGL();
+		this.gl = gl;
 
 		for (var i = 0; i < this.start_points.Length; i++)
 			this.start_points[i] = new float[3];

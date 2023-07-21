@@ -13,15 +13,6 @@ public class OpenTkRenderer : OpenTkDriver, refexport_t, Ref
 	private readonly KBD kbd = new OpenTkKBD();
 	private RenderAPI impl;
 
-	static OpenTkRenderer()
-	{
-		Renderer.register(new OpenTkRenderer());
-	}
-
-	private OpenTkRenderer()
-	{
-	}
-
 	public bool Init(int vid_xpos, int vid_ypos)
 	{
 		Base.setGLDriver(this);

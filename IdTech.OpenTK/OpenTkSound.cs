@@ -626,8 +626,6 @@ public class OpenTkSound : Sound
 
 	static OpenTkSound()
 	{
-		S.register(new OpenTkSound());
-
 		for (var i = 0; i < OpenTkSound.known_sfx.Length; i++)
 			OpenTkSound.known_sfx[i] = new();
 	}
