@@ -1,79 +1,58 @@
-# Quake2Sharp
-An ID Tech 2 Engine modernization project.
+# IdEngine
 
-## Compiling / Running
+A modern C# port of the ID Tech 2 engine along its games, based on the Yamagi Quake II source code.
 
-Method 1 - Release build:
-- Make sure the Quake2Sharp files are next to your baseq2 directory.
-- Run
+## Progress
 
-Method 2 - Building from source:
-- Install latest .NET SDK
-- Run (replace win-x64 with your target platform. Examples: linux-x64, osx-x64, osx-arm64, ...)
-  - `dotnet publish -c Release --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false -r win-x64 -p:TargetPlatform=win-x64`
-- Get the output files from Quake2Sharp/bin/Release/<.NET version>/<platform>/publish/
-- Follow method 1
+The project already runs and lets you play Quake II, however it is still largely based on an older source port.
+The Yamagi Quake II source code will be ported on top of the existing source code, ensuring changes can be tested immediately.
 
-Method 3 - Running from IDE:
-- Install latest .NET SDK
-- Make sure the baseq2 directory lies in the project root directory.
-- Open the solution file and run
+### Base project
 
-## Goals
-- The codebase should be raised to modern c# standards
-- The engine should be highly moddable
-- Provide a good base for custom games
-- The repository should contain a fully compatible Quake2 gamecode
-- Get the codebase running on any technically possible platform
+- [x] Project setup
+- [ ] Port of the Yamagi Quake II source code.
+	- [ ] Engine
+      - [ ] common
+      - [ ] backend
+      - [ ] server
+	  - [ ] client
+	- [ ] Quake 2
+	- [ ] The Reckoning
+	- [ ] Ground Zero
+	- [ ] Capture the Flag
 
-## Roadmap
-- Refactor the whole codebase
+### Modernize codebase
 
-- Split project into multiple projects
+While the port will be pretty straight forward, this phase focuses on readability and maintainability.
 
-  - **Quake2Sharp.Engine**
+- [ ] Make code non-static
+- [ ] Make the addons properly extend the base game
+- [ ] Remove limits
 
-    This project should contain all core engine code.
-    Its output will be a library only.
-    At this level, platform specific dependencies should not be allowed, to ensure runnability on all platforms.
-    The engine itself should include game detection and loading mechanisms.
+### Modernize toolchain
 
-  - **Quake2Sharp.Game.Quake2**
+Doing whatever required to make the project a solid foundation for new games or mods.
 
-    This project should contain the actual Quake 2 game implementation for the engine to load.
-    Its output will be a library only.
-    At this level, platform specific dependencies should not be allowed, to ensure runnability on all platforms.
-    Other games might ofcourse decide to use platform specific dependencies.
+- [ ] Deploy the projects as NuGet packages
+- [ ] Implement png texture support
+- [ ] Implement GLTF model support
+- [ ] Implement TrenchBroom .map support
+- [ ] Implement bare-bones example game
 
-  - **Quake2Sharp.Server**
+### Platform support
 
-    This project should produce the dedicated server executable and its starting mechanism.
-    It will load up the engine, make sure the game is loaded and spawn a dedicated server for people to play on.
+Ensure that projects using IdEngine will run nearly everywhere.
 
-  - **Quake2Sharp.Client**
+- [ ] Implement Vulkan platform
+- [ ] Implement Godot platform
+- [ ] Implement Unity platform
 
-    This project should produce the client executable. Its should also implement the platform loader.
-    Upon starting, it should check the available platforms, initialize the preferred one and provide
-    a frontend to interact with the engine (menu, playing the game).
+## Based upon:
 
-  - **Quake2Sharp.Platform.OpenTk**
-
-    This project should contain all platform specific implementations.
-
-- Rendering
-  - Switch to Silk.Net
-  - Implement Silk.Net OpenGL 4.6 renderer
-  - Implement Silk.Net Vulkan renderer
-
-- Moddability
-  - Support .png textures
-  - Support .glb models
-  - Support trenchbroom .map maps
-
-- Other
-  - Implement powerful ui system for more complex menus and uis
-  - Implement Doom3-style ui textures
-
-## Credits
-- ID Software for releasing their Quake 2 source code https://github.com/id-Software/Quake-2
-- Bytonic for their Java port https://bytonic.de/html/jake2.html
+| Project          | Source                                                                                   | Version |
+|------------------|------------------------------------------------------------------------------------------|---------|
+| IdEngine         | [Yamagi Quake II](https://github.com/yquake2/yquake2)                                    |    8.20 |
+| Quake2           | [Yamagi Quake II](https://github.com/yquake2/yquake2)                                    |    8.20 |
+| Quake2Xatrix     | [The Reckoning](https://github.com/yquake2/xatrix)                                       |    2.11 |
+| Quake2Rogue      | [Ground Zero](https://github.com/yquake2/rogue)                                          |    2.10 |
+| Quake2Ctf        | [Capture the Flag](https://github.com/yquake2/ctf)                                       |    1.09 |
