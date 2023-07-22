@@ -17,12 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
+using Quake2Sharp.qcommon;
+using Quake2Sharp.util;
+
 namespace Quake2Sharp.game.types;
 
-using qcommon;
-using util;
-
-/** 
+/**
  	Player_state_t is the information needed in addition to pmove_state_t
 	to rendered a view.  There will only be 10 player_state_t sent each second,
 	but the number of pmove_state_t changes will be relative to client

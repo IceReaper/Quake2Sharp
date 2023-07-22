@@ -18,8 +18,6 @@
  * 02111-1307, USA.
  */
 
-using Quake2Sharp.qcommon;
-
 namespace IdTech.common;
 
 /* =======================================================================
@@ -38,9 +36,9 @@ public static class argproc
 	 */
 	public static int COM_CheckParm(string parm)
 	{
-		for (var i = 1; i < com_argv.Count; i++)
+		for (var i = 1; i < argproc.com_argv.Count; i++)
 		{
-			if (parm == com_argv[i])
+			if (parm == argproc.com_argv[i])
 				return i;
 		}
 
@@ -49,29 +47,29 @@ public static class argproc
 
 	public static int COM_Argc()
 	{
-		return com_argv.Count;
+		return argproc.com_argv.Count;
 	}
 
 	public static string COM_Argv(int arg)
 	{
-		if (arg < 0 || arg >= com_argv.Count)
+		if (arg < 0 || arg >= argproc.com_argv.Count)
 			return string.Empty;
 
-		return com_argv[arg];
+		return argproc.com_argv[arg];
 	}
 
 	public static void COM_ClearArgv(int arg)
 	{
-		if (arg < 0 || arg >= com_argv.Count || com_argv[arg].Length == 0)
+		if (arg < 0 || arg >= argproc.com_argv.Count || argproc.com_argv[arg].Length == 0)
 			return;
 
-		com_argv.RemoveAt(arg);
+		argproc.com_argv.RemoveAt(arg);
 	}
 
 	public static void COM_InitArgv(string[] argv)
 	{
-		com_argv.Clear();
-		com_argv.AddRange(argv);
+		argproc.com_argv.Clear();
+		argproc.com_argv.AddRange(argv);
 	}
 
 	/*
@@ -79,7 +77,7 @@ public static class argproc
 	 */
 	public static void COM_AddParm(string parm)
 	{
-		com_argv.Add(parm);
+		argproc.com_argv.Add(parm);
 	}
 
 	public static void Info_Print(string s)

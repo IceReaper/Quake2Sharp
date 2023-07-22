@@ -18,10 +18,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-namespace Quake2Sharp.client.types;
-
-using render.types;
+using Quake2Sharp.render.types;
 using System.Numerics;
+
+namespace Quake2Sharp.client.types;
 
 public class Beam
 {

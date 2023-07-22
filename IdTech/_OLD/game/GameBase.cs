@@ -19,15 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
+using Quake2Sharp.client;
+using Quake2Sharp.game.types;
+using Quake2Sharp.server;
+using Quake2Sharp.util;
+using System.Text.RegularExpressions;
 
 namespace Quake2Sharp.game;
-
-using client;
-using qcommon;
-using server;
-using System.Text.RegularExpressions;
-using types;
-using util;
 
 public class GameBase
 {

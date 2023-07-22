@@ -19,17 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
-
-namespace Quake2Sharp.client;
-
-using qcommon;
-using render.types;
-using sound;
-using sound.types;
+using Quake2Sharp.client.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.render.types;
+using Quake2Sharp.sound;
+using Quake2Sharp.sound.types;
+using Quake2Sharp.util;
 using System.Drawing;
 using System.Numerics;
-using types;
-using util;
+
+namespace Quake2Sharp.client;
 
 /* =================
  * CL_tent

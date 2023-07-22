@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class GameWeapon
 {
@@ -173,8 +174,8 @@ public class GameWeapon
 	});
 
 	/*
-	 * ================= 
-	 * fire_rocket 
+	 * =================
+	 * fire_rocket
 	 * =================
 	 */
 	private static readonly EntTouchAdapter rocket_touch = new("rocket_touch", (ent, other, plane, surf) =>
@@ -231,8 +232,8 @@ public class GameWeapon
 	});
 
 	/*
-	 * ================= 
-	 * fire_bfg 
+	 * =================
+	 * fire_bfg
 	 * =================
 	 */
 	private static readonly EntThinkAdapter bfg_explode = new("bfg_explode", self =>
@@ -442,12 +443,12 @@ public class GameWeapon
 	});
 
 	/*
-	 * ================= 
+	 * =================
 	 * check_dodge
-	 * 
+	 *
 	 * This is a support routine used when a client is firing a non-instant
 	 * attack weapon. It checks to see if a monster's dodge function should be
-	 * called. 
+	 * called.
 	 * =================
 	 */
 	private static void check_dodge(edict_t self, float[] start, float[] dir, int speed)
@@ -480,10 +481,10 @@ public class GameWeapon
 	}
 
 	/*
-	 * ================= 
+	 * =================
 	 * fire_hit
-	 * 
-	 * Used for all impact (hit/punch/slash) attacks 
+	 *
+	 * Used for all impact (hit/punch/slash) attacks
 	 * =================
 	 */
 	public static bool fire_hit(edict_t self, float[] aim, int damage, int kick)
@@ -558,9 +559,9 @@ public class GameWeapon
 	}
 
 	/*
-	 * ================= 
+	 * =================
 	 * fire_lead
-	 * 
+	 *
 	 * This is an internal support routine used for bullet/pellet based weapons.
 	 * =================
 	 */
@@ -701,7 +702,7 @@ public class GameWeapon
 
 	/*
 	 * ================= fire_bullet
-	 * 
+	 *
 	 * Fires a single round. Used for machinegun and chaingun. Would be fine for
 	 * pistols, rifles, etc.... =================
 	 */
@@ -711,9 +712,9 @@ public class GameWeapon
 	}
 
 	/*
-	 * ================= 
+	 * =================
 	 * fire_shotgun
-	 * 
+	 *
 	 * Shoots shotgun pellets. Used by shotgun and super shotgun.
 	 * =================
 	 */
@@ -726,9 +727,9 @@ public class GameWeapon
 	}
 
 	/*
-	 * ================= 
+	 * =================
 	 * fire_blaster
-	 * 
+	 *
 	 * Fires a single blaster bolt. Used by the blaster and hyper blaster.
 	 * =================
 	 */
@@ -897,8 +898,8 @@ public class GameWeapon
 	}
 
 	/*
-	 * ================= 
-	 * fire_rail 
+	 * =================
+	 * fire_rail
 	 * =================
 	 */
 	public static void fire_rail(edict_t self, float[] start, float[] aimdir, int damage, int kick)

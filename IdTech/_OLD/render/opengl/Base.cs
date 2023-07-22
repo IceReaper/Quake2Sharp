@@ -17,10 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.opengl;
 
-using client.types;
-using game.types;
+using Quake2Sharp.client.types;
+using Quake2Sharp.game.types;
+
+namespace Quake2Sharp.render.opengl;
 
 public abstract class Base
 {
@@ -36,7 +37,7 @@ public abstract class Base
 	/*
 	 * skins will be outline flood filled and mip mapped pics and sprites with
 	 * alpha will be outline flood filled pic won't be mip mapped
-	 * 
+	 *
 	 * model skin sprite frame wall texture pic
 	 */
 	// enum imagetype_t

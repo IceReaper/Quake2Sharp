@@ -1,13 +1,11 @@
 using IdTech.common;
+using OpenTK.Audio.OpenAL;
+using Quake2Sharp.client;
+using Quake2Sharp.game.types;
+using Quake2Sharp.sound.types;
+using Quake2Sharp.util;
 
 namespace Quake2Sharp.opentk;
-
-using client;
-using game.types;
-using OpenTK.Audio.OpenAL;
-using qcommon;
-using sound.types;
-using util;
 
 public class Channel
 {
@@ -16,8 +14,8 @@ public class Channel
 	public const int DYNAMIC = 2;
 	private static readonly int MAX_CHANNELS = 32;
 	private static readonly float[] NULLVECTOR = { 0, 0, 0 };
-	private static readonly Channel[] channels = new Channel[Channel.MAX_CHANNELS];
-	private static readonly int[] sources = new int[Channel.MAX_CHANNELS];
+	private static readonly Channel[] channels = new Channel[MAX_CHANNELS];
+	private static readonly int[] sources = new int[MAX_CHANNELS];
 
 	// a reference of JOALSoundImpl.buffers
 	private static int[] buffers;
@@ -71,14 +69,14 @@ public class Channel
 
 		// create channels
 		int sourceId;
-		Channel.numChannels = 0;
+		numChannels = 0;
 
-		for (var i = 0; i < Channel.MAX_CHANNELS; i++)
+		for (var i = 0; i < MAX_CHANNELS; i++)
 		{
 			try
 			{
-				AL.GenSources(1, Channel.tmp);
-				sourceId = Channel.tmp[0];
+				AL.GenSources(1, tmp);
+				sourceId = tmp[0];
 
 				// can't generate more sources
 				if (sourceId <= 0)
@@ -90,16 +88,16 @@ public class Channel
 				break;
 			}
 
-			Channel.sources[i] = sourceId;
+			sources[i] = sourceId;
 
-			Channel.channels[i] = new(sourceId);
-			Channel.numChannels++;
+			channels[i] = new(sourceId);
+			numChannels++;
 
 			// set default values for AL sources
 			AL.Source(sourceId, ALSourcef.Gain, 1.0f);
 			AL.Source(sourceId, ALSourcef.Pitch, 1.0f);
 			AL.Source(sourceId, ALSourceb.SourceRelative, false);
-			AL.Source(sourceId, ALSource3f.Velocity, Channel.NULLVECTOR[0], Channel.NULLVECTOR[1], Channel.NULLVECTOR[2]);
+			AL.Source(sourceId, ALSource3f.Velocity, NULLVECTOR[0], NULLVECTOR[1], NULLVECTOR[2]);
 			AL.Source(sourceId, ALSourceb.Looping, false);
 			AL.Source(sourceId, ALSourcef.ReferenceDistance, 200.0f);
 			AL.Source(sourceId, ALSourcef.MinGain, 0.0005f);
@@ -109,64 +107,64 @@ public class Channel
 				ALC.EFX.Source(sourceId, EFXSourceInteger3.AuxiliarySendFilter, efxSlot, 0, 0);
 		}
 
-		return Channel.numChannels;
+		return numChannels;
 	}
 
 	public static void reset()
 	{
-		for (var i = 0; i < Channel.numChannels; i++)
+		for (var i = 0; i < numChannels; i++)
 		{
-			AL.SourceStop(Channel.sources[i]);
-			AL.Source(Channel.sources[i], ALSourcei.Buffer, 0);
-			Channel.channels[i].clear();
+			AL.SourceStop(sources[i]);
+			AL.Source(sources[i], ALSourcei.Buffer, 0);
+			channels[i].clear();
 		}
 	}
 
 	public static void shutdown()
 	{
-		AL.DeleteSources(Channel.sources);
-		Channel.numChannels = 0;
+		AL.DeleteSources(sources);
+		numChannels = 0;
 	}
 
 	private static void enableStreaming()
 	{
-		if (Channel.streamingEnabled)
+		if (streamingEnabled)
 			return;
 
 		// use the last source
-		Channel.numChannels--;
-		Channel.streamingEnabled = true;
-		Channel.streamQueue = 0;
+		numChannels--;
+		streamingEnabled = true;
+		streamQueue = 0;
 
-		var source = Channel.channels[Channel.numChannels].sourceId;
+		var source = channels[numChannels].sourceId;
 		AL.Source(source, ALSourceb.SourceRelative, true);
 		AL.Source(source, ALSourcef.Gain, 1.0f);
-		Channel.channels[Channel.numChannels].volumeChanged = true;
+		channels[numChannels].volumeChanged = true;
 
 		clientserver.Com_DPrintf("streaming enabled\n");
 	}
 
 	public static void disableStreaming()
 	{
-		if (!Channel.streamingEnabled)
+		if (!streamingEnabled)
 			return;
 
-		Channel.unqueueStreams();
-		var source = Channel.channels[Channel.numChannels].sourceId;
+		unqueueStreams();
+		var source = channels[numChannels].sourceId;
 		AL.Source(source, ALSourceb.SourceRelative, false);
 
 		// free the last source
-		Channel.numChannels++;
-		Channel.streamingEnabled = false;
+		numChannels++;
+		streamingEnabled = false;
 		clientserver.Com_DPrintf("streaming disabled\n");
 	}
 
 	private static void unqueueStreams()
 	{
-		if (!Channel.streamingEnabled)
+		if (!streamingEnabled)
 			return;
 
-		var source = Channel.channels[Channel.numChannels].sourceId;
+		var source = channels[numChannels].sourceId;
 
 		// stop streaming
 		AL.SourceStop(source);
@@ -175,38 +173,38 @@ public class Channel
 		clientserver.Com_DPrintf("unqueue " + count + " buffers\n");
 
 		while (count-- > 0)
-			AL.SourceUnqueueBuffers(source, 1, Channel.tmp);
+			AL.SourceUnqueueBuffers(source, 1, tmp);
 
-		Channel.streamQueue = 0;
+		streamQueue = 0;
 	}
 
 	public static void updateStream(byte[] samples, ALFormat format, int rate)
 	{
-		Channel.enableStreaming();
+		enableStreaming();
 		var buffer = new int[] { 0 };
-		var source = Channel.channels[Channel.numChannels].sourceId;
+		var source = channels[numChannels].sourceId;
 
 		int processed;
 		AL.GetSource(source, ALGetSourcei.BuffersProcessed, out processed);
 		int state;
 		AL.GetSource(source, ALGetSourcei.SourceState, out state);
 		var playing = state == (int)ALSourceState.Playing;
-		var interupted = !playing && Channel.streamQueue > 2;
+		var interupted = !playing && streamQueue > 2;
 
 		if (interupted)
 		{
-			Channel.unqueueStreams();
-			buffer[0] = Channel.buffers[OpenTkSound.MAX_SFX + Channel.streamQueue++];
-			clientserver.Com_DPrintf("queue " + (Channel.streamQueue - 1) + '\n');
+			unqueueStreams();
+			buffer[0] = buffers[OpenTkSound.MAX_SFX + streamQueue++];
+			clientserver.Com_DPrintf("queue " + (streamQueue - 1) + '\n');
 		}
 		else if (processed < 2)
 		{
 			// check queue overrun
-			if (Channel.streamQueue >= OpenTkSound.STREAM_QUEUE)
+			if (streamQueue >= OpenTkSound.STREAM_QUEUE)
 				return;
 
-			buffer[0] = Channel.buffers[OpenTkSound.MAX_SFX + Channel.streamQueue++];
-			clientserver.Com_DPrintf("queue " + (Channel.streamQueue - 1) + '\n');
+			buffer[0] = buffers[OpenTkSound.MAX_SFX + streamQueue++];
+			clientserver.Com_DPrintf("queue " + (streamQueue - 1) + '\n');
 		}
 		else
 		{
@@ -217,7 +215,7 @@ public class Channel
 		AL.BufferData(buffer[0], format, samples, rate);
 		AL.SourceQueueBuffers(source, 1, buffer);
 
-		if (Channel.streamQueue > 1 && !playing)
+		if (streamQueue > 1 && !playing)
 		{
 			clientserver.Com_DPrintf("start sound\n");
 			AL.SourcePlay(source);
@@ -226,7 +224,7 @@ public class Channel
 
 	public static void addPlaySounds()
 	{
-		while (Channel.assign(PlaySound.nextPlayableSound()))
+		while (assign(PlaySound.nextPlayableSound()))
 			;
 	}
 
@@ -238,9 +236,9 @@ public class Channel
 		Channel ch = null;
 		int i;
 
-		for (i = 0; i < Channel.numChannels; i++)
+		for (i = 0; i < numChannels; i++)
 		{
-			ch = Channel.channels[i];
+			ch = channels[i];
 
 			if (ps.entchannel != 0 && ch.entnum == ps.entnum && ch.entchannel == ps.entchannel)
 			{
@@ -260,12 +258,12 @@ public class Channel
 				break;
 		}
 
-		if (i == Channel.numChannels)
+		if (i == numChannels)
 			return false;
 
 		ch.type = ps.type;
 
-		if (ps.type == Channel.FIXED)
+		if (ps.type == FIXED)
 			Math3D.VectorCopy(ps.origin, ch.origin);
 
 		ch.entnum = ps.entnum;
@@ -285,9 +283,9 @@ public class Channel
 	{
 		Channel ch;
 
-		for (var i = 0; i < Channel.numChannels; i++)
+		for (var i = 0; i < numChannels; i++)
 		{
-			ch = Channel.channels[i];
+			ch = channels[i];
 
 			// looking for a free AL source
 			if (!ch.active)
@@ -320,9 +318,9 @@ public class Channel
 		int state;
 		var tmp = new int[] { 0 };
 
-		for (var i = 0; i < Channel.numChannels; i++)
+		for (var i = 0; i < numChannels; i++)
 		{
-			ch = Channel.channels[i];
+			ch = channels[i];
 
 			if (ch.active)
 			{
@@ -330,19 +328,19 @@ public class Channel
 
 				switch (ch.type)
 				{
-					case Channel.LISTENER:
-						Math3D.VectorCopy(listenerOrigin, Channel.sourceOrigin);
+					case LISTENER:
+						Math3D.VectorCopy(listenerOrigin, sourceOrigin);
 
 						break;
 
-					case Channel.DYNAMIC:
-						CL_ents.GetEntitySoundOrigin(ch.entnum, Channel.entityOrigin);
-						Channel.convertVector(Channel.entityOrigin, Channel.sourceOrigin);
+					case DYNAMIC:
+						CL_ents.GetEntitySoundOrigin(ch.entnum, entityOrigin);
+						convertVector(entityOrigin, sourceOrigin);
 
 						break;
 
-					case Channel.FIXED:
-						Channel.convertVector(ch.origin, Channel.sourceOrigin);
+					case FIXED:
+						convertVector(ch.origin, sourceOrigin);
 
 						break;
 				}
@@ -367,7 +365,7 @@ public class Channel
 						AL.Source(sourceId, ALSourcef.Gain, ch.volume);
 
 					AL.Source(sourceId, ALSourcef.RolloffFactor, ch.rolloff);
-					AL.Source(sourceId, ALSource3f.Position, Channel.sourceOrigin[0], Channel.sourceOrigin[1], Channel.sourceOrigin[2]);
+					AL.Source(sourceId, ALSource3f.Position, sourceOrigin[0], sourceOrigin[1], sourceOrigin[2]);
 					AL.SourcePlay(sourceId);
 					ch.modified = false;
 				}
@@ -376,7 +374,7 @@ public class Channel
 					AL.GetSource(sourceId, ALGetSourcei.SourceState, out state);
 
 					if (state == (int)ALSourceState.Playing)
-						AL.Source(sourceId, ALSource3f.Position, Channel.sourceOrigin[0], Channel.sourceOrigin[1], Channel.sourceOrigin[2]);
+						AL.Source(sourceId, ALSource3f.Position, sourceOrigin[0], sourceOrigin[1], sourceOrigin[2]);
 					else
 						ch.clear();
 				}
@@ -396,7 +394,7 @@ public class Channel
 	{
 		if (Globals.cl_paused.value != 0.0f || Globals.cls.state != Defines.ca_active || !Globals.cl.sound_prepped)
 		{
-			Channel.removeUnusedLoopSounds();
+			removeUnusedLoopSounds();
 
 			return;
 		}
@@ -419,7 +417,7 @@ public class Channel
 				continue;
 
 			key = ent.number;
-			Channel.looptable.TryGetValue(key, out ch);
+			looptable.TryGetValue(key, out ch);
 
 			if (ch != null)
 			{
@@ -441,20 +439,20 @@ public class Channel
 				continue;
 
 			// allocate a channel
-			ch = Channel.pickForLoop(Channel.buffers[sfx.bufferId], 6);
+			ch = pickForLoop(buffers[sfx.bufferId], 6);
 
 			if (ch == null)
 				break;
 
-			ch.type = Channel.FIXED;
+			ch.type = FIXED;
 			Math3D.VectorCopy(ent.origin, ch.origin);
 			ch.autosound = true;
 
-			Channel.looptable.Add(key, ch);
+			looptable.Add(key, ch);
 			AL.Source(ch.sourceId, ALSourceb.Looping, true);
 		}
 
-		Channel.removeUnusedLoopSounds();
+		removeUnusedLoopSounds();
 	}
 
 	private static void removeUnusedLoopSounds()
@@ -462,15 +460,15 @@ public class Channel
 		Channel ch;
 
 		// stop unused loopsounds
-		foreach (var k in Channel.looptable.Keys.ToArray())
+		foreach (var k in looptable.Keys.ToArray())
 		{
-			ch = Channel.looptable[k];
+			ch = looptable[k];
 
 			if (!ch.autosound)
 			{
 				AL.SourceStop(ch.sourceId);
 				AL.Source(ch.sourceId, ALSourceb.Looping, false);
-				Channel.looptable.Remove(k);
+				looptable.Remove(k);
 				ch.clear();
 			}
 		}

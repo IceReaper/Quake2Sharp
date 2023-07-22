@@ -18,17 +18,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
+using Quake2Sharp.client.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
 using System.Text;
 
 namespace Quake2Sharp.client;
-
-using game;
-using game.types;
-using qcommon;
-using sys;
-using types;
-using util;
 
 /**
  * V
@@ -282,7 +279,7 @@ public class V
 		if (frame.cl_timedemo.value != 0.0f)
 		{
 			if (Globals.cl.timedemo_start == 0)
-				Globals.cl.timedemo_start = Timer.Sys_Milliseconds();
+				Globals.cl.timedemo_start = system.Sys_Milliseconds();
 
 			Globals.cl.timedemo_frames++;
 		}

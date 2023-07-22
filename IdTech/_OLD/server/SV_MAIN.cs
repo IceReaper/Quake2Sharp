@@ -18,17 +18,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
+using Quake2Sharp.game;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.server.types;
+using Quake2Sharp.sys;
+using Quake2Sharp.util;
 
 namespace Quake2Sharp.server;
-
-using game;
-using game.types;
-using qcommon;
-using qcommon.types;
-using sys;
-using types;
-using util;
 
 public class SV_MAIN
 {
@@ -705,7 +705,7 @@ public class SV_MAIN
 	public static void SV_RunGameFrame()
 	{
 		if (frame.host_speeds.value != 0)
-			frame.time_before_game = Timer.Sys_Milliseconds();
+			frame.time_before_game = system.Sys_Milliseconds();
 
 		// we always need to bump framenum, even if we
 		// don't run the world, otherwise the delta
@@ -730,7 +730,7 @@ public class SV_MAIN
 		}
 
 		if (frame.host_speeds.value != 0)
-			frame.time_after_game = Timer.Sys_Milliseconds();
+			frame.time_after_game = system.Sys_Milliseconds();
 	}
 
 	/**

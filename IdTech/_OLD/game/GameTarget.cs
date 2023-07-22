@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class GameTarget
 {
@@ -316,10 +317,10 @@ public class GameTarget
      * reliable "noise" wav file to play "attenuation" -1 = none, send to whole
      * level 1 = normal fighting sounds 2 = idle sound level 3 = ambient sound
      * level "volume" 0.0 to 1.0
-     * 
+     *
      * Normal sounds play each time the target is used. The reliable flag can be
      * set for crucial voiceovers.
-     * 
+     *
      * Looped sounds are always atten 3 / vol 1, and the use function toggles it
      * on/off. Multiple identical looping sounds will just increase volume
      * without any speed cost.
@@ -394,7 +395,7 @@ public class GameTarget
 	/**
      * QUAKED target_explosion (1 0 0) (-8 -8 -8) (8 8 8) Spawns an explosion
      * temporary entity when used.
-     * 
+     *
      * "delay" wait this long before going off "dmg" how much radius damage
      * should be done, defaults to 0
      */
@@ -484,10 +485,10 @@ public class GameTarget
 	/**
      * QUAKED target_splash (1 0 0) (-8 -8 -8) (8 8 8) Creates a particle splash
      * effect when used.
-     * 
+     *
      * Set "sounds" to one of the following: 1) sparks 2) blue water 3) brown
      * water 4) slime 5) lava 6) blood
-     * 
+     *
      * "count" how many pixels in the splash "dmg" if set, does a radius damage
      * at this location when it splashes useful for lava/sparks
      */
@@ -509,9 +510,9 @@ public class GameTarget
      * QUAKED target_spawner (1 0 0) (-8 -8 -8) (8 8 8) Set target to the type
      * of entity you want spawned. Useful for spawning monsters and gibs in the
      * factory levels.
-     * 
+     *
      * For monsters: Set direction to the facing you want it to have.
-     * 
+     *
      * For gibs: Set direction if you want it moving and speed how fast it
      * should be moving otherwise it will just be dropped
      */
@@ -535,7 +536,7 @@ public class GameTarget
 	/**
      * QUAKED target_blaster (1 0 0) (-8 -8 -8) (8 8 8) NOTRAIL NOEFFECTS Fires
      * a blaster bolt in the set direction when triggered.
-     * 
+     *
      * dmg default is 15 speed default is 1000
      */
 	public static EntUseAdapter use_target_blaster = new("use_target_blaster", (self, other, activator) =>
@@ -582,7 +583,7 @@ public class GameTarget
      * trigger2 trigger3 trigger4 trigger5 trigger6 trigger7 trigger8 Triggered
      * by a trigger_crosslevel elsewhere within a unit. If multiple triggers are
      * checked, all must be true. Delay, target and killtarget also work.
-     * 
+     *
      * "delay" delay before using targets if the trigger has been activated
      * (default 1)
      */

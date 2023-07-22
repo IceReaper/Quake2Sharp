@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.monsters;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game.monsters;
 
 public class M_Actor
 {
@@ -875,11 +876,11 @@ public class M_Actor
 	 * BRUTAL JUMP jump in set direction upon reaching this target SHOOT take a
 	 * single shot at the pathtarget ATTACK attack pathtarget until it or actor
 	 * is dead
-	 * 
+	 *
 	 * "target" next target_actor "pathtarget" target of any action to be taken
 	 * at this point "wait" amount of time actor should pause at this point
 	 * "message" actor will "say" this to the player
-	 * 
+	 *
 	 * for JUMP only: "speed" speed thrown forward (default 200) "height" speed
 	 * thrown upwards (default 200)
 	 */

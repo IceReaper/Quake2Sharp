@@ -18,12 +18,11 @@
  * 02111-1307, USA.
  */
 
+using IdTech.backend;
 using Quake2Sharp;
 using Quake2Sharp.client;
 using Quake2Sharp.game.types;
-using Quake2Sharp.qcommon;
 using Quake2Sharp.server;
-using Quake2Sharp.sys;
 using System.Text;
 
 namespace IdTech.common;
@@ -49,18 +48,18 @@ public static class clientserver
 
 	public static void Com_BeginRedirect(int target, Action<int, string> flush)
 	{
-		rd_target = target;
-		rd_buffer = string.Empty;
-		rd_flush = flush;
+		clientserver.rd_target = target;
+		clientserver.rd_buffer = string.Empty;
+		clientserver.rd_flush = flush;
 	}
 
 	public static void Com_EndRedirect()
 	{
-		rd_flush?.Invoke(rd_target, rd_buffer);
+		clientserver.rd_flush?.Invoke(clientserver.rd_target, clientserver.rd_buffer);
 
-		rd_target = 0;
-		rd_buffer = string.Empty;
-		rd_flush = null;
+		clientserver.rd_target = 0;
+		clientserver.rd_buffer = string.Empty;
+		clientserver.rd_flush = null;
 	}
 
 	/*
@@ -72,13 +71,13 @@ public static class clientserver
 		if (print_level == Defines.PRINT_DEVELOPER && (frame.developer == null || frame.developer.value == 0))
 			return; /* don't confuse non-developers with techie stuff... */
 
-		if (rd_flush != null)
+		if (clientserver.rd_flush != null)
 		{
-			rd_buffer += msg;
+			clientserver.rd_buffer += msg;
 			return;
 		}
 
-		if (!Globals.DEDICATED_ONLY)
+		if (!main.DEDICATED_ONLY)
 			QConsole.Print(msg);
 
 		var chars = msg.ToCharArray();
@@ -91,7 +90,7 @@ public static class clientserver
 				// skip color marker
 				case (char)0x01 or (char)0x02:
 				{
-					if (color_terminal.value == 0)
+					if (clientserver.color_terminal.value == 0)
 						chars[i] = ' ';
 					break;
 				}
@@ -128,22 +127,22 @@ public static class clientserver
 		msg = new string(chars);
 
 		/* also echo to debugging console */
-		Sys.ConsoleOutput(msg);
+		system.Sys_ConsoleOutput(msg);
 
 		/* logfile */
-		if (logfile_active.value == 0)
+		if (clientserver.logfile_active.value == 0)
 			return;
 
 		// remove color marker
 		if (msg.Length > 0 && (msg[0] == 0x01 || msg[0] == 0x02))
 			msg = ' ' + msg[1..];
 
-		logfile ??= File.Open($"{filesystem.FS_Gamedir()}/qconsole.log", logfile_active.value > 2 ? FileMode.Append : FileMode.Create, FileAccess.Write);
-		logfile.Write(Encoding.UTF8.GetBytes(msg));
+		clientserver.logfile ??= File.Open($"{filesystem.FS_Gamedir()}/qconsole.log", clientserver.logfile_active.value > 2 ? FileMode.Append : FileMode.Create, FileAccess.Write);
+		clientserver.logfile.Write(Encoding.UTF8.GetBytes(msg));
 
 		/* force it to save every time */
-		if (logfile_active.value > 0)
-			logfile.Flush();
+		if (clientserver.logfile_active.value > 0)
+			clientserver.logfile.Flush();
 	}
 
 	/*
@@ -152,7 +151,7 @@ public static class clientserver
 	 */
 	public static void Com_Printf(string msg)
 	{
-		Com_VPrintf(Defines.PRINT_ALL, msg);
+		clientserver.Com_VPrintf(Defines.PRINT_ALL, msg);
 	}
 
 	/*
@@ -160,7 +159,7 @@ public static class clientserver
 	 */
 	public static void Com_DPrintf(string msg)
 	{
-		Com_VPrintf(Defines.PRINT_DEVELOPER, msg);
+		clientserver.Com_VPrintf(Defines.PRINT_DEVELOPER, msg);
 	}
 
 	/*
@@ -170,7 +169,7 @@ public static class clientserver
 	private static void Com_MDPrintf(string msg)
 	{
 		if (frame.modder.value != 0 || frame.developer.value != 0)
-			Com_Printf(msg);
+			clientserver.Com_Printf(msg);
 	}
 
 	/*
@@ -181,45 +180,45 @@ public static class clientserver
 
 	public static void Com_Error(int code, string msg)
 	{
-		if (recursive)
-			Sys.Error($"recursive error after: {msg}");
+		if (clientserver.recursive)
+			system.Sys_Error($"recursive error after: {msg}");
 
-		recursive = true;
+		clientserver.recursive = true;
 
 		if (code == Defines.ERR_DISCONNECT)
 		{
-			if (!Globals.DEDICATED_ONLY)
+			if (!main.DEDICATED_ONLY)
 				Cl.Drop();
 
-			recursive = false;
+			clientserver.recursive = false;
 			throw new Exception();
 		}
 
 		if (code == Defines.ERR_DROP)
 		{
-			Com_Printf($"********************\nERROR: {msg}\n********************\n");
+			clientserver.Com_Printf($"********************\nERROR: {msg}\n********************\n");
 			SV_MAIN.SV_Shutdown($"Server crashed: {msg}\n", false);
 
-			if (!Globals.DEDICATED_ONLY)
+			if (!main.DEDICATED_ONLY)
 				Cl.Drop();
 
-			recursive = false;
+			clientserver.recursive = false;
 			throw new Exception();
 		}
 
 		SV_MAIN.SV_Shutdown($"Server fatal crashed: {msg}\n", false);
 
-		if (!Globals.DEDICATED_ONLY)
+		if (!main.DEDICATED_ONLY)
 			Cl.Shutdown();
 
-		if (logfile != null)
+		if (clientserver.logfile != null)
 		{
-			logfile.Dispose();
-			logfile = null;
+			clientserver.logfile.Dispose();
+			clientserver.logfile = null;
 		}
 
-		Sys.Error(msg);
-		recursive = false;
+		system.Sys_Error(msg);
+		clientserver.recursive = false;
 	}
 
 	/*
@@ -228,18 +227,18 @@ public static class clientserver
 	 */
 	public static void Com_Quit()
 	{
-		Com_Printf("\n----------- shutting down ----------\n");
+		clientserver.Com_Printf("\n----------- shutting down ----------\n");
 		SV_MAIN.SV_Shutdown("Server quit\n", false);
-		Sys.Quit();
+		system.Sys_Quit();
 	}
 
 	public static int Com_ServerState()
 	{
-		return server_state;
+		return clientserver.server_state;
 	}
 
 	public static void Com_SetServerState(int state)
 	{
-		server_state = state;
+		clientserver.server_state = state;
 	}
 }

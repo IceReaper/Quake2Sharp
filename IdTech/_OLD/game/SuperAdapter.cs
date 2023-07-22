@@ -22,8 +22,6 @@ using IdTech.common;
 
 namespace Quake2Sharp.game;
 
-using qcommon;
-
 public abstract class SuperAdapter
 {
 	/** Constructor, does the adapter registration. */

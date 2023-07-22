@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.monsters;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game.monsters;
 
 public class M_Brain
 {
@@ -396,7 +397,7 @@ public class M_Brain
 	/*
 	 * # if 0 void brain_walk2_cycle(edict_t self) { if (random() > 0.1)
 	 * self.monsterinfo.nextframe= FRAME_walk220; }
-	 * 
+	 *
 	 * static mframe_t brain_frames_walk2[]= new mframe_t[] { new
 	 * mframe_t(ai_walk, 3, null), new mframe_t(ai_walk, -2, null), new
 	 * mframe_t(ai_walk, -4, null), new mframe_t(ai_walk, -3, null), new
@@ -409,7 +410,7 @@ public class M_Brain
 	 * mframe_t(ai_walk, 0, null), new mframe_t(ai_walk, 0, null), new
 	 * mframe_t(ai_walk, 0, null), new mframe_t(ai_walk, 10, null, // Cycle
 	 * Start)
-	 * 
+	 *
 	 * new mframe_t(ai_walk, -1, null), new mframe_t(ai_walk, 7, null), new
 	 * mframe_t(ai_walk, 0, null), new mframe_t(ai_walk, 3, null), new
 	 * mframe_t(ai_walk, -3, null), new mframe_t(ai_walk, 2, null), new

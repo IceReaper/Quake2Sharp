@@ -17,23 +17,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using types;
-using util;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class PlayerTrail
 {
 	/*
 	 * ==============================================================================
-	 * 
+	 *
 	 * PLAYER TRAIL
-	 * 
+	 *
 	 * ==============================================================================
-	 * 
+	 *
 	 * This is a circular list containing the a list of points of where the
 	 * player has been recently. It is used by monsters for pursuit.
-	 * 
+	 *
 	 * .origin the spot .owner forward link .aiment backward link
 	 */
 	private static readonly int TRAIL_LENGTH = 8;

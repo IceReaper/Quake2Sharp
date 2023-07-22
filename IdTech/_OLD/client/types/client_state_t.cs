@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client.types;
 
-using game.types;
-using render.types;
-using sound.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.render.types;
+using Quake2Sharp.sound.types;
+
+namespace Quake2Sharp.client.types;
 
 public class client_state_t
 {

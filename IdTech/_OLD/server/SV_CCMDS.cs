@@ -18,17 +18,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
+using Quake2Sharp.game;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.server.types;
+using Quake2Sharp.sys;
+using Quake2Sharp.util;
 
 namespace Quake2Sharp.server;
-
-using game;
-using game.types;
-using qcommon;
-using qcommon.types;
-using sys;
-using types;
-using util;
 
 public class SV_CCMDS
 {
@@ -184,27 +184,27 @@ public class SV_CCMDS
 
 		name = filesystem.FS_Gamedir() + "/save/" + savename + "/*.sav";
 
-		var f = Sys.FindFirst(name, 0, 0);
+		var f = system.Sys_FindFirst(name);
 
 		while (f != null)
 		{
 			File.Delete(f);
-			f = Sys.FindNext();
+			f = system.Sys_FindNext();
 		}
 
-		Sys.FindClose();
+		system.Sys_FindClose();
 
 		name = filesystem.FS_Gamedir() + "/save/" + savename + "/*.sv2";
 
-		f = Sys.FindFirst(name, 0, 0);
+		f = system.Sys_FindFirst(name);
 
 		while (f != null)
 		{
 			File.Delete(f);
-			f = Sys.FindNext();
+			f = system.Sys_FindNext();
 		}
 
-		Sys.FindClose();
+		system.Sys_FindClose();
 	}
 
 	/*
@@ -241,7 +241,7 @@ public class SV_CCMDS
 		var name1 = filesystem.FS_Gamedir() + "/save/" + src + "/";
 		name = filesystem.FS_Gamedir() + "/save/" + src + "/*.sav";
 
-		var found = Sys.FindFirst(name, 0, 0);
+		var found = system.Sys_FindFirst(name);
 
 		while (found != null)
 		{
@@ -256,10 +256,10 @@ public class SV_CCMDS
 
 			SV_CCMDS.CopyFile(name, name2);
 
-			found = Sys.FindNext();
+			found = system.Sys_FindNext();
 		}
 
-		Sys.FindClose();
+		system.Sys_FindClose();
 	}
 
 	/*

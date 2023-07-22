@@ -1,6 +1,6 @@
-namespace Quake2Sharp.opentk;
-
 using OpenTK.Windowing.Common;
+
+namespace Quake2Sharp.opentk;
 
 public class InputListener
 {

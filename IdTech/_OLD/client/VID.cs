@@ -19,18 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
-
-namespace Quake2Sharp.client;
-
-using game;
-using game.types;
-using qcommon;
-using render;
-using sound;
-using sys;
+using Quake2Sharp.client.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.render;
+using Quake2Sharp.sound;
+using Quake2Sharp.sys;
 using System.Drawing;
 using System.Text;
-using types;
+
+namespace Quake2Sharp.client;
 
 public class VID
 {

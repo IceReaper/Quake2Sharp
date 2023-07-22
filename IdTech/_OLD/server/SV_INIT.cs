@@ -19,16 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
+using Quake2Sharp.client;
+using Quake2Sharp.game;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.server.types;
+using Quake2Sharp.sys;
+using Quake2Sharp.util;
 
 namespace Quake2Sharp.server;
-
-using client;
-using game;
-using game.types;
-using qcommon;
-using sys;
-using types;
-using util;
 
 public class SV_INIT
 {

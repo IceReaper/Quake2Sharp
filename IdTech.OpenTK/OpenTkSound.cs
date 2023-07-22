@@ -1,13 +1,12 @@
 using IdTech.common;
+using OpenTK.Audio.OpenAL;
+using Quake2Sharp.game;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.sound;
+using Quake2Sharp.sound.types;
 
 namespace Quake2Sharp.opentk;
-
-using game;
-using game.types;
-using OpenTK.Audio.OpenAL;
-using qcommon;
-using sound;
-using sound.types;
 
 public class OpenTkSound : Sound
 {
@@ -19,15 +18,15 @@ public class OpenTkSound : Sound
 	private static int efxEffectUnderwater;
 	private static int efxSlot;
 	private cvar_t s_volume;
-	private readonly int[] buffers = new int[OpenTkSound.MAX_SFX + OpenTkSound.STREAM_QUEUE];
+	private readonly int[] buffers = new int[MAX_SFX + STREAM_QUEUE];
 
 	public bool Init()
 	{
 		try
 		{
 			var deviceName = ALC.GetString(ALDevice.Null, AlcGetString.DefaultDeviceSpecifier);
-			OpenTkSound.device = ALC.OpenDevice(deviceName);
-			var context = ALC.CreateContext(OpenTkSound.device, (int[])null);
+			device = ALC.OpenDevice(deviceName);
+			var context = ALC.CreateContext(device, (int[])null);
 			ALC.MakeContextCurrent(context);
 			this.checkError();
 			this.initOpenALExtensions();
@@ -43,7 +42,7 @@ public class OpenTkSound : Sound
 		this.s_volume = cvar.Cvar_Get("s_volume", "0.7", Defines.CVAR_ARCHIVE);
 
 		AL.GenBuffers(this.buffers.Length, this.buffers);
-		var count = Channel.init(this.buffers, OpenTkSound.efxSlot);
+		var count = Channel.init(this.buffers, efxSlot);
 		clientserver.Com_Printf("... using " + count + " channels\n");
 		AL.DistanceModel(ALDistanceModel.InverseDistanceClamped);
 
@@ -55,7 +54,7 @@ public class OpenTkSound : Sound
 
 		cmdparser.Cmd_AddCommand("soundinfo", () => { this.SoundInfo_f(); });
 
-		OpenTkSound.num_sfx = 0;
+		num_sfx = 0;
 
 		Com.Println("sound sampling rate: 44100Hz");
 
@@ -67,19 +66,19 @@ public class OpenTkSound : Sound
 
 	private void initOpenALExtensions()
 	{
-		if (ALC.EFX.IsExtensionPresent(OpenTkSound.device))
+		if (ALC.EFX.IsExtensionPresent(device))
 		{
-			OpenTkSound.efx = true;
-			OpenTkSound.efxEffectGeneric = this.createEffect(ReverbPresets.Generic);
-			OpenTkSound.efxEffectUnderwater = this.createEffect(ReverbPresets.Underwater);
-			ALC.EFX.GenAuxiliaryEffectSlot(out OpenTkSound.efxSlot);
-			this.currentEnv = OpenTkSound.efxEffectGeneric;
+			efx = true;
+			efxEffectGeneric = this.createEffect(ReverbPresets.Generic);
+			efxEffectUnderwater = this.createEffect(ReverbPresets.Underwater);
+			ALC.EFX.GenAuxiliaryEffectSlot(out efxSlot);
+			this.currentEnv = efxEffectGeneric;
 			Com.Println("... using EFX");
 		}
 		else
 		{
 			Com.Println("... EFX not found");
-			OpenTkSound.efx = false;
+			efx = false;
 		}
 	}
 
@@ -181,11 +180,11 @@ public class OpenTkSound : Sound
 		Channel.shutdown();
 		AL.DeleteBuffers(this.buffers.Length, this.buffers);
 
-		if (OpenTkSound.efx)
+		if (efx)
 		{
-			ALC.EFX.DeleteEffect(OpenTkSound.efxEffectGeneric);
-			ALC.EFX.DeleteEffect(OpenTkSound.efxEffectUnderwater);
-			ALC.EFX.DeleteAuxiliaryEffectSlot(OpenTkSound.efxSlot);
+			ALC.EFX.DeleteEffect(efxEffectGeneric);
+			ALC.EFX.DeleteEffect(efxEffectUnderwater);
+			ALC.EFX.DeleteAuxiliaryEffectSlot(efxSlot);
 		}
 
 		cmdparser.Cmd_RemoveCommand("play");
@@ -194,15 +193,15 @@ public class OpenTkSound : Sound
 		cmdparser.Cmd_RemoveCommand("soundinfo");
 
 		// free all sounds
-		for (var i = 0; i < OpenTkSound.num_sfx; i++)
+		for (var i = 0; i < num_sfx; i++)
 		{
-			if (OpenTkSound.known_sfx[i].name == null)
+			if (known_sfx[i].name == null)
 				continue;
 
-			OpenTkSound.known_sfx[i].clear();
+			known_sfx[i].clear();
 		}
 
-		OpenTkSound.num_sfx = 0;
+		num_sfx = 0;
 	}
 
 	public void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs)
@@ -238,23 +237,23 @@ public class OpenTkSound : Sound
 		// set the listener (master) volume
 		AL.Listener(ALListenerf.Gain, this.s_volume.value);
 
-		if (OpenTkSound.efx)
+		if (efx)
 		{
 			if ((GameBase.gi.pointcontents(origin) & Defines.MASK_WATER) != 0)
 			{
-				this.changeEnv = this.currentEnv != OpenTkSound.efxEffectUnderwater;
-				this.currentEnv = OpenTkSound.efxEffectUnderwater;
+				this.changeEnv = this.currentEnv != efxEffectUnderwater;
+				this.currentEnv = efxEffectUnderwater;
 			}
 			else
 			{
-				this.changeEnv = this.currentEnv != OpenTkSound.efxEffectGeneric;
-				this.currentEnv = OpenTkSound.efxEffectGeneric;
+				this.changeEnv = this.currentEnv != efxEffectGeneric;
+				this.currentEnv = efxEffectGeneric;
 			}
 
 			if (this.changeEnv)
 			{
 				this.changeEnv = false;
-				ALC.EFX.AuxiliaryEffectSlot(OpenTkSound.efxSlot, EffectSlotInteger.Effect, this.currentEnv);
+				ALC.EFX.AuxiliaryEffectSlot(efxSlot, EffectSlotInteger.Effect, this.currentEnv);
 			}
 		}
 
@@ -302,9 +301,9 @@ public class OpenTkSound : Sound
 		sfx_t sfx;
 
 		// free any sounds not from this registration sequence
-		for (i = 0; i < OpenTkSound.num_sfx; i++)
+		for (i = 0; i < num_sfx; i++)
 		{
-			sfx = OpenTkSound.known_sfx[i];
+			sfx = known_sfx[i];
 
 			if (sfx.name == null)
 				continue;
@@ -317,9 +316,9 @@ public class OpenTkSound : Sound
 		}
 
 		// load everything in
-		for (i = 0; i < OpenTkSound.num_sfx; i++)
+		for (i = 0; i < num_sfx; i++)
 		{
-			sfx = OpenTkSound.known_sfx[i];
+			sfx = known_sfx[i];
 
 			if (sfx.name == null)
 				continue;
@@ -393,7 +392,7 @@ public class OpenTkSound : Sound
 		return this.AliasName(sexedFilename, maleFilename);
 	}
 
-	private static readonly sfx_t[] known_sfx = new sfx_t[OpenTkSound.MAX_SFX];
+	private static readonly sfx_t[] known_sfx = new sfx_t[MAX_SFX];
 	private static int num_sfx;
 
 	private sfx_t FindName(string name, bool create)
@@ -411,33 +410,33 @@ public class OpenTkSound : Sound
 			clientserver.Com_Error(Defines.ERR_FATAL, "Sound name too long: " + name);
 
 		// see if already loaded
-		for (i = 0; i < OpenTkSound.num_sfx; i++)
+		for (i = 0; i < num_sfx; i++)
 		{
-			if (name.Equals(OpenTkSound.known_sfx[i].name))
-				return OpenTkSound.known_sfx[i];
+			if (name.Equals(known_sfx[i].name))
+				return known_sfx[i];
 		}
 
 		if (!create)
 			return null;
 
 		// find a free sfx
-		for (i = 0; i < OpenTkSound.num_sfx; i++)
+		for (i = 0; i < num_sfx; i++)
 		{
-			if (OpenTkSound.known_sfx[i].name == null)
+			if (known_sfx[i].name == null)
 
 				// registration_sequence < s_registration_sequence)
 				break;
 		}
 
-		if (i == OpenTkSound.num_sfx)
+		if (i == num_sfx)
 		{
-			if (OpenTkSound.num_sfx == OpenTkSound.MAX_SFX)
+			if (num_sfx == MAX_SFX)
 				clientserver.Com_Error(Defines.ERR_FATAL, "S_FindName: out of sfx_t");
 
-			OpenTkSound.num_sfx++;
+			num_sfx++;
 		}
 
-		sfx = OpenTkSound.known_sfx[i];
+		sfx = known_sfx[i];
 		sfx.clear();
 		sfx.name = name;
 		sfx.registration_sequence = this.s_registration_sequence;
@@ -461,21 +460,21 @@ public class OpenTkSound : Sound
 		s = new(truename);
 
 		// find a free sfx
-		for (i = 0; i < OpenTkSound.num_sfx; i++)
+		for (i = 0; i < num_sfx; i++)
 		{
-			if (OpenTkSound.known_sfx[i].name == null)
+			if (known_sfx[i].name == null)
 				break;
 		}
 
-		if (i == OpenTkSound.num_sfx)
+		if (i == num_sfx)
 		{
-			if (OpenTkSound.num_sfx == OpenTkSound.MAX_SFX)
+			if (num_sfx == MAX_SFX)
 				clientserver.Com_Error(Defines.ERR_FATAL, "S_FindName: out of sfx_t");
 
-			OpenTkSound.num_sfx++;
+			num_sfx++;
 		}
 
-		sfx = OpenTkSound.known_sfx[i];
+		sfx = known_sfx[i];
 		sfx.clear();
 		sfx.name = new(aliasname);
 		sfx.registration_sequence = this.s_registration_sequence;
@@ -585,9 +584,9 @@ public class OpenTkSound : Sound
 
 		total = 0;
 
-		for (i = 0; i < OpenTkSound.num_sfx; i++)
+		for (i = 0; i < num_sfx; i++)
 		{
-			sfx = OpenTkSound.known_sfx[i];
+			sfx = known_sfx[i];
 
 			if (sfx.registration_sequence == 0)
 				continue;
@@ -628,7 +627,7 @@ public class OpenTkSound : Sound
 
 	static OpenTkSound()
 	{
-		for (var i = 0; i < OpenTkSound.known_sfx.Length; i++)
-			OpenTkSound.known_sfx[i] = new();
+		for (var i = 0; i < known_sfx.Length; i++)
+			known_sfx[i] = new();
 	}
 }

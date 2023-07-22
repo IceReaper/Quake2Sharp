@@ -1,16 +1,15 @@
 using IdTech.common;
-
-namespace Quake2Sharp.opentk;
-
-using client;
+using IdTech.OpenTK;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using qcommon;
-using render;
-using render.opengl;
+using Quake2Sharp.client;
+using Quake2Sharp.render;
+using Quake2Sharp.render.opengl;
 using System.ComponentModel;
 using System.Drawing;
+
+namespace Quake2Sharp.opentk;
 
 public abstract class OpenTkDriver : OpenTkGL, GLDriver
 {
@@ -93,7 +92,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		}
 
 		this.window.Focus();
-		this.window.Closing += OpenTkDriver.QuitOnClose;
+		this.window.Closing += QuitOnClose;
 
 		OpenTkKBD.Window = this.window;
 		this.window.KeyDown += OpenTkKBD.Listener.KeyDown;
@@ -142,7 +141,7 @@ public abstract class OpenTkDriver : OpenTkGL, GLDriver
 		if (this.window == null)
 			return;
 
-		this.window.Closing -= OpenTkDriver.QuitOnClose;
+		this.window.Closing -= QuitOnClose;
 		this.window.Dispose();
 		OpenTkKBD.Window = null;
 		this.window = null;

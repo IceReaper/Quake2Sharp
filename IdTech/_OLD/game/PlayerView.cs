@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using monsters;
-using types;
-using util;
+using Quake2Sharp.game.monsters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class PlayerView
 {
@@ -55,10 +56,10 @@ public class PlayerView
 	}
 
 	/*
-	 * =============== 
+	 * ===============
 	 * P_DamageFeedback
-	 * 
-	 * Handles color blends and view kicks 
+	 *
+	 * Handles color blends and view kicks
 	 * ===============
 	 */
 
@@ -219,12 +220,12 @@ public class PlayerView
 	}
 
 	/**
-     * 
-     * fall from 128: 400 = 160000 
-     * fall from 256: 580 = 336400 
-     * fall from 384: 720 = 518400 
-     * fall from 512: 800 = 640000 
-     * fall from 640: 960 =  
+     *
+     * fall from 128: 400 = 160000
+     * fall from 256: 580 = 336400
+     * fall from 384: 720 = 518400
+     * fall from 512: 800 = 640000
+     * fall from 640: 960 =
      * damage = deltavelocity*deltavelocity * 0.0001
      */
 	public static void SV_CalcViewOffset(edict_t ent)
@@ -886,8 +887,8 @@ public class PlayerView
 	}
 
 	/*
-	 * =============== 
-	 * G_SetClientEffects 
+	 * ===============
+	 * G_SetClientEffects
 	 * ===============
 	 */
 	public static void G_SetClientEffects(edict_t ent)
@@ -939,8 +940,8 @@ public class PlayerView
 	}
 
 	/*
-	 * =============== 
-	 * G_SetClientEvent 
+	 * ===============
+	 * G_SetClientEvent
 	 * ===============
 	 */
 	public static void G_SetClientEvent(edict_t ent)
@@ -956,8 +957,8 @@ public class PlayerView
 	}
 
 	/*
-	 * =============== 
-	 * G_SetClientSound 
+	 * ===============
+	 * G_SetClientSound
 	 * ===============
 	 */
 	public static void G_SetClientSound(edict_t ent)
@@ -995,8 +996,8 @@ public class PlayerView
 	}
 
 	/*
-	 * =============== 
-	 * G_SetClientFrame 
+	 * ===============
+	 * G_SetClientFrame
 	 * ===============
 	 */
 	public static void G_SetClientFrame(edict_t ent)
@@ -1126,7 +1127,7 @@ public class PlayerView
 		// If the origin or velocity have changed since ClientThink(),
 		// update the pmove values. This will happen when the client
 		// is pushed by a bmodel or kicked by an explosion.
-		// 
+		//
 		// If it wasn't updated here, the view position would lag a frame
 		// behind the body position when pushed -- "sinking into plats"
 		//

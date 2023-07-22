@@ -17,12 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using client;
-using types;
-using util;
+using Quake2Sharp.client;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class GameMisc
 {
@@ -999,7 +1000,7 @@ public class GameMisc
 
 	/**
      * QUAKED func_areaportal (0 0 0) ?
-     * 
+     *
      * This is a non-visible object that divides the world into areas that are
      * seperated when this portal is not activated. Usually enclosed in the
      * middle of a door.
@@ -1173,13 +1174,13 @@ public class GameMisc
 	/*
 	 * QUAKED func_wall (0 .5 .8) ? TRIGGER_SPAWN TOGGLE START_ON ANIMATED
 	 * ANIMATED_FAST This is just a solid wall if not inhibited
-	 * 
+	 *
 	 * TRIGGER_SPAWN the wall will not be present until triggered it will then
 	 * blink in to existance; it will kill anything that was in it's way
-	 * 
+	 *
 	 * TOGGLE only valid for TRIGGER_SPAWN walls this allows the wall to be
 	 * turned on and off
-	 * 
+	 *
 	 * START_ON only valid for TRIGGER_SPAWN walls the wall will initially be
 	 * present
 	 */
@@ -1245,11 +1246,11 @@ public class GameMisc
 	 * Any brush that you want to explode or break apart. If you want an
 	 * ex0plosion, set dmg and it will do a radius explosion of that amount at
 	 * the center of the bursh.
-	 * 
+	 *
 	 * If targeted it will not be shootable.
-	 * 
+	 *
 	 * health defaults to 100.
-	 * 
+	 *
 	 * mass defaults to 75. This determines how much debris is emitted when it
 	 * explodes. You get one large chunk per 100 of mass (up to 8) and one small
 	 * chunk per 25 of mass (up to 16). So 800 gives the most.
@@ -1596,7 +1597,7 @@ public class GameMisc
 	 * the flyby bombing. It is trigger_spawned, so you must have something use
 	 * it for it to show up. There must be a path for it to follow once it is
 	 * activated.
-	 * 
+	 *
 	 * "speed" How fast the Viper should fly
 	 */
 
@@ -1673,7 +1674,7 @@ public class GameMisc
 	 * ship for the flybys. It is trigger_spawned, so you must have something
 	 * use it for it to show up. There must be a path for it to follow once it
 	 * is activated.
-	 * 
+	 *
 	 * "speed" How fast it should fly
 	 */
 
@@ -1746,12 +1747,12 @@ public class GameMisc
 	/*
 	 * QUAKED func_clock (0 0 1) (-8 -8 -8) (8 8 8) TIMER_UP TIMER_DOWN
 	 * START_OFF MULTI_USE target a target_string with this
-	 * 
+	 *
 	 * The default is to be a time of day clock
-	 * 
+	 *
 	 * TIMER_UP and TIMER_DOWN run for "count" seconds and the fire "pathtarget"
 	 * If START_OFF, this entity must be used before it starts
-	 * 
+	 *
 	 * "style" 0 "xx" 1 "xx:xx" 2 "xx:xx:xx"
 	 */
 	public static readonly int CLOCK_MESSAGE_SIZE = 16;
@@ -1788,7 +1789,7 @@ public class GameMisc
 
 			/*
 			 * struct tm * ltime; time_t gmtime;
-			 * 
+			 *
 			 * time(& gmtime); ltime = localtime(& gmtime);
 			 * Com_sprintf(self.message, CLOCK_MESSAGE_SIZE, "%2i:%2i:%2i",
 			 * ltime.tm_hour, ltime.tm_min, ltime.tm_sec); if

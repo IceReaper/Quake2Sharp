@@ -17,12 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using monsters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.monsters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class PlayerWeapon
 {
@@ -140,9 +141,9 @@ public class PlayerWeapon
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * GRENADE LAUNCHER
-	 * 
+	 *
 	 * ======================================================================
 	 */
 
@@ -195,9 +196,9 @@ public class PlayerWeapon
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * ROCKET
-	 * 
+	 *
 	 * ======================================================================
 	 */
 
@@ -386,9 +387,9 @@ public class PlayerWeapon
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * SHOTGUN / SUPERSHOTGUN
-	 * 
+	 *
 	 * ======================================================================
 	 */
 
@@ -535,9 +536,9 @@ public class PlayerWeapon
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * RAILGUN
-	 * 
+	 *
 	 * ======================================================================
 	 */
 	public static EntThinkAdapter weapon_railgun_fire = new("weapon_railgun_fire", ent =>
@@ -603,9 +604,9 @@ public class PlayerWeapon
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * BFG10K
-	 * 
+	 *
 	 * ======================================================================
 	 */
 
@@ -683,10 +684,10 @@ public class PlayerWeapon
 	public static byte is_silenced;
 
 	/*
-	 * ================ 
+	 * ================
 	 * Use_Weapon
-	 * 
-	 * Make the weapon ready if there is ammo 
+	 *
+	 * Make the weapon ready if there is ammo
 	 * ================
 	 */
 	public static ItemUseAdapter Use_Weapon = new("Use_Weapon", (ent, item) =>
@@ -723,8 +724,8 @@ public class PlayerWeapon
 	});
 
 	/*
-	 * ================ 
-	 * Drop_Weapon 
+	 * ================
+	 * Drop_Weapon
 	 * ================
 	 */
 
@@ -751,9 +752,9 @@ public class PlayerWeapon
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * MACHINEGUN / CHAINGUN
-	 * 
+	 *
 	 * ======================================================================
 	 */
 
@@ -1040,9 +1041,9 @@ public class PlayerWeapon
 	}
 
 	/*
-	 * =============== 
+	 * ===============
 	 * ChangeWeapon
-	 * 
+	 *
 	 * The old weapon has been dropped all the way, so make the new one current
 	 * ===============
 	 */
@@ -1107,8 +1108,8 @@ public class PlayerWeapon
 	}
 
 	/*
-	 * ================= 
-	 * NoAmmoWeaponChange 
+	 * =================
+	 * NoAmmoWeaponChange
 	 * =================
 	 */
 	public static void NoAmmoWeaponChange(edict_t ent)
@@ -1165,10 +1166,10 @@ public class PlayerWeapon
 	}
 
 	/*
-	 * ================= 
+	 * =================
 	 * Think_Weapon
-	 * 
-	 * Called by ClientBeginServerFrame and ClientThink 
+	 *
+	 * Called by ClientBeginServerFrame and ClientThink
 	 * =================
 	 */
 	public static void Think_Weapon(edict_t ent)
@@ -1195,9 +1196,9 @@ public class PlayerWeapon
 	}
 
 	/*
-	 * ================ 
+	 * ================
 	 * Weapon_Generic
-	 * 
+	 *
 	 * A generic function to handle the basics of weapon thinking
 	 * ================
 	 */
@@ -1380,9 +1381,9 @@ public class PlayerWeapon
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * GRENADE
-	 * 
+	 *
 	 * ======================================================================
 	 */
 
@@ -1440,9 +1441,9 @@ public class PlayerWeapon
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * BLASTER / HYPERBLASTER
-	 * 
+	 *
 	 * ======================================================================
 	 */
 
@@ -1480,15 +1481,15 @@ public class PlayerWeapon
 	}
 
 	/*
-	 * =============== 
+	 * ===============
 	 * PlayerNoise
-	 * 
+	 *
 	 * Each player can have two noise objects associated with it: a personal
 	 * noise (jumping, pain, weapon firing), and a weapon target noise (bullet
 	 * wall impacts)
-	 * 
+	 *
 	 * Monsters that don't directly see the player can move to a noise in hopes
-	 * of seeing the player from there. 
+	 * of seeing the player from there.
 	 * ===============
 	 */
 	public static void PlayerNoise(edict_t who, float[] where, int type)

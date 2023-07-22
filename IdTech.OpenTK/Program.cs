@@ -18,75 +18,40 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
 using Quake2Sharp.opentk;
 using Quake2Sharp.render;
 using Quake2Sharp.render.opengl;
 using Quake2Sharp.sound;
 
-namespace Quake2Sharp;
-
-using qcommon;
-using sys;
+namespace IdTech.OpenTK;
 
 public class Program
 {
 	public static Action UpdateLoop;
-	private static int last = Timer.Sys_Milliseconds();
 	public static bool Exit;
 
 	public static void Main(string[] args)
 	{
-		var dedicated = false;
+		main.Main(args);
 
-		// check if we are in dedicated mode to hide the dialog.
-		for (var n = 0; n < args.Length; n++)
-		{
-			if (!args[n].Equals("+set"))
-				continue;
-
-			if (++n >= args.Length)
-				break;
-
-			if (!args[n].Equals("dedicated"))
-				continue;
-
-			if (++n >= args.Length)
-				break;
-
-			if (!args[n].Equals("1") && !args[n].Equals("\"1\""))
-				continue;
-
-			clientserver.Com_Printf("Starting in dedicated mode.\n");
-			dedicated = true;
-		}
-
-		if (dedicated)
-			frame.dedicated.value = 1.0f;
-		else
+		if (!main.DEDICATED_ONLY)
 		{
 			Renderer.register(new OpenTkRenderer());
 			Renderer.renderApi = new OpenGLRenderApi(new OpenTkGL());
 			S.register(new OpenTkSound());
 		}
 
-		Globals.nostdout = cvar.Cvar_Get("nostdout", "0", 0);
-
+		// Call the initialization code.
 		frame.Qcommon_Init(args);
 
-
-		while (!Program.Exit)
+		while (!Exit)
 		{
-			// find time spending rendering last frame
-			var now = Timer.Sys_Milliseconds();
-			var delta = now - Program.last;
-
-			if (Program.UpdateLoop != null)
-				Program.UpdateLoop();
-			else if (delta > 0)
+			if (UpdateLoop != null)
+				UpdateLoop();
+			else
 				frame.Qcommon_Mainloop();
-
-			Program.last = now;
 		}
 	}
 }

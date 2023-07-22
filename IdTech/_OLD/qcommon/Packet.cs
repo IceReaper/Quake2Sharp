@@ -1,6 +1,6 @@
-namespace Quake2Sharp.qcommon;
-
 using System.Net;
+
+namespace Quake2Sharp.qcommon;
 
 public class Packet
 {

@@ -19,12 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
+using Quake2Sharp.client;
+using System.Text;
 
 namespace Quake2Sharp.render.opengl;
-
-using client;
-using qcommon;
-using System.Text;
 
 public partial class OpenGLRenderApi
 {

@@ -18,7 +18,7 @@
  * 02111-1307, USA.
  */
 
-using Quake2Sharp.sys;
+using IdTech.backend;
 
 namespace IdTech.common;
 
@@ -141,27 +141,27 @@ public static class crc
 
 	private static ushort CRC_Init()
 	{
-		return CrcInitValue;
+		return crc.CrcInitValue;
 	}
 
 	public static ushort CRC_Block(IEnumerable<byte> data)
 	{
-		return data.Aggregate(CRC_Init(), (current, value) => (ushort)((current << 8) ^ CrcTable[(current >> 8) ^ value]));
+		return data.Aggregate(crc.CRC_Init(), (current, value) => (ushort)((current << 8) ^ crc.CrcTable[(current >> 8) ^ value]));
 	}
 
 	private static byte COM_BlockSequenceCRCByte(byte[] data, int offset, int length, int sequence)
 	{
 		if (sequence < 0)
-			Sys.Error("sequence < 0, this shouldn't happen\n");
+			system.Sys_Error("sequence < 0, this shouldn't happen\n");
 
 		if (length > 64)
 			length = 64;
 
 		var checkBlock = new byte[length];
 		Array.Copy(data, offset, checkBlock, 0, length - 4);
-		Array.Copy(ChunkTable, sequence % (ChunkTable.Length - 4), checkBlock, length - 4, 4);
+		Array.Copy(common.crc.ChunkTable, sequence % (common.crc.ChunkTable.Length - 4), checkBlock, length - 4, 4);
 
-		var crc = CRC_Block(checkBlock);
+		var crc = common.crc.CRC_Block(checkBlock);
 		var x = checkBlock.Aggregate(0, (current, checkValue) => current + checkValue);
 
 		return (byte)((crc ^ x) & 0xff);

@@ -18,20 +18,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
+using Quake2Sharp.client.types;
+using Quake2Sharp.game;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.server;
+using Quake2Sharp.sound;
+using Quake2Sharp.sys;
+using Quake2Sharp.util;
+using System.Text;
 
 namespace Quake2Sharp.client;
-
-using game;
-using game.types;
-using qcommon;
-using qcommon.types;
-using server;
-using sound;
-using sys;
-using System.Text;
-using types;
-using util;
 
 /**
 	 * CL
@@ -720,7 +720,7 @@ public class Cl
 		if (frame.cl_timedemo != null && frame.cl_timedemo.value != 0.0f)
 		{
 			int time;
-			time = (int)(Timer.Sys_Milliseconds() - Globals.cl.timedemo_start);
+			time = (int)(system.Sys_Milliseconds() - Globals.cl.timedemo_start);
 
 			if (time > 0)
 			{
@@ -1331,7 +1331,7 @@ public class Cl
 	private static void InitLocal()
 	{
 		Globals.cls.state = Defines.ca_disconnected;
-		Globals.cls.realtime = Timer.Sys_Milliseconds();
+		Globals.cls.realtime = system.Sys_Milliseconds();
 		CL_input.InitInput();
 		cvar.Cvar_Get("adr0", "", Defines.CVAR_ARCHIVE);
 		cvar.Cvar_Get("adr1", "", Defines.CVAR_ARCHIVE);
@@ -1562,7 +1562,7 @@ public class Cl
 
 		// if in the debugger last frame, don't timeout
 		if (timedelta > 5000)
-			Globals.cls.netchan.last_received = Timer.Sys_Milliseconds();
+			Globals.cls.netchan.last_received = system.Sys_Milliseconds();
 
 		// fetch results from server
 		Cl.ReadPackets();

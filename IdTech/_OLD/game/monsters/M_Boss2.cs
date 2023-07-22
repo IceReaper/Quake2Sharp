@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.monsters;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game.monsters;
 
 public class M_Boss2
 {
@@ -534,13 +535,13 @@ public class M_Boss2
 		 * RST: this was disabled ! float[] forward={0,0,0}, right={0,0,0};
 		 * float[] start={0,0,0}; float[] dir={0,0,0}; float[] vec={0,0,0};
 		 * int flash_number;
-		 * 
+		 *
 		 * AngleVectors (self.s.angles, forward, right, null);
-		 * 
+		 *
 		 * flash_number = MZ2_BOSS2_MACHINEGUN_1 + (self.s.frame -
 		 * FRAME_attack10); G_ProjectSource (self.s.origin,
 		 * monster_flash_offset[flash_number], forward, right, start);
-		 * 
+		 *
 		 * VectorCopy (self.enemy.s.origin, vec); vec[2] +=
 		 * self.enemy.viewheight; VectorSubtract (vec, start, dir);
 		 * VectorNormalize (dir); monster_fire_bullet (self, start, dir, 3,

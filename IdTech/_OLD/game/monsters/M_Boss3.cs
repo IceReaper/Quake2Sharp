@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.monsters;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game.monsters;
 
 public class M_Boss3
 {
@@ -48,7 +49,7 @@ public class M_Boss3
 
 	/*
 	 * QUAKED monster_boss3_stand (1 .5 0) (-32 -32 0) (32 32 90)
-	 * 
+	 *
 	 * Just stands and cycles in one place until targeted, then teleports away.
 	 */
 	public static void SP_monster_boss3_stand(edict_t self)

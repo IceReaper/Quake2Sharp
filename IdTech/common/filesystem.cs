@@ -18,11 +18,10 @@
  * 02111-1307, USA.
  */
 
+using IdTech.backend;
 using Quake2Sharp;
 using Quake2Sharp.client;
 using Quake2Sharp.game.types;
-using Quake2Sharp.qcommon;
-using Quake2Sharp.sys;
 using System.IO.Compression;
 using System.Text;
 
@@ -140,7 +139,7 @@ public static class filesystem
 
 	public static int FS_FileLength(string path)
 	{
-		using var stream = FS_FOpenFile(path, false);
+		using var stream = filesystem.FS_FOpenFile(path, false);
 
 		if (stream == null)
 			return 0;
@@ -153,23 +152,23 @@ public static class filesystem
 	 */
 	public static void FS_CreatePath(string path)
 	{
-		FS_DPrintf($"FS_CreatePath({path})\n");
+		filesystem.FS_DPrintf($"FS_CreatePath({path})\n");
 
 		if (path.Contains(".."))
 			clientserver.Com_Printf($"WARNING: refusing to create relative path '{path}'.\n");
 		else
-			Directory.CreateDirectory(Com_FilePath(path));
+			Directory.CreateDirectory(filesystem.Com_FilePath(path));
 	}
 
 	private static void FS_DPrintf(string msg)
 	{
-		if (fs_debug.value != 0)
+		if (filesystem.fs_debug.value != 0)
 			clientserver.Com_Printf(msg);
 	}
 
 	public static string FS_Gamedir()
 	{
-		return fs_gamedir;
+		return filesystem.fs_gamedir;
 	}
 
 	/*
@@ -219,16 +218,16 @@ public static class filesystem
 			output++;
 		}
 
-		file_from_protected_pack = false;
+		filesystem.file_from_protected_pack = false;
 
-		foreach (var search in fs_searchPaths)
+		foreach (var search in filesystem.fs_searchPaths)
 		{
-			if (gamedir_only && !search.Path.Contains(FS_Gamedir()))
+			if (gamedir_only && !search.Path.Contains(filesystem.FS_Gamedir()))
 				continue;
 
 			// Evil hack for maps.lst and players/
 			// TODO: A flag to ignore paks would be better
-			if (fs_gamedirvar.@string.Length == 0 && search is PackSearchPath)
+			if (filesystem.fs_gamedirvar.@string.Length == 0 && search is PackSearchPath)
 			{
 				if (name == "maps.lst" || name.StartsWith("players/"))
 					continue;
@@ -244,11 +243,11 @@ public static class filesystem
 							continue;
 
 						/* Found it! */
-						if (fs_debug.value != 0)
+						if (filesystem.fs_debug.value != 0)
 							clientserver.Com_Printf($"FS_FOpenFile: '{rawname}' (found in '{pak.Path}').\n");
 
 						if (pak.Protected)
-							file_from_protected_pack = true;
+							filesystem.file_from_protected_pack = true;
 
 						pak.Stream.Position = pakFile.Offset;
 
@@ -265,11 +264,11 @@ public static class filesystem
 							continue;
 
 						/* Found it! */
-						if (fs_debug.value != 0)
+						if (filesystem.fs_debug.value != 0)
 							clientserver.Com_Printf($"FS_FOpenFile: '{rawname}' (found in '{zip.Path}').\n");
 
 						if (zip.Protected)
-							file_from_protected_pack = true;
+							filesystem.file_from_protected_pack = true;
 
 						return new MemoryStream(new BinaryReader(zipFile.Open()).ReadBytes((int)zipFile.Length));
 					}
@@ -284,7 +283,7 @@ public static class filesystem
 					{
 						var stream = File.Open(path, FileMode.Open, FileAccess.Read);
 
-						if (fs_debug.value != 0)
+						if (filesystem.fs_debug.value != 0)
 							clientserver.Com_Printf($"FS_FOpenFile: '{rawname}' (found in '{search.Path}').\n");
 
 						return stream;
@@ -298,7 +297,7 @@ public static class filesystem
 			}
 		}
 
-		if (fs_debug.value != 0)
+		if (filesystem.fs_debug.value != 0)
 			clientserver.Com_Printf($"FS_FOpenFile: couldn't find '{rawname}'.\n");
 
 		/* Couldn't open. */
@@ -311,7 +310,7 @@ public static class filesystem
 	 */
 	public static byte[]? FS_LoadFile(string path)
 	{
-		var stream = FS_FOpenFile(path, false);
+		var stream = filesystem.FS_FOpenFile(path, false);
 
 		if (stream == null)
 			return null;
@@ -356,7 +355,7 @@ public static class filesystem
 
 		var ident = Encoding.ASCII.GetString(reader.ReadBytes(4));
 
-		if (ident != IDPAKHEADER)
+		if (ident != filesystem.IDPAKHEADER)
 		{
 			stream.Dispose();
 			clientserver.Com_Error(Defines.ERR_FATAL, $"FS_LoadPAK: '{path}' is not a pak file");
@@ -426,11 +425,11 @@ public static class filesystem
 	public static string? FS_NextPath(string? lastPath)
 	{
 		if (lastPath == null)
-			return fs_gamedir;
+			return filesystem.fs_gamedir;
 
-		var prev = fs_gamedir;
+		var prev = filesystem.fs_gamedir;
 
-		foreach (var searchPath in fs_searchPaths)
+		foreach (var searchPath in filesystem.fs_searchPaths)
 		{
 			if (searchPath is PackSearchPath)
 				continue;
@@ -450,7 +449,7 @@ public static class filesystem
 
 		clientserver.Com_Printf("Current search path:\n");
 
-		foreach (var searchPath in fs_searchPaths)
+		foreach (var searchPath in filesystem.fs_searchPaths)
 		{
 			switch (searchPath)
 			{
@@ -472,8 +471,8 @@ public static class filesystem
 
 		clientserver.Com_Printf("\n");
 
-		for (var i = 0; i < fs_links.Count; i++)
-			clientserver.Com_Printf($"Link {i}: '{fs_links[i].From}' . '{fs_links[i].To}'.\n");
+		for (var i = 0; i < filesystem.fs_links.Count; i++)
+			clientserver.Com_Printf($"Link {i}: '{filesystem.fs_links[i].From}' . '{filesystem.fs_links[i].To}'.\n");
 
 
 		clientserver.Com_Printf("----------------------\n");
@@ -493,18 +492,18 @@ public static class filesystem
 		}
 
 		/* See if the link already exists. */
-		foreach (var link in fs_links.ToArray())
+		foreach (var link in filesystem.fs_links.ToArray())
 		{
 			if (link.From != cmdparser.Cmd_Argv(1))
 				continue;
 
 			/* Delete it. */
-			fs_links.Remove(link);
+			filesystem.fs_links.Remove(link);
 			break;
 		}
 
 		/* Create a new link. */
-		fs_links.Add(new Link
+		filesystem.fs_links.Add(new Link
 		{
 			From = cmdparser.Cmd_Argv(1),
 			To = cmdparser.Cmd_Argv(2)
@@ -517,15 +516,15 @@ public static class filesystem
 	public static string[] FS_ListFiles(string findname)
 	{
 		var list = new List<string>();
-		var s = Sys.FindFirst(findname, 0, 0);
+		var s = system.Sys_FindFirst(findname);
 
 		while (s != null)
 		{
 			list.Add(s);
-			s = Sys.FindNext();
+			s = system.Sys_FindNext();
 		}
 
-		Sys.FindClose();
+		system.Sys_FindClose();
 
 		return list.ToArray();
 	}
@@ -539,7 +538,7 @@ public static class filesystem
 	{
 		var list = new List<string>();
 
-		foreach (var searchPath in fs_searchPaths)
+		foreach (var searchPath in filesystem.fs_searchPaths)
 		{
 			switch (searchPath)
 			{
@@ -562,7 +561,7 @@ public static class filesystem
 					break;
 
 				default:
-					list.AddRange(FS_ListFiles($"{searchPath.Path}/{findname}"));
+					list.AddRange(filesystem.FS_ListFiles($"{searchPath.Path}/{findname}"));
 					break;
 			}
 		}
@@ -601,7 +600,7 @@ public static class filesystem
 		var modnames = new List<string>();
 
 		// iterate over all Raw paths
-		foreach (var search in fs_rawPath)
+		foreach (var search in filesystem.fs_rawPath)
 		{
 			if (search.Length == 0)
 				continue;
@@ -613,7 +612,7 @@ public static class filesystem
 				searchPath += '/';
 
 			// iterate over the children of this Raw path (unless we've already got enough mods)
-			foreach (var directory in FS_ListFiles($"{searchPath}*"))
+			foreach (var directory in filesystem.FS_ListFiles($"{searchPath}*"))
 			{
 				var modname = directory[(directory.LastIndexOf('/') + 1)..];
 
@@ -621,9 +620,9 @@ public static class filesystem
 					continue;
 
 				// iterate over supported pack types
-				foreach (var suffix in fs_packtypes.Keys)
+				foreach (var suffix in filesystem.fs_packtypes.Keys)
 				{
-					var packsinchilddir = FS_ListFiles($"{directory}/*.{suffix}");
+					var packsinchilddir = filesystem.FS_ListFiles($"{directory}/*.{suffix}");
 
 					// if this dir has some pack files, add it
 					if (packsinchilddir.Length <= 0)
@@ -635,7 +634,7 @@ public static class filesystem
 			}
 		}
 
-		modnames.Sort(Q_sort_modcmp);
+		modnames.Sort(filesystem.Q_sort_modcmp);
 
 		return modnames.ToArray();
 	}
@@ -649,13 +648,13 @@ public static class filesystem
 		var filter = cmdparser.Cmd_Argc() != 1 ? cmdparser.Cmd_Argv(1) : "*.*";
 
 		/* Scan search paths and list files. */
-		for (var path = FS_NextPath(null); path != null; path = FS_NextPath(path))
+		for (var path = filesystem.FS_NextPath(null); path != null; path = filesystem.FS_NextPath(path))
 		{
 			var filteredPath = $"{path}/{filter}";
 			clientserver.Com_Printf($"Directory of '{filteredPath}'.\n");
 			clientserver.Com_Printf("----\n");
 
-			foreach (var file in FS_ListFiles(filteredPath))
+			foreach (var file in filesystem.FS_ListFiles(filteredPath))
 				clientserver.Com_Printf($"{(file.Contains('/') ? file[(file.LastIndexOf('/') + 1)..] : file)}\n");
 
 			clientserver.Com_Printf("\n");
@@ -672,7 +671,7 @@ public static class filesystem
 
 	private static bool FS_FileInGamedir(string file)
 	{
-		return File.Exists($"{fs_gamedir}/{file}");
+		return File.Exists($"{filesystem.fs_gamedir}/{file}");
 	}
 
 	/*
@@ -682,10 +681,10 @@ public static class filesystem
 	 */
 	private static bool FS_AddPackFromGamedir(string pack)
 	{
-		var path = $"{fs_gamedir}/{pack}";
+		var path = $"{filesystem.fs_gamedir}/{pack}";
 
 		// Depending on filetype we must load it as .pak or .pk3.
-		foreach (var (suffix, format) in fs_packtypes)
+		foreach (var (suffix, format) in filesystem.fs_packtypes)
 		{
 			// Not the current filetype, next one please.
 			if (!pack.EndsWith(suffix))
@@ -696,11 +695,11 @@ public static class filesystem
 			switch (format)
 			{
 				case PackFormat.Pak:
-					packFile = FS_LoadPAK(path);
+					packFile = filesystem.FS_LoadPAK(path);
 					break;
 
 				case PackFormat.Zip:
-					packFile = FS_LoadPK2(path);
+					packFile = filesystem.FS_LoadPK2(path);
 
 					break;
 			}
@@ -710,7 +709,7 @@ public static class filesystem
 				return false;
 
 			// Add it.
-			fs_searchPaths.Insert(0, packFile);
+			filesystem.fs_searchPaths.Insert(0, packFile);
 		}
 
 		// Apparently we didn't load anything.
@@ -721,7 +720,7 @@ public static class filesystem
 	{
 		string? prev = null;
 
-		foreach (var rawPath in fs_rawPath)
+		foreach (var rawPath in filesystem.fs_rawPath)
 		{
 			if (lastRawPath == prev)
 				return rawPath;
@@ -742,12 +741,12 @@ public static class filesystem
 		// Set the current directory as game directory. This
 		// is somewhat fragile since the game directory MUST
 		// be the last directory added to the search path.
-		fs_gamedir = dir;
+		filesystem.fs_gamedir = dir;
 
-		FS_CreatePath(fs_gamedir);
+		filesystem.FS_CreatePath(filesystem.fs_gamedir);
 
 		// Add the directory itself.
-		fs_searchPaths.Insert(0, new SearchPath
+		filesystem.fs_searchPaths.Insert(0, new SearchPath
 		{
 			Path = dir
 		});
@@ -762,7 +761,7 @@ public static class filesystem
 		{
 			var any = false;
 
-			foreach (var (suffix, format) in fs_packtypes)
+			foreach (var (suffix, format) in filesystem.fs_packtypes)
 			{
 				var path = $"{dir}/pak{i}.{suffix}";
 				PackSearchPath? pack = null;
@@ -770,11 +769,11 @@ public static class filesystem
 				switch (format)
 				{
 					case PackFormat.Pak:
-						pack = FS_LoadPAK(path);
+						pack = filesystem.FS_LoadPAK(path);
 						break;
 
 					case PackFormat.Zip:
-						pack = FS_LoadPK2(path);
+						pack = filesystem.FS_LoadPK2(path);
 						break;
 				}
 
@@ -783,7 +782,7 @@ public static class filesystem
 
 				pack.Protected = true;
 				basePacks.Add(path);
-				fs_searchPaths.Insert(0, pack);
+				filesystem.fs_searchPaths.Insert(0, pack);
 
 				any = true;
 			}
@@ -797,9 +796,9 @@ public static class filesystem
 		// sequence as they're returned by FS_ListFiles. This is
 		// fragile and file system dependent. We cannot change
 		// this, since it might break existing installations.
-		foreach (var file in FS_ListFiles($"{dir}/*"))
+		foreach (var file in filesystem.FS_ListFiles($"{dir}/*"))
 		{
-			foreach (var (suffix, format) in fs_packtypes)
+			foreach (var (suffix, format) in filesystem.fs_packtypes)
 			{
 				// Nothing here, next pak type please.
 				if (!file.EndsWith(suffix))
@@ -816,11 +815,11 @@ public static class filesystem
 				switch (format)
 				{
 					case PackFormat.Pak:
-						pack = FS_LoadPAK(file);
+						pack = filesystem.FS_LoadPAK(file);
 						break;
 
 					case PackFormat.Zip:
-						pack = FS_LoadPK2(file);
+						pack = filesystem.FS_LoadPK2(file);
 						break;
 				}
 
@@ -828,28 +827,28 @@ public static class filesystem
 					continue;
 
 				pack.Protected = false;
-				fs_searchPaths.Insert(0, pack);
+				filesystem.fs_searchPaths.Insert(0, pack);
 			}
 		}
 	}
 
 	private static void FS_BuildGenericSearchPath()
 	{
-		foreach (var search in fs_rawPath)
-			FS_AddDirToSearchPath($"{search}/{Globals.BASEDIRNAME}");
+		foreach (var search in filesystem.fs_rawPath)
+			filesystem.FS_AddDirToSearchPath($"{search}/{Globals.BASEDIRNAME}");
 
 		// Until here we've added the generic directories to the
 		// search path. Save the current head node so we can
 		// distinguish generic and specialized directories.
-		fs_baseSearchPaths = fs_searchPaths.ToList();
-		fs_searchPaths.Clear();
+		filesystem.fs_baseSearchPaths = filesystem.fs_searchPaths.ToList();
+		filesystem.fs_searchPaths.Clear();
 
 		// We need to create the game directory.
-		Directory.CreateDirectory(fs_gamedir);
+		Directory.CreateDirectory(filesystem.fs_gamedir);
 
 		// We need to create the screenshot directory since the
 		// render dll doesn't link the filesystem stuff.
-		var path = $"{fs_gamedir}/scrnshot";
+		var path = $"{filesystem.fs_gamedir}/scrnshot";
 		Directory.CreateDirectory(path);
 	}
 
@@ -857,7 +856,7 @@ public static class filesystem
 	{
 		// Write the config. Otherwise changes made by the
 		// current mod are lost.
-		if (!Globals.DEDICATED_ONLY)
+		if (!main.DEDICATED_ONLY)
 			Cl.WriteConfiguration();
 
 		// empty string means baseq2
@@ -875,8 +874,8 @@ public static class filesystem
 		// We may already have specialised directories in our search
 		// path. This can happen if the server changes the mod. Let's
 		// remove them.
-		FS_FreeSearchPaths(fs_searchPaths);
-		fs_searchPaths.AddRange(fs_baseSearchPaths);
+		filesystem.FS_FreeSearchPaths(filesystem.fs_searchPaths);
+		filesystem.fs_searchPaths.AddRange(filesystem.fs_baseSearchPaths);
 
 		// Enforce a renderer and sound backend restart to
 		// purge all internal caches. This is rather hacky
@@ -892,27 +891,27 @@ public static class filesystem
 
 			// fs_gamedir must be reset to the last
 			// dir of the generic search path.
-			fs_gamedir = fs_baseSearchPaths[0].Path;
+			filesystem.fs_gamedir = filesystem.fs_baseSearchPaths[0].Path;
 		}
 		else
 		{
 			cvar.Cvar_FullSet("gamedir", dir, Defines.CVAR_SERVERINFO | Defines.CVAR_NOSET);
 
-			foreach (var search in fs_rawPath)
-				FS_AddDirToSearchPath($"{search}/{dir}");
+			foreach (var search in filesystem.fs_rawPath)
+				filesystem.FS_AddDirToSearchPath($"{search}/{dir}");
 		}
 
 		// Create the game directory.
-		Directory.CreateDirectory(fs_gamedir);
+		Directory.CreateDirectory(filesystem.fs_gamedir);
 
 		// We need to create the screenshot directory since the
 		// render dll doesn't link the filesystem stuff.
-		Directory.CreateDirectory($"{fs_gamedir}/scrnshot");
+		Directory.CreateDirectory($"{filesystem.fs_gamedir}/scrnshot");
 
 		// the gamedir has changed, so read in the corresponding configs
 		frame.Qcommon_ExecConfigs(false);
 
-		if (Globals.DEDICATED_ONLY)
+		if (main.DEDICATED_ONLY)
 			return;
 
 		// This function is called whenever the game cvar changes =>
@@ -945,7 +944,7 @@ public static class filesystem
 
 	private static void FS_AddDirToRawPath(string rawDir, bool required)
 	{
-		var dir = Sys.Realpath(rawDir);
+		var dir = system.Sys_Realpath(rawDir);
 
 		// Get the realpath.
 		if (dir == null)
@@ -964,14 +963,14 @@ public static class filesystem
 			dir = dir[..^1];
 
 		// Bail out if the dir was already added.
-		foreach (var search in fs_rawPath)
+		foreach (var search in filesystem.fs_rawPath)
 		{
 			if (search == dir)
 				return;
 		}
 
 		// Add the directory.
-		fs_rawPath.Insert(0, dir);
+		filesystem.fs_rawPath.Insert(0, dir);
 	}
 
 	private static void FS_BuildRawPath()
@@ -980,30 +979,30 @@ public static class filesystem
 		// otherwise the config cannot be written.
 		if (!frame.is_portable)
 		{
-			var homeDir = Sys.GetHomeDir();
+			var homeDir = system.Sys_GetHomeDir();
 
 			if (homeDir != null)
-				FS_AddDirToRawPath(homeDir, true);
+				filesystem.FS_AddDirToRawPath(homeDir, true);
 		}
 
 		// Add binary dir. Required, because the renderer
 		// libraries are loaded from it.
-		var binaryDir = Sys.GetWorkDir();
+		var binaryDir = system.Sys_GetWorkDir();
 
 		if (binaryDir is { Length: > 0 })
-			FS_AddDirToRawPath(binaryDir, true);
+			filesystem.FS_AddDirToRawPath(binaryDir, true);
 
 		// Add data dir. Required, when the user gives us
 		// a data dir he expects it in a working state.
-		FS_AddDirToRawPath(datadir, true);
+		filesystem.FS_AddDirToRawPath(filesystem.datadir, true);
 
 		// The CD must be the last directory of the path,
 		// otherwise we cannot be sure that the game won't
 		// stream the videos from the CD. Required, if the
 		// user sets a CD path, he expects data getting
 		// read from the CD.
-		if (fs_cddir.@string.Length > 0)
-			FS_AddDirToRawPath(fs_cddir.@string, true);
+		if (filesystem.fs_cddir.@string.Length > 0)
+			filesystem.FS_AddDirToRawPath(filesystem.fs_cddir.@string, true);
 	}
 
 	// --------
@@ -1011,35 +1010,35 @@ public static class filesystem
 	public static void FS_InitFilesystem()
 	{
 		// Register FS commands.
-		cmdparser.Cmd_AddCommand("path", FS_Path_f);
-		cmdparser.Cmd_AddCommand("link", FS_Link_f);
-		cmdparser.Cmd_AddCommand("dir", FS_Dir_f);
+		cmdparser.Cmd_AddCommand("path", filesystem.FS_Path_f);
+		cmdparser.Cmd_AddCommand("link", filesystem.FS_Link_f);
+		cmdparser.Cmd_AddCommand("dir", filesystem.FS_Dir_f);
 
 		// Deprecation warning, can be removed at a later time.
-		if (fs_basedir.@string != ".")
+		if (filesystem.fs_basedir.@string != ".")
 		{
 			clientserver.Com_Printf("+set basedir is deprecated, use -datadir instead\n");
-			datadir = fs_basedir.@string;
+			filesystem.datadir = filesystem.fs_basedir.@string;
 		}
-		else if (datadir.Length == 0)
-			datadir = ".";
+		else if (filesystem.datadir.Length == 0)
+			filesystem.datadir = ".";
 
 		// Build search path
-		FS_BuildRawPath();
-		FS_BuildGenericSearchPath();
-		FS_BuildGameSpecificSearchPath(fs_gamedirvar.@string);
+		filesystem.FS_BuildRawPath();
+		filesystem.FS_BuildGenericSearchPath();
+		filesystem.FS_BuildGameSpecificSearchPath(filesystem.fs_gamedirvar.@string);
 
 		// we still need to get the list of OGG tracks for background music
-		if (!Globals.DEDICATED_ONLY)
+		if (!main.DEDICATED_ONLY)
 			ogg.OGG_InitTrackList();
 
 		// Debug output
-		clientserver.Com_Printf($"Using '{fs_gamedir}' for writing.\n");
+		clientserver.Com_Printf($"Using '{filesystem.fs_gamedir}' for writing.\n");
 	}
 
 	public static void FS_ShutdownFilesystem()
 	{
-		FS_FreeSearchPaths(fs_searchPaths);
-		FS_FreeSearchPaths(fs_baseSearchPaths);
+		filesystem.FS_FreeSearchPaths(filesystem.fs_searchPaths);
+		filesystem.FS_FreeSearchPaths(filesystem.fs_baseSearchPaths);
 	}
 }

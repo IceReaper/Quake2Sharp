@@ -1,8 +1,8 @@
-namespace Quake2Sharp.opentk;
-
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using render.opengl;
+using Quake2Sharp.render.opengl;
+
+namespace Quake2Sharp.opentk;
 
 public class OpenTkGL : IOpenGL
 {

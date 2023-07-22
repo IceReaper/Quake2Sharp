@@ -58,7 +58,7 @@ public static class glob
 
 		while (t < text.Length)
 		{
-			if ((c == '[' || text[t] == c1) && glob_match(pattern[(p - 1)..], text[t..]))
+			if ((c == '[' || text[t] == c1) && glob.glob_match(pattern[(p - 1)..], text[t..]))
 				return true;
 		}
 
@@ -114,7 +114,7 @@ public static class glob
 					break;
 
 				case '*':
-					return glob_match_after_star(pattern[p..], text[t..]);
+					return glob.glob_match_after_star(pattern[p..], text[t..]);
 
 				case '[':
 				{

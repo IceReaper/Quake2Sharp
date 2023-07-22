@@ -17,12 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using monsters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.monsters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class GameTurret
 {
@@ -58,7 +59,7 @@ public class GameTurret
      * pitch and yaw. The model should be made with a flat pitch. It (and the
      * associated base) need to be oriented towards 0. Use "angle" to set the
      * starting angle.
-     * 
+     *
      * "speed" default 50 "dmg" default 10 "angle" point this forward "target"
      * point this at an info_notnull at the muzzle tip "minpitch" min acceptable
      * pitch angle : default -30 "maxpitch" max acceptable pitch angle : default

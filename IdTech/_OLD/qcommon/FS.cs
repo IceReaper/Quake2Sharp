@@ -22,8 +22,6 @@ using IdTech.common;
 
 namespace Quake2Sharp.qcommon;
 
-using sys;
-
 public class FS
 {
 	private static string fs_userdir;

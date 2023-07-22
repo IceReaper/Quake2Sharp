@@ -1,11 +1,12 @@
-namespace Quake2Sharp.opentk;
-
-using client;
+using IdTech.backend;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using sys;
+using Quake2Sharp.client;
+using Quake2Sharp.sys;
+
+namespace Quake2Sharp.opentk;
 
 public class OpenTkKBD : KBD
 {
@@ -20,10 +21,10 @@ public class OpenTkKBD : KBD
 	{
 		InputEvent @event;
 
-		KBD.mx = 0;
-		KBD.my = 0;
+		mx = 0;
+		my = 0;
 
-		while ((@event = OpenTkKBD.Listener.Next()) != null)
+		while ((@event = Listener.Next()) != null)
 		{
 			int key;
 
@@ -31,27 +32,27 @@ public class OpenTkKBD : KBD
 			{
 				case InputEvent.KeyPress:
 				case InputEvent.KeyRelease:
-					this.Do_Key_Event(OpenTkKBD.MapKey((Keys)@event.Value), @event.Type == InputEvent.KeyPress, @event.Text);
+					this.Do_Key_Event(MapKey((Keys)@event.Value), @event.Type == InputEvent.KeyPress, @event.Text);
 
 					break;
 
 				case InputEvent.MotionNotify:
 					if (IN.mouse_active)
 					{
-						KBD.mx += (int)((Vector2)@event.Value).X;
-						KBD.my += (int)((Vector2)@event.Value).Y;
+						mx += (int)((Vector2)@event.Value).X;
+						my += (int)((Vector2)@event.Value).Y;
 					}
 					else
 					{
-						KBD.mx = 0;
-						KBD.my = 0;
+						mx = 0;
+						my = 0;
 					}
 
 					break;
 
 				case InputEvent.ButtonPress:
 				case InputEvent.ButtonRelease:
-					key = OpenTkKBD.MapMouseButton((MouseButton)@event.Value);
+					key = MapMouseButton((MouseButton)@event.Value);
 					this.Do_Key_Event(key, @event.Type == InputEvent.ButtonPress, null);
 
 					break;
@@ -157,18 +158,18 @@ public class OpenTkKBD : KBD
 	public override void Do_Key_Event(int key, bool down, string? text)
 	{
 		if (key != -1)
-			Key.Event(key, down, Timer.Sys_Milliseconds(), text);
+			Key.Event(key, down, system.Sys_Milliseconds(), text);
 	}
 
 	public override void installGrabs()
 	{
-		if (OpenTkKBD.Window != null)
-			OpenTkKBD.Window.CursorState = CursorState.Grabbed;
+		if (Window != null)
+			Window.CursorState = CursorState.Grabbed;
 	}
 
 	public override void uninstallGrabs()
 	{
-		if (OpenTkKBD.Window != null)
-			OpenTkKBD.Window.CursorState = CursorState.Normal;
+		if (Window != null)
+			Window.CursorState = CursorState.Normal;
 	}
 }

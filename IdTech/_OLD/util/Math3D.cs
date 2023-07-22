@@ -19,12 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
+using Quake2Sharp.game.types;
+using System.Numerics;
 
 namespace Quake2Sharp.util;
-
-using game.types;
-using qcommon;
-using System.Numerics;
 
 public class Math3D
 {

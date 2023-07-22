@@ -19,14 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
-
-namespace Quake2Sharp.sys;
-
-using qcommon;
-using qcommon.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.util;
 using System.Net;
 using System.Text;
-using util;
+
+namespace Quake2Sharp.sys;
 
 public class NET
 {

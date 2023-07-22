@@ -19,14 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
-
-namespace Quake2Sharp.sound;
-
-using game.types;
-using qcommon;
+using Quake2Sharp.game.types;
+using Quake2Sharp.sound.types;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using types;
+
+namespace Quake2Sharp.sound;
 
 /**
  * S
@@ -233,7 +231,6 @@ public class S
 
 		for (var i = 0; i < names.Length; i++)
 		{
-			if (S.drivers[i] is not DummyDriver)
 				names[i] = ((Sound)S.drivers[i]).getName();
 		}
 

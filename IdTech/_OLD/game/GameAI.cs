@@ -17,12 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using client;
-using types;
-using util;
+using Quake2Sharp.client;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class GameAI
 {
@@ -31,7 +32,7 @@ public class GameAI
 		self.monsterinfo.attack_finished = GameBase.level.time + time;
 	}
 
-	/** 
+	/**
      * Checks, if the monster should turn left/right.
      */
 	public static bool FacingIdeal(edict_t self)
@@ -101,24 +102,24 @@ public class GameAI
 	/**
      * Decides if we're going to attack or do something else used by ai_run and
      * ai_stand.
-     * 
+     *
      * .enemy Will be world if not currently angry at anyone.
-     * 
+     *
      * .movetarget The next path spot to walk toward. If .enemy, ignore
      * .movetarget. When an enemy is killed, the monster will try to return to
      * it's path.
-     * 
+     *
      * .hunt_time Set to time + something when the player is in sight, but
      * movement straight for him is blocked. This causes the monster to use wall
      * following code for movement direction instead of sighting on the player.
-     * 
+     *
      * .ideal_yaw A yaw angle of the intended direction, which will be turned
      * towards at up to 45 deg / state. If the enemy is in view and hunt_time is
      * not active, this will be the exact line towards the enemy.
-     * 
+     *
      * .pausetime A monster will leave it's stand state and head towards it's
      * .movetarget when time > .pausetime.
-     * 
+     *
      * walkmove(angle, speed) primitive is all or nothing
      */
 	public static bool ai_checkattack(edict_t self, float dist)
@@ -262,9 +263,9 @@ public class GameAI
 	/**
      * Called once each frame to set level.sight_client to the player to be
      * checked for in findtarget.
-     * 
+     *
      * If all clients are either dead or in notarget, sight_client will be null.
-     * 
+     *
      * In coop games, sight_client will cycle between the clients.
      */
 	public static void AI_SetSightClient()
@@ -413,7 +414,7 @@ public class GameAI
 
 	/**
      * Don't move, but turn towards ideal_yaw Distance is for slight position
-     * adjustments needed by the animations 
+     * adjustments needed by the animations
      */
 	public static AIAdapter ai_turn = new("ai_turn", (self, dist) =>
 	{
@@ -457,7 +458,7 @@ public class GameAI
 
 	/**
      * Used for standing around and looking for players Distance is for slight
-     * position adjustments needed by the animations. 
+     * position adjustments needed by the animations.
      */
 	public static AIAdapter ai_stand = new("ai_stand", (self, dist) =>
 	{

@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class GameFunc
 {
@@ -68,7 +69,7 @@ public class GameFunc
 
 	/**
      * Think_AccelMove
-     * 
+     *
      * The team has completed a frame of movement, so change the speed for the
      * next frame.
      */
@@ -208,7 +209,7 @@ public class GameFunc
 
 		//
 		//	   middle trigger
-		//	
+		//
 		trigger = GameUtil.G_Spawn();
 		trigger.touch = GameFunc.Touch_Plat_Center;
 		trigger.movetype = Defines.MOVETYPE_NONE;
@@ -248,21 +249,21 @@ public class GameFunc
 
 	/**
      * QUAKED func_plat (0 .5 .8) ? PLAT_LOW_TRIGGER speed default 150
-     * 
+     *
      * Plats are always drawn in the extended position, so they will light
      * correctly.
-     * 
+     *
      * If the plat is the target of another trigger or button, it will start out
      * disabled in the extended position until it is trigger, when it will lower
      * and become a normal plat.
-     * 
+     *
      * "speed" overrides default 200. "accel" overrides default 500 "lip"
      * overrides default 8 pixel lip
-     * 
+     *
      * If the "height" key is set, that will determine the amount the plat
      * moves, instead of being implicitly determoveinfoned by the model's
      * height.
-     * 
+     *
      * Set "sounds" to one of the following: 1) base fast 2) chain slow
      */
 	public static void SP_func_plat(edict_t ent)
@@ -334,10 +335,10 @@ public class GameFunc
 
 	/**
      * DOORS
-     * 
+     *
      * spawn a trigger surrounding the entire team unless it is already targeted
      * by another.
-     * 
+     *
      */
 	/**
 	 * QUAKED func_door (0 .5 .8) ? START_OPEN x CRUSHER NOMONSTER ANIMATED
@@ -346,7 +347,7 @@ public class GameFunc
 	 * spawned, and operate in reverse. It is used to temporarily or permanently
 	 * close off an area when triggered (not useful for touch or takedamage
 	 * doors). NOMONSTER monsters will not trigger this door
-	 * 
+	 *
 	 * "message" is printed when the door is touched if it is a trigger door and
 	 * it hasn't been fired yet "angle" determines the opening direction
 	 * "targetname" if set, no touch field will be spawned and a remote button
@@ -411,10 +412,10 @@ public class GameFunc
      * QUAKED func_water (0 .5 .8) ? START_OPEN func_water is a moveable water
      * brush. It must be targeted to operate. Use a non-water texture at your
      * own risk.
-     * 
+     *
      * START_OPEN causes the water to move to its destination when spawned and
      * operate in reverse.
-     * 
+     *
      * "angle" determines the opening direction (up or down only) "speed"
      * movement speed (25 default) "wait" wait before returning (-1 default, -1 =
      * TOGGLE) "lip" lip remaining at end of move (0 default) "sounds" (yes,
@@ -573,19 +574,19 @@ public class GameFunc
 
 	/**
      * PLATS
-     * 
+     *
      * movement options:
-     * 
+     *
      * linear smooth start, hard stop smooth start, smooth stop
-     * 
+     *
      * start end acceleration speed deceleration begin sound end sound target
      * fired when reaching end wait at end
-     * 
+     *
      * object characteristics that use move segments
      * --------------------------------------------- movetype_push, or
      * movetype_stop action when touched action when blocked action when used
      * disabled? auto trigger spawning
-     * 
+     *
      */
 	public static readonly int PLAT_LOW_TRIGGER = 1;
 
@@ -855,10 +856,10 @@ public class GameFunc
      * as part of this entity. The center of that brush will be the point around
      * which it is rotated. It will rotate around the Z axis by default. You can
      * check either the X_AXIS or Y_AXIS box to change that.
-     * 
+     *
      * "speed" determines how fast it moves; default value is 100. "dmg" damage
      * to inflict when blocked (2 default)
-     * 
+     *
      * REVERSE will cause the it to rotate in the opposite direction. STOP mean
      * it will stop moving instead of pushing entities
      */
@@ -946,9 +947,9 @@ public class GameFunc
 
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * BUTTONS
-	 * 
+	 *
 	 * ======================================================================
 	 */
 	/*
@@ -956,7 +957,7 @@ public class GameFunc
 	 * distance in the direction of it's angle, triggers all of it's targets,
 	 * waits some time, then returns to it's original position where it can be
 	 * triggered again.
-	 * 
+	 *
 	 * "angle" determines the opening direction "target" all entities with a
 	 * matching targetname will be used "speed" override the default 40 speed
 	 * "wait" override the default 1 second wait (-1 = never return) "lip"
@@ -1489,22 +1490,22 @@ public class GameFunc
 	 * QUAKED func_door_rotating (0 .5 .8) ? START_OPEN REVERSE CRUSHER
 	 * NOMONSTER ANIMATED TOGGLE X_AXIS Y_AXIS TOGGLE causes the door to wait in
 	 * both the start and end states for a trigger event.
-	 * 
+	 *
 	 * START_OPEN the door to moves to its destination when spawned, and operate
 	 * in reverse. It is used to temporarily or permanently close off an area
 	 * when triggered (not useful for touch or takedamage doors). NOMONSTER
 	 * monsters will not trigger this door
-	 * 
+	 *
 	 * You need to have an origin brush as part of this entity. The center of
 	 * that brush will be the point around which it is rotated. It will rotate
 	 * around the Z axis by default. You can check either the X_AXIS or Y_AXIS
 	 * box to change that.
-	 * 
+	 *
 	 * "distance" is how many degrees the door will be rotated. "speed"
 	 * determines how fast the door moves; default value is 100.
-	 * 
+	 *
 	 * REVERSE will cause the door to rotate in the opposite direction.
-	 * 
+	 *
 	 * "message" is printed when the door is touched if it is a trigger door and
 	 * it hasn't been fired yet "angle" determines the opening direction
 	 * "targetname" if set, no touch field will be spawned and a remote button
@@ -1636,7 +1637,7 @@ public class GameFunc
 	 * target it is pointing at. If the train is the target of a button or
 	 * trigger, it will not begin moving until activated. speed default 100 dmg
 	 * default 2 noise looping sound to play when the train is in motion
-	 *  
+	 *
 	 */
 
 	private static readonly EntBlockedAdapter train_blocked = new("train_blocked", (self, other) =>
@@ -1917,15 +1918,15 @@ public class GameFunc
 	 * QUAKED func_timer (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) START_ON "wait" base
 	 * time between triggering all targets, default is 1 "random" wait variance,
 	 * default is 0
-	 * 
+	 *
 	 * so, the basic time between firing is a random time between (wait -
 	 * random) and (wait + random)
-	 * 
+	 *
 	 * "delay" delay before first firing when turned on, default is 0
-	 * 
+	 *
 	 * "pausetime" additional delay used only the very first time and only if
 	 * spawned with START_ON
-	 * 
+	 *
 	 * These can used but not touched.
 	 */
 
@@ -2002,11 +2003,11 @@ public class GameFunc
 	/*
 	 * QUAKED func_door_secret (0 .5 .8) ? always_shoot 1st_left 1st_down A
 	 * secret door. Slide back and then to the side.
-	 * 
+	 *
 	 * open_once doors never closes 1st_left 1st move is left of arrow 1st_down
 	 * 1st move is down from arrow always_shoot door is shootebale even if
 	 * targeted
-	 * 
+	 *
 	 * "angle" determines the direction "dmg" damage to inflic when blocked
 	 * (default 2) "wait" how long to hold in the open position (default 5, -1
 	 * means hold)

@@ -17,13 +17,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client;
 
-using game;
-using game.adapters;
-using game.types;
-using server;
-using util;
+using Quake2Sharp.game;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.server;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.client;
 
 /**
  * M
@@ -146,7 +147,7 @@ public class M
 		return true; // we got out easy
 	}
 
-	/** 
+	/**
      * M_ChangeYaw.
      */
 	public static void M_ChangeYaw(edict_t ent)
@@ -211,7 +212,7 @@ public class M
 		}
 	}
 
-	/** 
+	/**
      * M_walkmove.
      */
 	public static bool M_walkmove(edict_t ent, float yaw, float dist)

@@ -19,16 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
+using Quake2Sharp.client.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.render.types;
+using Quake2Sharp.sound;
+using Quake2Sharp.sys;
 
 namespace Quake2Sharp.client;
-
-using game;
-using game.types;
-using qcommon;
-using render.types;
-using sound;
-using sys;
-using types;
 
 /**
  * CL_parse

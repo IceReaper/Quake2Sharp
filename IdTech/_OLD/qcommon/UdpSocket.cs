@@ -1,7 +1,7 @@
-namespace Quake2Sharp.qcommon;
-
 using System.Net;
 using System.Net.Sockets;
+
+namespace Quake2Sharp.qcommon;
 
 public class UdpSocket
 {

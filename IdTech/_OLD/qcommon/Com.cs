@@ -18,11 +18,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
 
 namespace Quake2Sharp.qcommon;
-
-using sys;
 
 /**
  * Com
@@ -1272,7 +1271,7 @@ public partial class Com
 	public static byte BlockSequenceCRCByte(byte[] @base, int offset, int length, int sequence)
 	{
 		if (sequence < 0)
-			Sys.Error("sequence < 0, this shouldn't happen\n");
+			system.Sys_Error("sequence < 0, this shouldn't happen\n");
 
 		//p_ndx = (sequence % (sizeof(chktbl) - 4));
 		var p_ndx = sequence % (1024 - 4);
@@ -1289,7 +1288,7 @@ public partial class Com
 		length += 4;
 
 		// unsigned short
-		var crc = (int)IdTech.common.crc.CRC_Block(chkb.Take(length));
+		var crc = (int)IdTech.common.crc.CRC_Block(Com.chkb.Take(length));
 
 		var x = 0;
 

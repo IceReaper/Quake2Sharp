@@ -17,23 +17,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.render.opengl;
 
-using client;
-using client.types;
-using qcommon;
-using qcommon.types;
-using render.types;
-using util;
+using Quake2Sharp.client;
+using Quake2Sharp.client.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.render.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.render.opengl;
 
 public partial class OpenGLRenderApi
 {
 	// g_mesh.c: triangle model functions
 	/*
 	 * =============================================================
-	 * 
+	 *
 	 * ALIAS MODELS
-	 * 
+	 *
 	 * =============================================================
 	 */
 	private readonly float[][] r_avertexnormals = Anorms.VERTEXNORMALS;
@@ -144,7 +145,7 @@ public partial class OpenGLRenderApi
 
 	/*
 	 * ============= GL_DrawAliasFrameLerp
-	 * 
+	 *
 	 * interpolates between two frames and origins FIXME: batch lerp all
 	 * vertexes =============
 	 */
@@ -595,7 +596,7 @@ public partial class OpenGLRenderApi
 
 	/*
 	 * ================= R_DrawAliasModel
-	 * 
+	 *
 	 * =================
 	 */
 	protected void R_DrawAliasModel(entity_t e)

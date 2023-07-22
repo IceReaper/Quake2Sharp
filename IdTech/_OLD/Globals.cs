@@ -18,15 +18,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using Quake2Sharp.client.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.render;
+using Quake2Sharp.render.types;
 using System.Runtime.InteropServices;
 
 namespace Quake2Sharp;
-
-using client.types;
-using game.types;
-using qcommon.types;
-using render;
-using render.types;
 
 /**
  * Globals ist the collection of global variables and constants.
@@ -43,8 +42,6 @@ public class Globals
 	public static readonly string YQ2ARCH = RuntimeInformation.OSArchitecture.ToString();
 	public static readonly DateTime BUILD_DATE = DateTime.UtcNow;
 	public const string CFGDIR = "YamagiQ2";
-
-	public static bool DEDICATED_ONLY;
 
 	/*
 	 * global variables

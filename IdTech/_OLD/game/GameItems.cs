@@ -17,13 +17,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using qcommon;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.util;
 using System.Text.RegularExpressions;
-using types;
-using util;
+
+namespace Quake2Sharp.game;
 
 public class GameItems
 {
@@ -800,7 +801,7 @@ public class GameItems
 
 	/*
 	 * =============== FindItemByClassname
-	 * 
+	 *
 	 * ===============
 	 */
 	public static gitem_t FindItemByClassname(string classname)
@@ -984,7 +985,7 @@ public class GameItems
 
 	/*
 	 * =============== SetItemNames
-	 * 
+	 *
 	 * Called by worldspawn ===============
 	 */
 	public static void SetItemNames()
@@ -1085,7 +1086,7 @@ public class GameItems
 
 	/*
 	 * =============== PrecacheItem
-	 * 
+	 *
 	 * Precaches all data needed for a given item. This will be called for each
 	 * item spawned in a level, and for each item in each client's inventory.
 	 * ===============
@@ -1151,9 +1152,9 @@ public class GameItems
 
 	/*
 	 * ============ SpawnItem
-	 * 
+	 *
 	 * Sets the clipping size and plants the object on the floor.
-	 * 
+	 *
 	 * Items can't be immediately dropped to floor, because they might be on an
 	 * entity that hasn't spawned yet. ============
 	 */

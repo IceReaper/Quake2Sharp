@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.client;
 
+using Quake2Sharp.client.types;
+using Quake2Sharp.util;
 using System.Numerics;
-using types;
-using util;
+
+namespace Quake2Sharp.client;
 
 /**
  * CL_newfx
@@ -199,7 +200,7 @@ public class CL_newfx
 	/*
 	 * =============== CL_BubbleTrail2 (lets you control the # of bubbles by
 	 * setting the distance between the spawns)
-	 * 
+	 *
 	 * ===============
 	 */
 	public static void BubbleTrail2(Vector3 start, Vector3 end, int dist)
@@ -357,7 +358,7 @@ public class CL_newfx
 
 	/*
 	 * =============== CL_ParticleSteamEffect
-	 * 
+	 *
 	 * Puffs with velocity along direction, with some randomness thrown in
 	 * ===============
 	 */
@@ -809,7 +810,7 @@ public class CL_newfx
 
 	/*
 	 * =============== CL_BlasterParticles2
-	 * 
+	 *
 	 * Wall impact puffs (Green) ===============
 	 */
 	public static void BlasterParticles2(Vector3 org, Vector3 dir, long color)
@@ -855,7 +856,7 @@ public class CL_newfx
 	// move, vec
 	/*
 	 * =============== CL_BlasterTrail2
-	 * 
+	 *
 	 * Green! ===============
 	 */
 	public static void BlasterTrail2(float[] start, float[] end)

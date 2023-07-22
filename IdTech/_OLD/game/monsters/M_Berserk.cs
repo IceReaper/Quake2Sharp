@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game.monsters;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game.monsters;
 
 public class M_Berserk
 {
@@ -376,12 +377,12 @@ public class M_Berserk
 	});
 
 	/*
-	 * 
+	 *
 	 * **************************** SKIPPED THIS FOR NOW!
 	 * ****************************
-	 * 
+	 *
 	 * Running . Arm raised in air
-	 * 
+	 *
 	 * void() berserk_runb1 =[ $r_att1 , berserk_runb2 ] {ai_run(21);}; void()
 	 * berserk_runb2 =[ $r_att2 , berserk_runb3 ] {ai_run(11);}; void()
 	 * berserk_runb3 =[ $r_att3 , berserk_runb4 ] {ai_run(21);}; void()

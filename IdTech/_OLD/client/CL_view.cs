@@ -19,13 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
-
-namespace Quake2Sharp.client;
-
-using qcommon;
-using sys;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.sys;
 using System.Globalization;
 using System.Text.RegularExpressions;
+
+namespace Quake2Sharp.client;
 
 public class CL_view
 {

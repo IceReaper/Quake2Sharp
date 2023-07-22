@@ -18,14 +18,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.sys;
+using Quake2Sharp.util;
 
 namespace Quake2Sharp.qcommon;
-
-using game.types;
-using sys;
-using types;
-using util;
 
 /**
  * Netchan
@@ -101,7 +101,7 @@ public class Netchan
 		long port;
 
 		// pick a port value that should be nice and random
-		port = Timer.Sys_Milliseconds() & 0xffff;
+		port = system.Sys_Milliseconds() & 0xffff;
 
 		Netchan.showpackets = cvar.Cvar_Get("showpackets", "0", 0);
 		Netchan.showdrop = cvar.Cvar_Get("showdrop", "0", 0);

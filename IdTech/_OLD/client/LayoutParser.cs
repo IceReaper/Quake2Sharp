@@ -22,8 +22,6 @@ using IdTech.common;
 
 namespace Quake2Sharp.client;
 
-using qcommon;
-
 public class LayoutParser
 {
 	private int tokenPos;

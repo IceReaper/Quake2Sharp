@@ -1,11 +1,11 @@
-namespace Quake2Sharp.opentk;
-
-using client.types;
-using render;
-using render.opengl;
-using render.types;
-using sys;
+using Quake2Sharp.client.types;
+using Quake2Sharp.render;
+using Quake2Sharp.render.opengl;
+using Quake2Sharp.render.types;
+using Quake2Sharp.sys;
 using System.Drawing;
+
+namespace Quake2Sharp.opentk;
 
 public class OpenTkRenderer : OpenTkDriver, refexport_t, Ref
 {
@@ -146,12 +146,12 @@ public class OpenTkRenderer : OpenTkDriver, refexport_t, Ref
 
 	public string getName()
 	{
-		return OpenTkRenderer.DriverName;
+		return DriverName;
 	}
 
 	public string toString()
 	{
-		return OpenTkRenderer.DriverName;
+		return DriverName;
 	}
 
 	public refexport_t GetRefAPI(RenderAPI renderer)

@@ -19,15 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.monsters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+using System.Runtime.CompilerServices;
 
 namespace Quake2Sharp.game;
-
-using adapters;
-using monsters;
-using qcommon;
-using System.Runtime.CompilerServices;
-using types;
-using util;
 
 public class GameSave
 {

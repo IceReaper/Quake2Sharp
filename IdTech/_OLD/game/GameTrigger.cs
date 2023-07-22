@@ -17,11 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using adapters;
-using types;
-using util;
+using Quake2Sharp.game.adapters;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
+
+namespace Quake2Sharp.game;
 
 public class GameTrigger
 {
@@ -100,11 +101,11 @@ public class GameTrigger
      * QUAKED trigger_once (.5 .5 .5) ? x x TRIGGERED Triggers once, then
      * removes itself. You must set the key "target" to the name of another
      * object in the level that has a matching "targetname".
-     * 
+     *
      * If TRIGGERED, this trigger must be triggered before it is live.
-     * 
+     *
      * sounds 1) secret 2) beep beep 3) large switch 4)
-     * 
+     *
      * "message" string to be displayed when triggered
      */
 	public static void SP_trigger_once(edict_t ent)
@@ -173,9 +174,9 @@ public class GameTrigger
 
 	/*
 	 * ==============================================================================
-	 * 
+	 *
 	 * trigger_always
-	 * 
+	 *
 	 * ==============================================================================
 	 */
 
@@ -325,9 +326,9 @@ public class GameTrigger
 
 	/*
 	 * ==============================================================================
-	 * 
+	 *
 	 * trigger_key
-	 * 
+	 *
 	 * ==============================================================================
 	 */
 
@@ -421,10 +422,10 @@ public class GameTrigger
 	/**
      * QUAKED trigger_counter (.5 .5 .5) ? nomessage Acts as an intermediary for
      * an action that takes multiple inputs.
-     * 
+     *
      * If nomessage is not set, t will print "1 more.. " etc when triggered and
      * "sequence complete" when finished.
-     * 
+     *
      * After the counter has been triggered "count" times (default 2), it will
      * fire all of it's targets and remove itself.
      */
@@ -458,9 +459,9 @@ public class GameTrigger
 
 	/*
 	 * ==============================================================================
-	 * 
+	 *
 	 * trigger_push
-	 * 
+	 *
 	 * ==============================================================================
 	 */
 	public static readonly int PUSH_ONCE = 1;
@@ -494,14 +495,14 @@ public class GameTrigger
 	/**
      * QUAKED trigger_hurt (.5 .5 .5) ? START_OFF TOGGLE SILENT NO_PROTECTION
      * SLOW Any entity that touches this will be hurt.
-     * 
+     *
      * It does dmg points of damage each server frame
-     * 
+     *
      * SILENT supresses playing the sound SLOW changes the damage rate to once
      * per second NO_PROTECTION *nothing* stops the damage
-     * 
+     *
      * "dmg" default 5 (whole numbers only)
-     *  
+     *
      */
 	private static readonly EntUseAdapter hurt_use = new("hurt_use", (self, other, activator) =>
 	{
@@ -558,9 +559,9 @@ public class GameTrigger
 
 	/*
 	 * ==============================================================================
-	 * 
+	 *
 	 * trigger_gravity
-	 * 
+	 *
 	 * ==============================================================================
 	 */
 
@@ -575,9 +576,9 @@ public class GameTrigger
 
 	/*
 	 * ==============================================================================
-	 * 
+	 *
 	 * trigger_monsterjump
-	 * 
+	 *
 	 * ==============================================================================
 	 */
 

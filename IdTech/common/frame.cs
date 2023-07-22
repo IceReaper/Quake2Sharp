@@ -18,6 +18,7 @@
  * 02111-1307, USA.
  */
 
+using IdTech.backend;
 using Quake2Sharp;
 using Quake2Sharp.client;
 using Quake2Sharp.game.types;
@@ -25,7 +26,6 @@ using Quake2Sharp.qcommon;
 using Quake2Sharp.render;
 using Quake2Sharp.server;
 using Quake2Sharp.sys;
-using Timer = Quake2Sharp.sys.Timer;
 
 namespace IdTech.common;
 
@@ -43,7 +43,7 @@ public static class frame
 	private static readonly cvar_t timescale = cvar.Cvar_Get("timescale", "1", 0);
 	private static readonly cvar_t fixedtime = cvar.Cvar_Get("fixedtime", "0", 0);
 	public static readonly cvar_t cl_maxfps = cvar.Cvar_Get("cl_maxfps", "-1", Defines.CVAR_ARCHIVE);
-	public static readonly cvar_t dedicated = cvar.Cvar_Get("dedicated", Globals.DEDICATED_ONLY ? "1" : "0", Defines.CVAR_NOSET);
+	public static readonly cvar_t dedicated = cvar.Cvar_Get("dedicated", main.DEDICATED_ONLY ? "1" : "0", Defines.CVAR_NOSET);
 
 	public static Stream? log_stats_file;
 	private static readonly cvar_t busywait = cvar.Cvar_Get("busywait", "1", Defines.CVAR_ARCHIVE);
@@ -73,7 +73,7 @@ public static class frame
 	// Hack for the signal handlers.
 	private static bool quitnextframe;
 
-	private static int oldtime = Timer.Sys_Milliseconds();
+	private static int oldtime = system.Sys_Milliseconds();
 
 	// ----
 
@@ -81,28 +81,28 @@ public static class frame
 	{
 		var versionString = $"Yamagi Quake II v{Globals.YQ2VERSION}";
 
-		Sys.ConsoleOutput($"\n{versionString}\n");
+		system.Sys_ConsoleOutput($"\n{versionString}\n");
 
 		for (var i = 0; i < versionString.Length; ++i)
-			Sys.ConsoleOutput("=");
+			system.Sys_ConsoleOutput("=");
 
-		Sys.ConsoleOutput("\n");
+		system.Sys_ConsoleOutput("\n");
 
-		Sys.ConsoleOutput($"Platform: {Globals.YQ2OSTYPE}\n");
-		Sys.ConsoleOutput($"Architecture: {Globals.YQ2ARCH}\n");
+		system.Sys_ConsoleOutput($"Platform: {Globals.YQ2OSTYPE}\n");
+		system.Sys_ConsoleOutput($"Architecture: {Globals.YQ2ARCH}\n");
 	}
 
 	public static void Qcommon_Mainloop()
 	{
-		if (Globals.DEDICATED_ONLY)
+		if (main.DEDICATED_ONLY)
 			Thread.Sleep(TimeSpan.FromMilliseconds(1));
 
 		// Save global time for network- und input code.
-		curtime = Timer.Sys_Milliseconds();
+		frame.curtime = system.Sys_Milliseconds();
 
-		Qcommon_Frame((int)(curtime - oldtime));
+		frame.Qcommon_Frame((int)(frame.curtime - frame.oldtime));
 
-		oldtime = curtime;
+		frame.oldtime = frame.curtime;
 	}
 
 	public static void Qcommon_ExecConfigs(bool gameStartUp)
@@ -131,44 +131,44 @@ public static class frame
 				if (arg != helpArg)
 					continue;
 
-				Sys.ConsoleOutput($"Yamagi Quake II v{Globals.YQ2VERSION}\n");
-				Sys.ConsoleOutput("Most interesting commandline arguments:\n");
-				Sys.ConsoleOutput("-h or --help: Show this help\n");
-				Sys.ConsoleOutput("-cfgdir <path>\n");
-				Sys.ConsoleOutput("  set the name of your config directory\n");
-				Sys.ConsoleOutput("-datadir <path>\n");
-				Sys.ConsoleOutput("  set path to your Quake2 game data (the directory baseq2/ is in)\n");
-				Sys.ConsoleOutput("-portable\n");
-				Sys.ConsoleOutput("  Write (savegames, configs, ...) in the binary directory\n");
-				Sys.ConsoleOutput("+exec <config>\n");
-				Sys.ConsoleOutput("  execute the given config (mainly relevant for dedicated servers)\n");
-				Sys.ConsoleOutput("+set <cvarname> <value>\n");
-				Sys.ConsoleOutput("  Set the given cvar to the given value, e.g. +set vid_fullscreen 0\n");
+				system.Sys_ConsoleOutput($"Yamagi Quake II v{Globals.YQ2VERSION}\n");
+				system.Sys_ConsoleOutput("Most interesting commandline arguments:\n");
+				system.Sys_ConsoleOutput("-h or --help: Show this help\n");
+				system.Sys_ConsoleOutput("-cfgdir <path>\n");
+				system.Sys_ConsoleOutput("  set the name of your config directory\n");
+				system.Sys_ConsoleOutput("-datadir <path>\n");
+				system.Sys_ConsoleOutput("  set path to your Quake2 game data (the directory baseq2/ is in)\n");
+				system.Sys_ConsoleOutput("-portable\n");
+				system.Sys_ConsoleOutput("  Write (savegames, configs, ...) in the binary directory\n");
+				system.Sys_ConsoleOutput("+exec <config>\n");
+				system.Sys_ConsoleOutput("  execute the given config (mainly relevant for dedicated servers)\n");
+				system.Sys_ConsoleOutput("+set <cvarname> <value>\n");
+				system.Sys_ConsoleOutput("  Set the given cvar to the given value, e.g. +set vid_fullscreen 0\n");
 
-				Sys.ConsoleOutput("\nSome interesting cvars:\n");
-				Sys.ConsoleOutput("+set game <gamename>\n");
-				Sys.ConsoleOutput("  start the given addon/mod, e.g. +set game xatrix\n");
+				system.Sys_ConsoleOutput("\nSome interesting cvars:\n");
+				system.Sys_ConsoleOutput("+set game <gamename>\n");
+				system.Sys_ConsoleOutput("  start the given addon/mod, e.g. +set game xatrix\n");
 
-				if (!Globals.DEDICATED_ONLY)
+				if (!main.DEDICATED_ONLY)
 				{
-					Sys.ConsoleOutput("+set vid_fullscreen <0 or 1>\n");
-					Sys.ConsoleOutput("  start game in windowed (0) or desktop fullscreen (1)\n");
-					Sys.ConsoleOutput("  or classic fullscreen (2) mode\n");
-					Sys.ConsoleOutput("+set r_mode <modenumber>\n");
-					Sys.ConsoleOutput("  start game in resolution belonging to <modenumber>,\n");
-					Sys.ConsoleOutput("  use -1 for custom resolutions:\n");
-					Sys.ConsoleOutput("+set r_customwidth <size in pixels>\n");
-					Sys.ConsoleOutput("+set r_customheight <size in pixels>\n");
-					Sys.ConsoleOutput("  if r_mode is set to -1, these cvars allow you to specify the\n");
-					Sys.ConsoleOutput("  width/height of your custom resolution\n");
-					Sys.ConsoleOutput("+set vid_renderer <renderer>\n");
-					Sys.ConsoleOutput("  Selects the render backend. Currently available:\n");
-					Sys.ConsoleOutput("    'gl1'  (the OpenGL 1.x renderer),\n");
-					Sys.ConsoleOutput("    'gl3'  (the OpenGL 3.2 renderer),\n");
-					Sys.ConsoleOutput("    'soft' (the software renderer)\n");
+					system.Sys_ConsoleOutput("+set vid_fullscreen <0 or 1>\n");
+					system.Sys_ConsoleOutput("  start game in windowed (0) or desktop fullscreen (1)\n");
+					system.Sys_ConsoleOutput("  or classic fullscreen (2) mode\n");
+					system.Sys_ConsoleOutput("+set r_mode <modenumber>\n");
+					system.Sys_ConsoleOutput("  start game in resolution belonging to <modenumber>,\n");
+					system.Sys_ConsoleOutput("  use -1 for custom resolutions:\n");
+					system.Sys_ConsoleOutput("+set r_customwidth <size in pixels>\n");
+					system.Sys_ConsoleOutput("+set r_customheight <size in pixels>\n");
+					system.Sys_ConsoleOutput("  if r_mode is set to -1, these cvars allow you to specify the\n");
+					system.Sys_ConsoleOutput("  width/height of your custom resolution\n");
+					system.Sys_ConsoleOutput("+set vid_renderer <renderer>\n");
+					system.Sys_ConsoleOutput("  Selects the render backend. Currently available:\n");
+					system.Sys_ConsoleOutput("    'gl1'  (the OpenGL 1.x renderer),\n");
+					system.Sys_ConsoleOutput("    'gl3'  (the OpenGL 3.2 renderer),\n");
+					system.Sys_ConsoleOutput("    'soft' (the software renderer)\n");
 				}
 
-				Sys.ConsoleOutput("\nSee https://github.com/yquake2/yquake2/blob/master/doc/04_cvarlist.md\nfor some more cvars\n");
+				system.Sys_ConsoleOutput("\nSee https://github.com/yquake2/yquake2/blob/master/doc/04_cvarlist.md\nfor some more cvars\n");
 
 				return true;
 			}
@@ -181,7 +181,7 @@ public static class frame
 	{
 		try
 		{
-			if (checkForHelp(argv))
+			if (frame.checkForHelp(argv))
 			{
 				// ok, --help or similar commandline option was given
 				// and info was printed, exit the game now
@@ -189,7 +189,7 @@ public static class frame
 			}
 
 			// Print the build and version string
-			Qcommon_Buildstring();
+			frame.Qcommon_Buildstring();
 
 			// Start early subsystems.
 			argproc.COM_InitArgv(argv);
@@ -197,7 +197,7 @@ public static class frame
 			cmdparser.Cmd_Init();
 			cvar.Cvar_Init();
 
-			if (!Globals.DEDICATED_ONLY)
+			if (!main.DEDICATED_ONLY)
 				Key.Init();
 
 			/* we need to add the early commands twice, because
@@ -214,20 +214,20 @@ public static class frame
 			if (gameCvar is { @string.Length: > 0 })
 				game = gameCvar.@string;
 
-			userGivenGame = game;
+			frame.userGivenGame = game;
 
 			// The filesystems needs to be initialized after the cvars.
 			filesystem.FS_InitFilesystem();
 
 			// Add and execute configuration files.
-			Qcommon_ExecConfigs(true);
+			frame.Qcommon_ExecConfigs(true);
 
 			// cvars
 			cvar.Cvar_Get("version", $"{Globals.YQ2VERSION} {Globals.YQ2ARCH} {Globals.BUILD_DATE} {Globals.YQ2OSTYPE}",
 				Defines.CVAR_SERVERINFO | Defines.CVAR_NOSET);
 
 			// We can't use the clients "quit" command when running dedicated.
-			if (dedicated.value != 0)
+			if (frame.dedicated.value != 0)
 				cmdparser.Cmd_AddCommand("quit", clientserver.Com_Quit);
 
 			// Start late subsystem.
@@ -235,14 +235,14 @@ public static class frame
 			Netchan.Netchan_Init();
 			SV_MAIN.SV_Init();
 
-			if (!Globals.DEDICATED_ONLY)
+			if (!main.DEDICATED_ONLY)
 				Cl.Init();
 
 			// Everythings up, let's add + cmds from command line.
 			if (!cmdparser.Cbuf_AddLateCommands())
 			{
 				// Start demo loop...
-				if (dedicated.value == 0)
+				if (frame.dedicated.value == 0)
 					cmdparser.Cbuf_AddText("d1\n");
 
 				// ...or dedicated server.
@@ -253,7 +253,7 @@ public static class frame
 			}
 			/* the user asked for something explicit
 			   so drop the loading plaque */
-			else if (!Globals.DEDICATED_ONLY)
+			else if (!main.DEDICATED_ONLY)
 				SCR.EndLoadingPlaque();
 
 			clientserver.Com_Printf("==== Quake II Initialized ====\n\n");
@@ -262,11 +262,8 @@ public static class frame
 		catch
 		{
 			// Jump point used in emergency situations.
-			Sys.Error("Error during initialization");
+			system.Sys_Error("Error during initialization");
 		}
-
-		// Call the main loop
-		Qcommon_Mainloop();
 	}
 
 	// Time since last packetframe in millisec.
@@ -306,35 +303,35 @@ public static class frame
 
 			/* Tells the client to shutdown.
 			   Used by the signal handlers. */
-			if (quitnextframe)
+			if (frame.quitnextframe)
 				cmdparser.Cbuf_AddText("quit");
 
-			if (!Globals.DEDICATED_ONLY)
+			if (!main.DEDICATED_ONLY)
 			{
-				if (log_stats.modified)
+				if (frame.log_stats.modified)
 				{
-					log_stats.modified = false;
-					log_stats_file?.Dispose();
+					frame.log_stats.modified = false;
+					frame.log_stats_file?.Dispose();
 
-					if (log_stats.value != 0)
+					if (frame.log_stats.value != 0)
 					{
-						log_stats_file = File.Open("stats.log", FileMode.Create, FileAccess.Write);
-						log_stats_file.Write("entities,dlights,parts,frame time\n"u8);
+						frame.log_stats_file = File.Open("stats.log", FileMode.Create, FileAccess.Write);
+						frame.log_stats_file.Write("entities,dlights,parts,frame time\n"u8);
 					}
 					else
-						log_stats_file = null;
+						frame.log_stats_file = null;
 				}
 			}
 
 			// Timing debug crap. Just for historical reasons.
-			if (fixedtime.value != 0)
-				msec = (int)fixedtime.value;
-			else if (timescale.value != 0)
-				msec = (int)(msec * timescale.value);
+			if (frame.fixedtime.value != 0)
+				msec = (int)frame.fixedtime.value;
+			else if (frame.timescale.value != 0)
+				msec = (int)(msec * frame.timescale.value);
 
-			if (!Globals.DEDICATED_ONLY)
+			if (!main.DEDICATED_ONLY)
 			{
-				if (showtrace.value != 0)
+				if (frame.showtrace.value != 0)
 				{
 					clientserver.Com_Printf($"{Globals.c_traces:####} traces  {Globals.c_pointcontents:####} points\n");
 					Globals.c_traces = 0;
@@ -346,10 +343,10 @@ public static class frame
 				   frametime of the client is 1 millisecond. And of course we
 				   need to render something, the framerate can never be less
 				   then 1. Cap vid_maxfps between 1 and 999. */
-				if (vid_maxfps.value is > 999 or < 1)
+				if (frame.vid_maxfps.value is > 999 or < 1)
 					cvar.Cvar_SetValue("vid_maxfps", 999);
 
-				if (cl_maxfps.value > 250)
+				if (frame.cl_maxfps.value > 250)
 					cvar.Cvar_SetValue("cl_maxfps", 250);
 
 				// Calculate target and renderframerate.
@@ -360,12 +357,12 @@ public static class frame
 					// using refreshRate - 2, because targeting a value slightly below the
 					// (possibly not 100% correctly reported) refreshRate would introduce jittering, so only
 					// use vid_maxfps if it looks like the user really means it to be different from refreshRate
-					if (vid_maxfps.value < refreshRate - 2)
+					if (frame.vid_maxfps.value < refreshRate - 2)
 					{
-						rfps = vid_maxfps.value;
+						rfps = frame.vid_maxfps.value;
 
 						// we can't have more packet frames than render frames, so limit pfps to rfps
-						pfps = cl_maxfps.value > rfps ? rfps : cl_maxfps.value;
+						pfps = frame.cl_maxfps.value > rfps ? rfps : frame.cl_maxfps.value;
 					}
 
 					// target refresh rate, not vid_maxfps
@@ -382,20 +379,20 @@ public static class frame
 
 						// we can't have more packet frames than render frames, so limit pfps to rfps
 						// but in this case use tolerance for comparison and assign rfps with tolerance
-						pfps = cl_maxfps.value < refreshRate - 2 ? cl_maxfps.value : rfps;
+						pfps = frame.cl_maxfps.value < refreshRate - 2 ? frame.cl_maxfps.value : rfps;
 					}
 				}
 				else
 				{
-					rfps = vid_maxfps.value;
+					rfps = frame.vid_maxfps.value;
 
 					// we can't have more packet frames than render frames, so limit pfps to rfps
-					pfps = cl_maxfps.value > rfps ? rfps : cl_maxfps.value;
+					pfps = frame.cl_maxfps.value > rfps ? rfps : frame.cl_maxfps.value;
 				}
 
 				// cl_maxfps <= 0 means: automatically choose a packet framerate that should work
 				// well with the render framerate, which is the case if rfps is a multiple of pfps
-				if (cl_maxfps.value <= 0 && cl_async.value != 0)
+				if (frame.cl_maxfps.value <= 0 && frame.cl_async.value != 0)
 				{
 					// packet framerates between about 45 and 90 should be ok,
 					// with other values the game (esp. movement/clipping) can become glitchy
@@ -420,17 +417,17 @@ public static class frame
 				}
 
 				// Calculate timings.
-				packetdelta += msec;
-				renderdelta += msec;
-				clienttimedelta += msec;
-				servertimedelta += msec;
+				frame.packetdelta += msec;
+				frame.renderdelta += msec;
+				frame.clienttimedelta += msec;
+				frame.servertimedelta += msec;
 
-				if (cl_timedemo.value != 0)
+				if (frame.cl_timedemo.value != 0)
 				{
-					if (cl_async.value != 0)
+					if (frame.cl_async.value != 0)
 					{
 						// Render frames.
-						if (renderdelta < 1000 / rfps)
+						if (frame.renderdelta < 1000 / rfps)
 							renderframe = false;
 
 						// Network frames.
@@ -443,12 +440,12 @@ public static class frame
 						// because we must have at least one render frame between two packet frames
 						// TODO: does it make sense to use the average renderdelta of the last X frames
 						//       instead of just the last renderdelta?
-						if (!renderframe || packetdelta + renderdelta / 2f < packettargetdelta)
+						if (!renderframe || frame.packetdelta + frame.renderdelta / 2f < packettargetdelta)
 							packetFrame = false;
 					}
 
 					// Cap frames at target framerate.
-					else if (renderdelta < 1000 / rfps)
+					else if (frame.renderdelta < 1000 / rfps)
 					{
 						renderframe = false;
 						packetFrame = false;
@@ -458,21 +455,21 @@ public static class frame
 			else
 			{
 				// Target framerate.
-				pfps = (int)cl_maxfps.value;
+				pfps = (int)frame.cl_maxfps.value;
 
 				// Calculate timings.
-				packetdelta += msec;
-				servertimedelta += msec;
+				frame.packetdelta += msec;
+				frame.servertimedelta += msec;
 
 				// Network frame time.
-				if (packetdelta < 1000 / pfps)
+				if (frame.packetdelta < 1000 / pfps)
 					packetFrame = false;
 			}
 
 			// Dedicated server terminal console.
 			while (true)
 			{
-				var input = Sys.Sys_ConsoleInput();
+				var input = system.Sys_ConsoleInput();
 
 				if (input == null)
 					break;
@@ -482,35 +479,35 @@ public static class frame
 
 			cmdparser.Cbuf_Execute();
 
-			var timeBefore = Timer.Sys_Milliseconds();
+			var timeBefore = system.Sys_Milliseconds();
 
 			// Run the serverframe.
 			if (packetFrame)
 			{
-				SV_MAIN.SV_Frame(servertimedelta);
-				servertimedelta = 0;
+				SV_MAIN.SV_Frame(frame.servertimedelta);
+				frame.servertimedelta = 0;
 			}
 
-			if (!Globals.DEDICATED_ONLY)
+			if (!main.DEDICATED_ONLY)
 			{
-				var timeBetween = Timer.Sys_Milliseconds();
+				var timeBetween = system.Sys_Milliseconds();
 
 				// Run the client frame.
 				if (packetFrame || renderframe)
 				{
-					Cl.Frame(packetdelta, renderdelta, clienttimedelta, packetFrame, renderframe);
-					clienttimedelta = 0;
+					Cl.Frame(frame.packetdelta, frame.renderdelta, frame.clienttimedelta, packetFrame, renderframe);
+					frame.clienttimedelta = 0;
 				}
 
 				// Statistics.
-				if (host_speeds.value != 0)
+				if (frame.host_speeds.value != 0)
 				{
-					var timeAfter = Timer.Sys_Milliseconds();
+					var timeAfter = system.Sys_Milliseconds();
 					var all = timeAfter - timeBefore;
 					var sv = timeBetween - timeBefore;
 					var cl = timeAfter - timeBetween;
-					var gm = time_after_game - time_before_game;
-					var rf = time_after_ref - time_before_ref;
+					var gm = frame.time_after_game - frame.time_before_game;
+					var rf = frame.time_after_ref - frame.time_before_ref;
 
 					sv -= gm;
 					cl -= rf;
@@ -521,10 +518,10 @@ public static class frame
 
 			// Reset deltas and mark frame.
 			if (packetFrame)
-				packetdelta = 0;
+				frame.packetdelta = 0;
 
 			if (renderframe)
-				renderdelta = 0;
+				frame.renderdelta = 0;
 		}
 		catch
 		{
@@ -539,7 +536,7 @@ public static class frame
 		filesystem.FS_ShutdownFilesystem();
 		cvar.Cvar_Fini();
 
-		if (!Globals.DEDICATED_ONLY)
+		if (!main.DEDICATED_ONLY)
 			Key.Shutdown();
 
 		cmdparser.Cmd_Shutdown();

@@ -18,11 +18,11 @@
  * 02111-1307, USA.
  */
 
+using IdTech.backend;
 using Quake2Sharp;
 using Quake2Sharp.game;
 using Quake2Sharp.qcommon;
 using System.Text;
-using Timer = Quake2Sharp.sys.Timer;
 
 namespace IdTech.common;
 
@@ -54,12 +54,12 @@ public static class cmdparser
 	 */
 	public static void Cmd_Wait_f()
 	{
-		cmd_wait = Timer.Sys_Milliseconds();
+		cmdparser.cmd_wait = system.Sys_Milliseconds();
 	}
 
 	public static void Cbuf_Init()
 	{
-		cmd_text_buf = string.Empty;
+		cmdparser.cmd_text_buf = string.Empty;
 	}
 
 	/*
@@ -67,7 +67,7 @@ public static class cmdparser
 	 */
 	public static void Cbuf_AddText(string text)
 	{
-		cmd_text_buf += text;
+		cmdparser.cmd_text_buf += text;
 	}
 
 	/*
@@ -76,19 +76,19 @@ public static class cmdparser
 	 */
 	public static void Cbuf_InsertText(string text)
 	{
-		cmd_text_buf = text + cmd_text_buf;
+		cmdparser.cmd_text_buf = text + cmdparser.cmd_text_buf;
 	}
 
 	public static void Cbuf_CopyToDefer()
 	{
-		defer_text_buf = cmd_text_buf;
-		cmd_text_buf = string.Empty;
+		cmdparser.defer_text_buf = cmdparser.cmd_text_buf;
+		cmdparser.cmd_text_buf = string.Empty;
 	}
 
 	public static void Cbuf_InsertFromDefer()
 	{
-		cmd_text_buf += defer_text_buf;
-		defer_text_buf = string.Empty;
+		cmdparser.cmd_text_buf += cmdparser.defer_text_buf;
+		cmdparser.defer_text_buf = string.Empty;
 	}
 
 	public static void Cbuf_ExecuteText(int exec_when, string text)
@@ -96,15 +96,15 @@ public static class cmdparser
 		switch (exec_when)
 		{
 			case Defines.EXEC_NOW:
-				Cmd_ExecuteString(text);
+				cmdparser.Cmd_ExecuteString(text);
 				break;
 
 			case Defines.EXEC_INSERT:
-				Cbuf_InsertText(text);
+				cmdparser.Cbuf_InsertText(text);
 				break;
 
 			case Defines.EXEC_APPEND:
-				Cbuf_AddText(text);
+				cmdparser.Cbuf_AddText(text);
 				break;
 
 			default:
@@ -115,45 +115,45 @@ public static class cmdparser
 
 	public static void Cbuf_Execute()
 	{
-		if (cmd_wait > 0)
+		if (cmdparser.cmd_wait > 0)
 		{
 			// make sure that "wait" in scripts waits for ~16.66ms (1 frame at 60fps)
 			// regardless of framerate
-			if (Timer.Sys_Milliseconds() - cmd_wait <= 16)
+			if (system.Sys_Milliseconds() - cmdparser.cmd_wait <= 16)
 				return;
 
-			cmd_wait = 0;
+			cmdparser.cmd_wait = 0;
 		}
 
-		alias_count = 0; /* don't allow infinite alias loops */
+		cmdparser.alias_count = 0; /* don't allow infinite alias loops */
 
-		while (cmd_text_buf.Length > 0)
+		while (cmdparser.cmd_text_buf.Length > 0)
 		{
 			/* find a \n or ; line break */
 			var quotes = false;
 			var i = 0;
 
-			for (; i < cmd_text_buf.Length; i++)
+			for (; i < cmdparser.cmd_text_buf.Length; i++)
 			{
-				if (cmd_text_buf[i] == '"')
+				if (cmdparser.cmd_text_buf[i] == '"')
 					quotes = !quotes;
 
-				if (!quotes && (cmd_text_buf[i] == ';' || cmd_text_buf[i] == '\n'))
+				if (!quotes && (cmdparser.cmd_text_buf[i] == ';' || cmdparser.cmd_text_buf[i] == '\n'))
 					break; /* don't break if inside a quoted string */
 			}
 
 			/* delete the text from the command buffer and move remaining
 			   commands down this is necessary because commands (exec,
 			   alias) can insert data at the beginning of the text buffer */
-			var line = cmd_text_buf[..i];
-			cmd_text_buf = i == cmd_text_buf.Length ? string.Empty : cmd_text_buf[(i + 1)..];
+			var line = cmdparser.cmd_text_buf[..i];
+			cmdparser.cmd_text_buf = i == cmdparser.cmd_text_buf.Length ? string.Empty : cmdparser.cmd_text_buf[(i + 1)..];
 
 			/* execute the command line */
-			Cmd_ExecuteString(line);
+			cmdparser.Cmd_ExecuteString(line);
 
 			/* skip out while text still remains in buffer,
 			   leaving it for after we're done waiting */
-			if (cmd_wait > 0)
+			if (cmdparser.cmd_wait > 0)
 				break;
 		}
 	}
@@ -176,7 +176,7 @@ public static class cmdparser
 			if (argument != "+set")
 				continue;
 
-			Cbuf_AddText($"set {argproc.COM_Argv(++i)} {argproc.COM_Argv(++i)}\n");
+			cmdparser.Cbuf_AddText($"set {argproc.COM_Argv(++i)} {argproc.COM_Argv(++i)}\n");
 
 			if (!clear)
 				continue;
@@ -223,7 +223,7 @@ public static class cmdparser
 			while (j < text.Length && text[j] != '+' && !(text[j] == '-' && text[j - 1] == ' '))
 				j++;
 
-			Cbuf_AddText($"{text.Substring(i, j - i)}\n");
+			cmdparser.Cbuf_AddText($"{text.Substring(i, j - i)}\n");
 
 			found = true;
 
@@ -238,24 +238,24 @@ public static class cmdparser
 	 */
 	private static void Cmd_Exec_f()
 	{
-		if (Cmd_Argc() != 2)
+		if (cmdparser.Cmd_Argc() != 2)
 		{
 			clientserver.Com_Printf("exec <filename> : execute a script file\n");
 			return;
 		}
 
-		var data = filesystem.FS_LoadFile(Cmd_Argv(1));
+		var data = filesystem.FS_LoadFile(cmdparser.Cmd_Argv(1));
 
 		if (data == null)
 		{
-			clientserver.Com_Printf($"couldn't exec {Cmd_Argv(1)}\n");
+			clientserver.Com_Printf($"couldn't exec {cmdparser.Cmd_Argv(1)}\n");
 			return;
 		}
 
 		// make sure last line has a newline
-		clientserver.Com_Printf($"execing {Cmd_Argv(1)}.\n");
+		clientserver.Com_Printf($"execing {cmdparser.Cmd_Argv(1)}.\n");
 
-		Cbuf_InsertText($"{Encoding.UTF8.GetString(data)}\n");
+		cmdparser.Cbuf_InsertText($"{Encoding.UTF8.GetString(data)}\n");
 	}
 
 	/*
@@ -263,13 +263,13 @@ public static class cmdparser
 	 */
 	private static void Cmd_Vstr_f()
 	{
-		if (Cmd_Argc() != 2)
+		if (cmdparser.Cmd_Argc() != 2)
 		{
 			clientserver.Com_Printf("vstr <variablename> : execute a variable command\n");
 			return;
 		}
 
-		Cbuf_InsertText($"{cvar.Cvar_VariableString(Cmd_Argv(1))}\n");
+		cmdparser.Cbuf_InsertText($"{cvar.Cvar_VariableString(cmdparser.Cmd_Argv(1))}\n");
 	}
 
 	/*
@@ -277,7 +277,7 @@ public static class cmdparser
 	 */
 	private static void Cmd_Echo_f()
 	{
-		clientserver.Com_Printf($"{Cmd_Args()}\n");
+		clientserver.Com_Printf($"{cmdparser.Cmd_Args()}\n");
 	}
 
 	/*
@@ -286,11 +286,11 @@ public static class cmdparser
 	 */
 	private static void Cmd_Alias_f()
 	{
-		if (Cmd_Argc() == 1)
+		if (cmdparser.Cmd_Argc() == 1)
 		{
 			clientserver.Com_Printf("Current alias commands:\n");
 
-			foreach (var alias in cmd_alias)
+			foreach (var alias in cmdparser.cmd_alias)
 				clientserver.Com_Printf($"{alias.Key} : {alias.Value}\n");
 
 			return;
@@ -299,26 +299,26 @@ public static class cmdparser
 		/* copy the rest of the command line */
 		var value = string.Empty;
 
-		for (var i = 2; i < Cmd_Argc(); i++)
+		for (var i = 2; i < cmdparser.Cmd_Argc(); i++)
 		{
 			if (i > 2)
 				value += " ";
 
-			value += Cmd_Argv(i);
+			value += cmdparser.Cmd_Argv(i);
 		}
 
 		/* if the alias already exists, reuse it */
-		cmd_alias[Cmd_Argv(1)] = $"{value}\n";
+		cmdparser.cmd_alias[cmdparser.Cmd_Argv(1)] = $"{value}\n";
 	}
 
 	public static int Cmd_Argc()
 	{
-		return cmd_argv.Count;
+		return cmdparser.cmd_argv.Count;
 	}
 
 	public static string Cmd_Argv(int argument)
 	{
-		return argument >= cmd_argv.Count ? string.Empty : cmd_argv[argument];
+		return argument >= cmdparser.cmd_argv.Count ? string.Empty : cmdparser.cmd_argv[argument];
 	}
 
 	/*
@@ -326,7 +326,7 @@ public static class cmdparser
 	 */
 	public static string Cmd_Args()
 	{
-		return string.Join(' ', cmd_argv.Skip(1));
+		return string.Join(' ', cmdparser.cmd_argv.Skip(1));
 	}
 
 	private static string Cmd_MacroExpandString(string text)
@@ -376,11 +376,11 @@ public static class cmdparser
 	public static void Cmd_TokenizeString(string text, bool macroExpand)
 	{
 		/* clear the args from the last string */
-		cmd_argv.Clear();
+		cmdparser.cmd_argv.Clear();
 
 		/* macro expand the text */
 		if (macroExpand)
-			text = Cmd_MacroExpandString(text);
+			text = cmdparser.Cmd_MacroExpandString(text);
 
 		while (true)
 		{
@@ -412,7 +412,7 @@ public static class cmdparser
 			if (com_token.Length == 0)
 				return;
 
-			cmd_argv.Add(com_token);
+			cmdparser.cmd_argv.Add(com_token);
 		}
 	}
 
@@ -420,30 +420,30 @@ public static class cmdparser
 	{
 		/* fail if the command is a variable name */
 		if (cvar.Cvar_VariableString(cmd_name).Length > 0)
-			Cmd_RemoveCommand(cmd_name);
+			cmdparser.Cmd_RemoveCommand(cmd_name);
 
 		/* fail if the command already exists */
-		if (cmd_functions.ContainsKey(cmd_name))
+		if (cmdparser.cmd_functions.ContainsKey(cmd_name))
 		{
 			clientserver.Com_Printf($"Cmd_AddCommand: {cmd_name} already defined\n");
 			return;
 		}
 
 		/* link the command in */
-		cmd_functions.Add(cmd_name, function);
+		cmdparser.cmd_functions.Add(cmd_name, function);
 	}
 
 	public static void Cmd_RemoveCommand(string cmd_name)
 	{
-		if (!cmd_functions.ContainsKey(cmd_name))
+		if (!cmdparser.cmd_functions.ContainsKey(cmd_name))
 			clientserver.Com_Printf($"Cmd_RemoveCommand: {cmd_name} not removed\n");
 
-		cmd_functions.Remove(cmd_name);
+		cmdparser.cmd_functions.Remove(cmd_name);
 	}
 
 	private static bool Cmd_Exists(string cmd_name)
 	{
-		return cmd_functions.ContainsKey(cmd_name);
+		return cmdparser.cmd_functions.ContainsKey(cmd_name);
 	}
 
 	public static string? Cmd_CompleteCommand(string partial)
@@ -453,7 +453,7 @@ public static class cmdparser
 
 		var matches = new List<string>();
 
-		foreach (var command in cmd_functions.Keys)
+		foreach (var command in cmdparser.cmd_functions.Keys)
 		{
 			/* check for exact match */
 			if (command == partial)
@@ -464,7 +464,7 @@ public static class cmdparser
 				matches.Add(command);
 		}
 
-		foreach (var a in cmd_alias.Keys)
+		foreach (var a in cmdparser.cmd_alias.Keys)
 		{
 			/* check for exact match */
 			if (a == partial)
@@ -578,10 +578,10 @@ public static class cmdparser
 	private static bool Cmd_IsComplete(string command)
 	{
 		/* check for exact match */
-		if (cmd_functions.ContainsKey(command))
+		if (cmdparser.cmd_functions.ContainsKey(command))
 			return true;
 
-		if (cmd_alias.ContainsKey(command))
+		if (cmdparser.cmd_alias.ContainsKey(command))
 			return true;
 
 		foreach (var cvar in cvar.cvar_vars)
@@ -601,22 +601,22 @@ public static class cmdparser
 	 */
 	public static void Cmd_ExecuteString(string text)
 	{
-		Cmd_TokenizeString(text, true);
+		cmdparser.Cmd_TokenizeString(text, true);
 
 		/* execute the command line */
-		if (Cmd_Argc() == 0)
+		if (cmdparser.Cmd_Argc() == 0)
 			return; /* no tokens */
 
 		/* exec yq2.cfg is done directly after exec default.cfg, see Qcommon_Init() */
-		if (Cmd_Argc() > 1 && cmd_argv[0] == "exec" && cmd_argv[1] == "yq2.cfg")
-			doneWithDefaultCfg = true;
+		if (cmdparser.Cmd_Argc() > 1 && cmdparser.cmd_argv[0] == "exec" && cmdparser.cmd_argv[1] == "yq2.cfg")
+			cmdparser.doneWithDefaultCfg = true;
 
 		/* check functions */
-		if (cmd_functions.TryGetValue(cmd_argv[0], out var cmd))
+		if (cmdparser.cmd_functions.TryGetValue(cmdparser.cmd_argv[0], out var cmd))
 		{
 			/* forward to server command */
 			if (cmd == null)
-				Cmd_ExecuteString($"cmd {text}");
+				cmdparser.Cmd_ExecuteString($"cmd {text}");
 			else
 				cmd();
 
@@ -624,15 +624,15 @@ public static class cmdparser
 		}
 
 		/* check alias */
-		if (cmd_alias.TryGetValue(cmd_argv[0], out var a))
+		if (cmdparser.cmd_alias.TryGetValue(cmdparser.cmd_argv[0], out var a))
 		{
-			if (++alias_count == AliasLoopCount)
+			if (++cmdparser.alias_count == cmdparser.AliasLoopCount)
 			{
 				clientserver.Com_Printf("ALIAS_LOOP_COUNT\n");
 				return;
 			}
 
-			Cbuf_InsertText(a);
+			cmdparser.Cbuf_InsertText(a);
 
 			return;
 		}
@@ -642,31 +642,31 @@ public static class cmdparser
 			return;
 
 		/* send it as a server command if we are connected */
-		if (!Globals.DEDICATED_ONLY)
+		if (!main.DEDICATED_ONLY)
 			Cmd.ForwardToServer();
 	}
 
 	private static void Cmd_List_f()
 	{
-		foreach (var cmd in cmd_functions.Keys)
+		foreach (var cmd in cmdparser.cmd_functions.Keys)
 			clientserver.Com_Printf($"{cmd}\n");
 
-		clientserver.Com_Printf($"{cmd_functions.Count} commands\n");
+		clientserver.Com_Printf($"{cmdparser.cmd_functions.Count} commands\n");
 	}
 
 	public static void Cmd_Init()
 	{
 		/* register our commands */
-		Cmd_AddCommand("cmdlist", Cmd_List_f);
-		Cmd_AddCommand("exec", Cmd_Exec_f);
-		Cmd_AddCommand("vstr", Cmd_Vstr_f);
-		Cmd_AddCommand("echo", Cmd_Echo_f);
-		Cmd_AddCommand("alias", Cmd_Alias_f);
-		Cmd_AddCommand("wait", Cmd_Wait_f);
+		cmdparser.Cmd_AddCommand("cmdlist", cmdparser.Cmd_List_f);
+		cmdparser.Cmd_AddCommand("exec", cmdparser.Cmd_Exec_f);
+		cmdparser.Cmd_AddCommand("vstr", cmdparser.Cmd_Vstr_f);
+		cmdparser.Cmd_AddCommand("echo", cmdparser.Cmd_Echo_f);
+		cmdparser.Cmd_AddCommand("alias", cmdparser.Cmd_Alias_f);
+		cmdparser.Cmd_AddCommand("wait", cmdparser.Cmd_Wait_f);
 	}
 
 	public static void Cmd_Shutdown()
 	{
-		cmd_alias.Clear();
+		cmdparser.cmd_alias.Clear();
 	}
 }

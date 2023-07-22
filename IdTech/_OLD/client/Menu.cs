@@ -18,20 +18,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
-
-namespace Quake2Sharp.client;
-
-using game;
-using game.types;
-using qcommon;
-using qcommon.types;
-using sound;
-using sys;
+using Quake2Sharp.client.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.sound;
+using Quake2Sharp.sys;
+using Quake2Sharp.util;
 using System.Drawing;
 using System.Text;
-using types;
-using util;
+
+namespace Quake2Sharp.client;
 
 /**
  * Menu
@@ -726,7 +725,7 @@ public class Menu
 		if (Menu.bind_grab)
 			Globals.re.DrawChar(menu.x, menu.y + menu.cursor * 9, '=');
 		else
-			Globals.re.DrawChar(menu.x, menu.y + menu.cursor * 9, 12 + ((int)(Timer.Sys_Milliseconds() / 250) & 1));
+			Globals.re.DrawChar(menu.x, menu.y + menu.cursor * 9, 12 + ((int)(system.Sys_Milliseconds() / 250) & 1));
 	}
 
 	private static void DrawKeyBindingFunc(object self)
@@ -3402,16 +3401,16 @@ public class Menu
 			scratch = dirnames[i];
 			scratch += "/tris.md2";
 
-			if (Sys.FindFirst(scratch, 0, Defines.SFF_SUBDIR | Defines.SFF_HIDDEN | Defines.SFF_SYSTEM) == null)
+			if (system.Sys_FindFirst(scratch) == null)
 			{
 				//free(dirnames[i]);
 				dirnames[i] = null;
-				Sys.FindClose();
+				system.Sys_FindClose();
 
 				continue;
 			}
 
-			Sys.FindClose();
+			system.Sys_FindClose();
 
 			// verify the existence of at least one pcx skin
 			scratch = dirnames[i] + "/*.pcx";
@@ -3996,7 +3995,7 @@ public class Menu
 			else
 				offset = f.cursor;
 
-			if (((int)(Timer.Sys_Milliseconds() / 250) & 1) != 0)
+			if (((int)(system.Sys_Milliseconds() / 250) & 1) != 0)
 				Globals.re.DrawChar(f.x + f.parent.x + (offset + 2) * 8 + 8, f.y + f.parent.y, 11);
 			else
 				Globals.re.DrawChar(f.x + f.parent.x + (offset + 2) * 8 + 8, f.y + f.parent.y, ' ');
@@ -4239,9 +4238,9 @@ public class Menu
 		else if (item != null && item.type != Defines.MTYPE_FIELD)
 		{
 			if ((item.flags & Defines.QMF_LEFT_JUSTIFY) != 0)
-				Globals.re.DrawChar(menu.x + item.x - 24 + item.cursor_offset, menu.y + item.y, 12 + ((int)(Timer.Sys_Milliseconds() / 250) & 1));
+				Globals.re.DrawChar(menu.x + item.x - 24 + item.cursor_offset, menu.y + item.y, 12 + ((int)(system.Sys_Milliseconds() / 250) & 1));
 			else
-				Globals.re.DrawChar(menu.x + item.cursor_offset, menu.y + item.y, 12 + ((int)(Timer.Sys_Milliseconds() / 250) & 1));
+				Globals.re.DrawChar(menu.x + item.cursor_offset, menu.y + item.y, 12 + ((int)(system.Sys_Milliseconds() / 250) & 1));
 		}
 
 		if (item != null)

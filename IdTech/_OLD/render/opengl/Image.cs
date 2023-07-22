@@ -19,17 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 using IdTech.common;
+using Quake2Sharp.client;
+using Quake2Sharp.client.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.render.opengl.types;
+using Quake2Sharp.render.types;
+using System.Drawing;
 
 namespace Quake2Sharp.render.opengl;
-
-using client;
-using client.types;
-using game.types;
-using qcommon;
-using qcommon.types;
-using render.types;
-using System.Drawing;
-using types;
 
 public partial class OpenGLRenderApi
 {

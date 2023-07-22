@@ -17,20 +17,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.game;
 
-using qcommon;
+using Quake2Sharp.game.types;
+using Quake2Sharp.util;
 using System.Text;
-using types;
-using util;
+
+namespace Quake2Sharp.game;
 
 public class PlayerHud
 {
 	/*
 	 * ======================================================================
-	 * 
+	 *
 	 * INTERMISSION
-	 * 
+	 *
 	 * ======================================================================
 	 */
 
@@ -182,7 +182,7 @@ public class PlayerHud
 	}
 
 	/*
-	 * ================== 
+	 * ==================
 	 * DeathmatchScoreboardMessage
 	 * ==================
 	 */
@@ -275,11 +275,11 @@ public class PlayerHud
 	}
 
 	/*
-	 * ================== 
+	 * ==================
 	 * DeathmatchScoreboard
-	 * 
+	 *
 	 * Draw instead of help message. Note that it isn't that hard to overflow
-	 * the 1400 byte message limit! 
+	 * the 1400 byte message limit!
 	 * ==================
 	 */
 	public static void DeathmatchScoreboard(edict_t ent)
@@ -289,10 +289,10 @@ public class PlayerHud
 	}
 
 	/*
-	 * ================== 
+	 * ==================
 	 * Cmd_Score_f
-	 * 
-	 * Display the scoreboard 
+	 *
+	 * Display the scoreboard
 	 * ==================
 	 */
 	public static void Cmd_Score_f(edict_t ent)
@@ -317,8 +317,8 @@ public class PlayerHud
 	//=======================================================================
 
 	/*
-	 * =============== 
-	 * G_SetStats 
+	 * ===============
+	 * G_SetStats
 	 * ===============
 	 */
 	public static void G_SetStats(edict_t ent)
@@ -488,8 +488,8 @@ public class PlayerHud
 	}
 
 	/*
-	 * =============== 
-	 * G_CheckChaseStats 
+	 * ===============
+	 * G_CheckChaseStats
 	 * ===============
 	 */
 	public static void G_CheckChaseStats(edict_t ent)
@@ -512,8 +512,8 @@ public class PlayerHud
 	}
 
 	/*
-	 * =============== 
-	 * G_SetSpectatorStats 
+	 * ===============
+	 * G_SetSpectatorStats
 	 * ===============
 	 */
 	public static void G_SetSpectatorStats(edict_t ent)
@@ -543,7 +543,7 @@ public class PlayerHud
 			cl.ps.stats[Defines.STAT_CHASE] = 0;
 	}
 
-	/** 
+	/**
      * HelpComputer. Draws the help computer.
      */
 	public static void HelpComputer(edict_t ent)

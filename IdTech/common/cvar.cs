@@ -21,7 +21,6 @@
 using Quake2Sharp;
 using Quake2Sharp.game;
 using Quake2Sharp.game.types;
-using Quake2Sharp.qcommon;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -115,13 +114,13 @@ public static class cvar
 	private static cvar_t? Cvar_FindVar(string var_name)
 	{
 		/* An ugly hack to rewrite changed CVARs */
-		if (replacements.TryGetValue(var_name, out var replacement))
+		if (cvar.replacements.TryGetValue(var_name, out var replacement))
 		{
 			clientserver.Com_Printf($"cvar {var_name} ist deprecated, use {replacement} instead\n");
 			var_name = replacement;
 		}
 
-		foreach (var var in cvar_vars)
+		foreach (var var in cvar.cvar_vars)
 		{
 			if (var.name == var_name)
 				return var;
@@ -137,14 +136,14 @@ public static class cvar
 
 	public static float Cvar_VariableValue(string var_name)
 	{
-		var var = Cvar_FindVar(var_name);
+		var var = cvar.Cvar_FindVar(var_name);
 
 		return var?.value ?? 0;
 	}
 
 	public static string Cvar_VariableString(string var_name)
 	{
-		var var = Cvar_FindVar(var_name);
+		var var = cvar.Cvar_FindVar(var_name);
 
 		return var == null ? string.Empty : var.@string;
 	}
@@ -157,14 +156,14 @@ public static class cvar
 	{
 		if ((flags & (Defines.CVAR_USERINFO | Defines.CVAR_SERVERINFO)) != 0)
 		{
-			if (!Cvar_InfoValidate(var_name))
+			if (!cvar.Cvar_InfoValidate(var_name))
 			{
 				clientserver.Com_Printf("invalid info cvar name\n");
-				return badCvar;
+				return cvar.badCvar;
 			}
 		}
 
-		var var = Cvar_FindVar(var_name);
+		var var = cvar.Cvar_FindVar(var_name);
 
 		if (var != null)
 		{
@@ -175,10 +174,10 @@ public static class cvar
 
 		if ((flags & (Defines.CVAR_USERINFO | Defines.CVAR_SERVERINFO)) != 0)
 		{
-			if (!Cvar_InfoValidate(var_value))
+			if (!cvar.Cvar_InfoValidate(var_value))
 			{
 				clientserver.Com_Printf("invalid info cvar value\n");
-				return badCvar;
+				return cvar.badCvar;
 			}
 		}
 
@@ -198,21 +197,21 @@ public static class cvar
 		};
 
 		/* link the variable in */
-		cvar_vars.Add(var);
+		cvar.cvar_vars.Add(var);
 
 		return var;
 	}
 
 	private static cvar_t Cvar_Set2(string var_name, string value, bool force)
 	{
-		var var = Cvar_FindVar(var_name);
+		var var = cvar.Cvar_FindVar(var_name);
 
 		if (var == null)
-			return Cvar_Get(var_name, value, 0) ?? throw new UnreachableException();
+			return cvar.Cvar_Get(var_name, value, 0) ?? throw new UnreachableException();
 
 		if ((var.flags & (Defines.CVAR_USERINFO | Defines.CVAR_SERVERINFO)) != 0)
 		{
-			if (!Cvar_InfoValidate(value))
+			if (!cvar.Cvar_InfoValidate(value))
 			{
 				clientserver.Com_Printf("invalid info cvar value\n");
 				return var;
@@ -270,7 +269,7 @@ public static class cvar
 		var.modified = true;
 
 		if ((var.flags & Defines.CVAR_USERINFO) != 0)
-			userinfo_modified = true;
+			cvar.userinfo_modified = true;
 
 		var.@string = value;
 		var.value = float.TryParse(value, CultureInfo.InvariantCulture, out var fValue) ? fValue : 0;
@@ -280,25 +279,25 @@ public static class cvar
 
 	public static cvar_t Cvar_ForceSet(string var_name, string value)
 	{
-		return Cvar_Set2(var_name, value, true);
+		return cvar.Cvar_Set2(var_name, value, true);
 	}
 
 	public static cvar_t Cvar_Set(string var_name, string value)
 	{
-		return Cvar_Set2(var_name, value, false);
+		return cvar.Cvar_Set2(var_name, value, false);
 	}
 
 	public static cvar_t? Cvar_FullSet(string var_name, string value, int flags)
 	{
-		var var = Cvar_FindVar(var_name);
+		var var = cvar.Cvar_FindVar(var_name);
 
 		if (var == null)
-			return Cvar_Get(var_name, value, flags);
+			return cvar.Cvar_Get(var_name, value, flags);
 
 		var.modified = true;
 
 		if ((var.flags & Defines.CVAR_USERINFO) != 0)
-			userinfo_modified = true;
+			cvar.userinfo_modified = true;
 
 		// if $game is the default one ("baseq2"), then use "" instead because
 		// other code assumes this behavior (e.g. FS_BuildGameSpecificSearchPath())
@@ -314,7 +313,7 @@ public static class cvar
 
 	public static cvar_t Cvar_SetValue(string var_name, float value)
 	{
-		return Cvar_Set(var_name, value.ToString(CultureInfo.InvariantCulture));
+		return cvar.Cvar_Set(var_name, value.ToString(CultureInfo.InvariantCulture));
 	}
 
 	/*
@@ -322,7 +321,7 @@ public static class cvar
 	 */
 	public static void Cvar_GetLatchedVars()
 	{
-		foreach (var var in cvar_vars)
+		foreach (var var in cvar.cvar_vars)
 		{
 			if (var.latched_string == null)
 				continue;
@@ -342,7 +341,7 @@ public static class cvar
 	public static bool Cvar_Command()
 	{
 		/* check variables */
-		var v = Cvar_FindVar(cmdparser.Cmd_Argv(0));
+		var v = cvar.Cvar_FindVar(cmdparser.Cmd_Argv(0));
 
 		if (v == null)
 			return false;
@@ -360,7 +359,7 @@ public static class cvar
 		if (v.name == "game")
 			frame.userGivenGame = cmdparser.Cmd_Argv(1);
 
-		Cvar_Set(v.name, cmdparser.Cmd_Argv(1));
+		cvar.Cvar_Set(v.name, cmdparser.Cmd_Argv(1));
 		return true;
 	}
 
@@ -378,7 +377,7 @@ public static class cvar
 		var firstarg = cmdparser.Cmd_Argv(1);
 
 		/* An ugly hack to rewrite changed CVARs */
-		if (replacements.TryGetValue(firstarg, out var replacement))
+		if (cvar.replacements.TryGetValue(firstarg, out var replacement))
 			firstarg = replacement;
 
 		if (cmdparser.Cmd_Argc() == 4)
@@ -395,10 +394,10 @@ public static class cvar
 				return;
 			}
 
-			Cvar_FullSet(firstarg, cmdparser.Cmd_Argv(2), flags);
+			cvar.Cvar_FullSet(firstarg, cmdparser.Cmd_Argv(2), flags);
 		}
 		else
-			Cvar_Set(firstarg, cmdparser.Cmd_Argv(2));
+			cvar.Cvar_Set(firstarg, cmdparser.Cmd_Argv(2));
 	}
 
 	/*
@@ -410,7 +409,7 @@ public static class cvar
 		var stream = File.Open(path, FileMode.Append, FileAccess.Write);
 		var writer = new BinaryWriter(stream);
 
-		foreach (var variable in cvar_vars)
+		foreach (var variable in cvar.cvar_vars)
 		{
 			if ((variable.flags & Defines.CVAR_ARCHIVE) == 0)
 				continue;
@@ -423,7 +422,7 @@ public static class cvar
 
 	private static void Cvar_List_f()
 	{
-		foreach (var variable in cvar_vars)
+		foreach (var variable in cvar.cvar_vars)
 		{
 			clientserver.Com_Printf((variable.flags & Defines.CVAR_ARCHIVE) != 0 ? "*" : " ");
 			clientserver.Com_Printf((variable.flags & Defines.CVAR_USERINFO) != 0 ? "U" : " ");
@@ -432,7 +431,7 @@ public static class cvar
 			clientserver.Com_Printf($" {variable.name} \"{variable.@string}\"\n");
 		}
 
-		clientserver.Com_Printf($"{cvar_vars.Count} cvars\n");
+		clientserver.Com_Printf($"{cvar.cvar_vars.Count} cvars\n");
 	}
 
 	private static bool userinfo_modified;
@@ -441,7 +440,7 @@ public static class cvar
 	{
 		var info = string.Empty;
 
-		foreach (var var in cvar_vars)
+		foreach (var var in cvar.cvar_vars)
 		{
 			if ((var.flags & bit) != 0)
 				info = Info.Info_SetValueForKey(info, var.name, var.@string);
@@ -456,7 +455,7 @@ public static class cvar
 	 */
 	public static string Cvar_Userinfo()
 	{
-		return Cvar_BitInfo(Defines.CVAR_USERINFO);
+		return cvar.Cvar_BitInfo(Defines.CVAR_USERINFO);
 	}
 
 	/*
@@ -465,7 +464,7 @@ public static class cvar
 	 */
 	public static string Cvar_Serverinfo()
 	{
-		return Cvar_BitInfo(Defines.CVAR_SERVERINFO);
+		return cvar.Cvar_BitInfo(Defines.CVAR_SERVERINFO);
 	}
 
 	/*
@@ -480,7 +479,7 @@ public static class cvar
 			return;
 		}
 
-		var variable = Cvar_FindVar(cmdparser.Cmd_Argv(1));
+		var variable = cvar.Cvar_FindVar(cmdparser.Cmd_Argv(1));
 
 		if (variable == null)
 		{
@@ -488,7 +487,7 @@ public static class cvar
 			return;
 		}
 
-		if (!Cvar_IsFloat(variable.@string))
+		if (!cvar.Cvar_IsFloat(variable.@string))
 		{
 			clientserver.Com_Printf($"\"{variable.name}\" is \"{variable.@string}\", can't {cmdparser.Cmd_Argv(0)}\n");
 			return;
@@ -502,7 +501,7 @@ public static class cvar
 		if (cmdparser.Cmd_Argv(0) == "dec")
 			value = -value;
 
-		Cvar_Set(variable.name, (variable.value + value).ToString(CultureInfo.InvariantCulture));
+		cvar.Cvar_Set(variable.name, (variable.value + value).ToString(CultureInfo.InvariantCulture));
 	}
 
 	/*
@@ -516,7 +515,7 @@ public static class cvar
 			return;
 		}
 
-		var variable = Cvar_FindVar(cmdparser.Cmd_Argv(1));
+		var variable = cvar.Cvar_FindVar(cmdparser.Cmd_Argv(1));
 
 		if (variable == null)
 		{
@@ -525,7 +524,7 @@ public static class cvar
 		}
 
 		clientserver.Com_Printf($"{variable.name}: {variable.default_string}\n");
-		Cvar_Set(variable.name, variable.default_string);
+		cvar.Cvar_Set(variable.name, variable.default_string);
 	}
 
 	/*
@@ -534,7 +533,7 @@ public static class cvar
 	 */
 	private static void Cvar_ResetAll_f()
 	{
-		foreach (var variable in cvar_vars)
+		foreach (var variable in cvar.cvar_vars)
 		{
 			if ((variable.flags & Defines.CVAR_NOSET) != 0)
 				continue;
@@ -542,7 +541,7 @@ public static class cvar
 			if (variable.name == "game")
 				continue;
 
-			Cvar_Set(variable.name, variable.default_string);
+			cvar.Cvar_Set(variable.name, variable.default_string);
 		}
 	}
 
@@ -557,7 +556,7 @@ public static class cvar
 			return;
 		}
 
-		var var = Cvar_FindVar(cmdparser.Cmd_Argv(1));
+		var var = cvar.Cvar_FindVar(cmdparser.Cmd_Argv(1));
 
 		if (var == null)
 		{
@@ -570,11 +569,11 @@ public static class cvar
 			switch (var.@string)
 			{
 				case "0":
-					Cvar_Set(var.name, "1");
+					cvar.Cvar_Set(var.name, "1");
 					break;
 
 				case "1":
-					Cvar_Set(var.name, "0");
+					cvar.Cvar_Set(var.name, "0");
 					break;
 
 				default:
@@ -590,7 +589,7 @@ public static class cvar
 			if (var.@string != cmdparser.Cmd_Argv(2 + i))
 				continue;
 
-			Cvar_Set(var.name, cmdparser.Cmd_Argv(2 + (i + 1) % (cmdparser.Cmd_Argc() - 2)));
+			cvar.Cvar_Set(var.name, cmdparser.Cmd_Argv(2 + (i + 1) % (cmdparser.Cmd_Argc() - 2)));
 			return;
 		}
 
@@ -602,13 +601,13 @@ public static class cvar
 	 */
 	public static void Cvar_Init()
 	{
-		cmdparser.Cmd_AddCommand("cvarlist", Cvar_List_f);
-		cmdparser.Cmd_AddCommand("dec", Cvar_Inc_f);
-		cmdparser.Cmd_AddCommand("inc", Cvar_Inc_f);
-		cmdparser.Cmd_AddCommand("reset", Cvar_Reset_f);
-		cmdparser.Cmd_AddCommand("resetall", Cvar_ResetAll_f);
-		cmdparser.Cmd_AddCommand("set", Cvar_Set_f);
-		cmdparser.Cmd_AddCommand("toggle", Cvar_Toggle_f);
+		cmdparser.Cmd_AddCommand("cvarlist", cvar.Cvar_List_f);
+		cmdparser.Cmd_AddCommand("dec", cvar.Cvar_Inc_f);
+		cmdparser.Cmd_AddCommand("inc", cvar.Cvar_Inc_f);
+		cmdparser.Cmd_AddCommand("reset", cvar.Cvar_Reset_f);
+		cmdparser.Cmd_AddCommand("resetall", cvar.Cvar_ResetAll_f);
+		cmdparser.Cmd_AddCommand("set", cvar.Cvar_Set_f);
+		cmdparser.Cmd_AddCommand("toggle", cvar.Cvar_Toggle_f);
 	}
 
 	/*
@@ -616,7 +615,7 @@ public static class cvar
 	 */
 	public static void Cvar_Fini()
 	{
-		cvar_vars.Clear();
+		cvar.cvar_vars.Clear();
 
 		cmdparser.Cmd_RemoveCommand("cvarlist");
 		cmdparser.Cmd_RemoveCommand("dec");

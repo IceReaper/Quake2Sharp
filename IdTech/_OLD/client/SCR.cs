@@ -18,20 +18,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+using IdTech.backend;
 using IdTech.common;
-
-namespace Quake2Sharp.client;
-
-using game;
-using game.types;
-using qcommon;
-using qcommon.types;
-using sound;
-using sys;
+using Quake2Sharp.client.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon;
+using Quake2Sharp.qcommon.types;
+using Quake2Sharp.sound;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
-using types;
+
+namespace Quake2Sharp.client;
 
 /**
  * SCR
@@ -553,7 +551,7 @@ public class SCR
 			SCR.scr_draw_loading = 1;
 
 		SCR.UpdateScreen();
-		Globals.cls.disable_screen = Timer.Sys_Milliseconds();
+		Globals.cls.disable_screen = system.Sys_Milliseconds();
 		Globals.cls.disable_servercount = Globals.cl.servercount;
 	}
 
@@ -586,7 +584,7 @@ public class SCR
 		if (Globals.cls.state != Defines.ca_active)
 			return;
 
-		start = Timer.Sys_Milliseconds();
+		start = system.Sys_Milliseconds();
 
 		if (cmdparser.Cmd_Argc() == 2)
 		{
@@ -612,7 +610,7 @@ public class SCR
 			}
 		}
 
-		stop = Timer.Sys_Milliseconds();
+		stop = system.Sys_Milliseconds();
 		time = (stop - start) / 1000.0f;
 		clientserver.Com_Printf($"{time} seconds ({128.0f / time} fps)\n");
 	}
@@ -1236,7 +1234,7 @@ public class SCR
 		// do nothing at all
 		if (Globals.cls.disable_screen != 0)
 		{
-			if (Timer.Sys_Milliseconds() - Globals.cls.disable_screen > 120000)
+			if (system.Sys_Milliseconds() - Globals.cls.disable_screen > 120000)
 			{
 				Globals.cls.disable_screen = 0;
 				clientserver.Com_Printf("Loading plaque timed out.\n");
@@ -2000,6 +1998,6 @@ public class SCR
 		SCR.cin.restart_sound = true;
 		Globals.cl.cinematicframe = 0;
 		SCR.cin.pic = SCR.ReadNextFrame();
-		Globals.cl.cinematictime = Timer.Sys_Milliseconds();
+		Globals.cl.cinematictime = system.Sys_Milliseconds();
 	}
 }

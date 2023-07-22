@@ -17,10 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-namespace Quake2Sharp.server.types;
 
-using game.types;
-using qcommon.types;
+using Quake2Sharp.game.types;
+using Quake2Sharp.qcommon.types;
+
+namespace Quake2Sharp.server.types;
 
 public class server_static_t
 {
