@@ -29,7 +29,7 @@ public class PlayerClient
 	public static int player_die_i;
 
 	/**
-     * player_die. 
+     * player_die.
      */
 	public static EntDieAdapter player_die = new("player_die", (self, inflictor, attacker, damage, point) =>
 	{
@@ -599,7 +599,7 @@ public class PlayerClient
 
 	/**
      * This is only called when the game first initializes in single player, but
-     * is called after each death and level change in deathmatch. 
+     * is called after each death and level change in deathmatch.
      */
 	public static void InitClientPersistant(gclient_t client)
 	{
@@ -643,7 +643,7 @@ public class PlayerClient
 	/**
      * Some information that should be persistant, like health, is still stored
      * in the edict structure, so it needs to be mirrored out to the client
-     * structure before all the edicts are wiped. 
+     * structure before all the edicts are wiped.
      */
 	public static void SaveClientData()
 	{
@@ -773,7 +773,7 @@ public class PlayerClient
 		return spot;
 	}
 
-	/** 
+	/**
 	 * If turned on in the dmflags, select a spawn point far away from other players.
      */
 	private static edict_t SelectFarthestDeathmatchSpawnPoint()
@@ -1265,7 +1265,7 @@ public class PlayerClient
 
 	/**
      * A client has just connected to the server in deathmatch mode, so clear
-     * everything out before starting them. 
+     * everything out before starting them.
      */
 	public static void ClientBeginDeathmatch(edict_t ent)
 	{
@@ -1297,7 +1297,7 @@ public class PlayerClient
 
 	/**
      * Called when a client has finished connecting, and is ready to be placed
-     * into the game. This will happen every level load. 
+     * into the game. This will happen every level load.
      */
 	public static void ClientBegin(edict_t ent)
 	{
@@ -1357,9 +1357,9 @@ public class PlayerClient
 
 	/**
      * Called whenever the player updates a userinfo variable.
-     * 
+     *
      * The game can override any of the settings in place (forcing skins or
-     * names, etc) before copying it off. 
+     * names, etc) before copying it off.
      *
      */
 	public static string ClientUserinfoChanged(edict_t ent, string userinfo)
@@ -1423,7 +1423,7 @@ public class PlayerClient
      * entrance to a client by returning false. If the client is allowed, the
      * connection process will continue and eventually get to ClientBegin()
      * Changing levels will NOT cause this to be called again, but loadgames
-     * will. 
+     * will.
      */
 	public static bool ClientConnect(edict_t ent, string userinfo)
 	{
@@ -1506,7 +1506,7 @@ public class PlayerClient
 	}
 
 	/**
-     * Called when a player drops from the server. Will not be called between levels. 
+     * Called when a player drops from the server. Will not be called between levels.
      */
 	public static void ClientDisconnect(edict_t ent)
 	{
@@ -1535,22 +1535,22 @@ public class PlayerClient
 	}
 
 	/*
-	 * static int CheckBlock(int c) 
-	 * { 
-	 * 		int v, i; 
-	 * 		v = 0; 
+	 * static int CheckBlock(int c)
+	 * {
+	 * 		int v, i;
+	 * 		v = 0;
 	 * 		for (i = 0; i < c; i++)
-	 *			v += ((byte *) b)[i]; 
-	 *		return v; 
+	 *			v += ((byte *) b)[i];
+	 *		return v;
 	 * }
-	 * 
-	 * public static void PrintPmove(pmove_t * pm) 
-	 * { 
+	 *
+	 * public static void PrintPmove(pmove_t * pm)
+	 * {
 	 *		unsigned c1, c2;
-	 * 
+	 *
 	 * 		c1 = CheckBlock(&pm.s, sizeof(pm.s));
-	 * 		c2 = CheckBlock(&pm.cmd, sizeof(pm.cmd)); 
-	 *      Com_Printf("sv %3i:%i %i\n", pm.cmd.impulse, c1, c2); 
+	 * 		c2 = CheckBlock(&pm.cmd, sizeof(pm.cmd));
+	 *      Com_Printf("sv %3i:%i %i\n", pm.cmd.impulse, c1, c2);
 	 * }
 	 */
 
@@ -1675,7 +1675,7 @@ public class PlayerClient
 				GameBase.G_TouchTriggers(ent);
 
 			// touch other objects
-			for (i = 0; i < pm.numtouch; i++)
+			for (i = 0; i < pm.touchents.Count; i++)
 			{
 				other = pm.touchents[i];
 
@@ -1755,7 +1755,7 @@ public class PlayerClient
 
 	/**
      * This will be called once for each server frame, before running any other
-     * entities in the world. 
+     * entities in the world.
      */
 	public static void ClientBeginServerFrame(edict_t ent)
 	{
@@ -1812,8 +1812,8 @@ public class PlayerClient
 		client.latched_buttons = 0;
 	}
 
-	/** 
-     * Returns true, if the players gender flag was set to female. 
+	/**
+     * Returns true, if the players gender flag was set to female.
      */
 	public static bool IsFemale(edict_t ent)
 	{
@@ -1885,8 +1885,8 @@ public class PlayerClient
 			self.client.killer_yaw += 360;
 	}
 
-	/** 
-     * Drop items and weapons in deathmatch games. 
+	/**
+     * Drop items and weapons in deathmatch games.
      */
 	public static void TossClientWeapon(edict_t self)
 	{

@@ -145,7 +145,7 @@ public class game_import_t
 
 	public void Pmove(pmove_t pmove)
 	{
-		PMove.Pmove(pmove);
+		IdTech.common.pmove.Pmove(pmove);
 	}
 
 	// player movement code common with client prediction

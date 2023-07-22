@@ -244,7 +244,7 @@ public class CL_pred
 		pmove_t pm = new();
 		pm.trace = (start, mins, maxs, end) => { return CL_pred.PMTrace(start, mins, maxs, end); };
 		pm.pointcontents = point => { return CL_pred.PMpointcontents(point); };
-		PMove.pm_airaccelerate = Lib.atof(Globals.cl.configstrings[Defines.CS_AIRACCEL]);
+		pmove.pm_airaccelerate = Lib.atof(Globals.cl.configstrings[Defines.CS_AIRACCEL]);
 
 		// bugfix (rst) yeah !!!!!!!! found the solution to the B E W E G U N G
 		// S P R O B L E M.
@@ -261,7 +261,7 @@ public class CL_pred
 			frame = ack & (Defines.CMD_BACKUP - 1);
 			cmd = Globals.cl.cmds[frame];
 			pm.cmd.set(cmd);
-			PMove.Pmove(pm);
+			pmove.Pmove(pm);
 
 			// save for debug checking
 			Math3D.VectorCopy(pm.s.origin, Globals.cl.predicted_origins[frame]);

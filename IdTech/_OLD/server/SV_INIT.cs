@@ -207,12 +207,12 @@ public class SV_INIT
 		if (cvar.Cvar_VariableValue("deathmatch") != 0)
 		{
 			SV_INIT.sv.configstrings[Defines.CS_AIRACCEL] = "" + SV_MAIN.sv_airaccelerate.value;
-			PMove.pm_airaccelerate = SV_MAIN.sv_airaccelerate.value;
+			pmove.pm_airaccelerate = SV_MAIN.sv_airaccelerate.value;
 		}
 		else
 		{
 			SV_INIT.sv.configstrings[Defines.CS_AIRACCEL] = "0";
-			PMove.pm_airaccelerate = 0;
+			pmove.pm_airaccelerate = 0;
 		}
 
 		SZ.Init(SV_INIT.sv.multicast, SV_INIT.sv.multicast_buf, SV_INIT.sv.multicast_buf.Length);
