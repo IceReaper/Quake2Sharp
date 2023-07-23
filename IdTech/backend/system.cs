@@ -168,7 +168,8 @@ public static class system
 		if (system.FindResults.Count > 0)
 			system.Sys_Error("Sys_BeginFind without close");
 
-		system.FindResults.AddRange(Directory.GetFiles(Path.GetDirectoryName(path) ?? ".", Path.GetFileName(path), SearchOption.AllDirectories));
+		if (Directory.Exists(Path.GetDirectoryName(path)))
+			system.FindResults.AddRange(Directory.GetFiles(Path.GetDirectoryName(path) ?? ".", Path.GetFileName(path), SearchOption.AllDirectories));
 
 		return system.Sys_FindNext();
 	}

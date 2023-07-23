@@ -48,6 +48,7 @@ public class InputListener
 
 	public void TextInput(TextInputEventArgs args)
 	{
-		this.queue[^1].Text = args.AsString;
+		if (this.queue.Count > 0)
+			this.queue[^1].Text = args.AsString;
 	}
 }

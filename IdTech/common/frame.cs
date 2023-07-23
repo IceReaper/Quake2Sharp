@@ -39,7 +39,6 @@ namespace IdTech.common;
 public static class frame
 {
 	public static readonly cvar_t developer = cvar.Cvar_Get("developer", "0", 0);
-	public static readonly cvar_t modder = cvar.Cvar_Get("modder", "0", 0);
 	private static readonly cvar_t timescale = cvar.Cvar_Get("timescale", "1", 0);
 	private static readonly cvar_t fixedtime = cvar.Cvar_Get("fixedtime", "0", 0);
 	public static readonly cvar_t cl_maxfps = cvar.Cvar_Get("cl_maxfps", "-1", Defines.CVAR_ARCHIVE);

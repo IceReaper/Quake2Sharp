@@ -37,10 +37,10 @@ namespace IdTech.common;
 public static class clientserver
 {
 	private static Stream? logfile;
-	public static readonly cvar_t logfile_active = cvar.Cvar_Get("logfile", "1", Defines.CVAR_ARCHIVE);
+	private static readonly cvar_t logfile_active = cvar.Cvar_Get("logfile", "1", Defines.CVAR_ARCHIVE);
 
 	private static int server_state;
-	public static readonly cvar_t color_terminal = cvar.Cvar_Get("colorterminal", "1", Defines.CVAR_ARCHIVE);
+	private static readonly cvar_t color_terminal = cvar.Cvar_Get("colorterminal", "1", Defines.CVAR_ARCHIVE);
 
 	private static int rd_target;
 	private static string rd_buffer = string.Empty;
@@ -68,7 +68,7 @@ public static class clientserver
 	 */
 	private static void Com_VPrintf(int print_level, string msg)
 	{
-		if (print_level == Defines.PRINT_DEVELOPER && (frame.developer == null || frame.developer.value == 0))
+		if (print_level == Defines.PRINT_DEVELOPER && frame.developer.value == 0)
 			return; /* don't confuse non-developers with techie stuff... */
 
 		if (clientserver.rd_flush != null)
@@ -160,16 +160,6 @@ public static class clientserver
 	public static void Com_DPrintf(string msg)
 	{
 		clientserver.Com_VPrintf(Defines.PRINT_DEVELOPER, msg);
-	}
-
-	/*
-	 * A Com_Printf that only shows up when either the "modder" or "developer"
-	 * cvars is set
-	 */
-	private static void Com_MDPrintf(string msg)
-	{
-		if (frame.modder.value != 0 || frame.developer.value != 0)
-			clientserver.Com_Printf(msg);
 	}
 
 	/*

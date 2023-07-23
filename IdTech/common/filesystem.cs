@@ -107,10 +107,12 @@ public static class filesystem
 	// Raw search path, the actual search path is build from this one.
 	private static List<string> fs_rawPath = new();
 
+	private static bool fs_initialized;
+
 	// --------
 
 	/*
-	 * All of Quake's data access is through a hierchal file system, but the
+	 * All of Quake's data access is through a hierarchical file system, but the
 	 * contents of the file system can be transparently merged from several
 	 * sources.
 	 *
@@ -856,7 +858,7 @@ public static class filesystem
 	{
 		// Write the config. Otherwise changes made by the
 		// current mod are lost.
-		if (!main.DEDICATED_ONLY)
+		if (!main.DEDICATED_ONLY && filesystem.fs_initialized)
 			Cl.WriteConfiguration();
 
 		// empty string means baseq2
@@ -1034,6 +1036,8 @@ public static class filesystem
 
 		// Debug output
 		clientserver.Com_Printf($"Using '{filesystem.fs_gamedir}' for writing.\n");
+
+		filesystem.fs_initialized = true;
 	}
 
 	public static void FS_ShutdownFilesystem()
