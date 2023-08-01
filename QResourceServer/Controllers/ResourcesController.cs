@@ -7,6 +7,8 @@ using Microsoft.Extensions.Options;
 using QEntitiesServer;
 using System.Net.Mime;
 
+namespace QResourceServer.Controllers;
+
 [Authorize]
 [Route("/")]
 public class ResourcesController : Controller

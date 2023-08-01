@@ -37,121 +37,74 @@ using System.Reflection;
 
 public class Program
 {
-	public static Action<int> UpdateLoop;
-	private static int last = Timer.Milliseconds();
-	public static bool Exit;
+    public static Action<int> UpdateLoop;
+    private static int last = Timer.Milliseconds();
+    public static bool Exit;
 
-	private const string ResourceName = "baseq2";
+    private const string ResourceName = "baseq2";
 
-	public static void Main(string[] args)
-	{
-		if (!Directory.Exists(ResourceName))
-		{
-            var stream = DownloadResources();
-			ExtractResources(stream);
+    public static void Main(string[] args)
+    {
+        if (!Directory.Exists(ResourceName))
+        {
+            var stream = AzUtils.DownloadResources();
+            ExtractResources(stream);
         }
-		
+
         var dedicated = false;
 
-		// check if we are in dedicated mode to hide the dialog.
-		for (var n = 0; n < args.Length; n++)
-		{
-			if (!args[n].Equals("+set"))
-				continue;
+        // check if we are in dedicated mode to hide the dialog.
+        for (var n = 0; n < args.Length; n++)
+        {
+            if (!args[n].Equals("+set"))
+                continue;
 
-			if (++n >= args.Length)
-				break;
+            if (++n >= args.Length)
+                break;
 
-			if (!args[n].Equals("dedicated"))
-				continue;
+            if (!args[n].Equals("dedicated"))
+                continue;
 
-			if (++n >= args.Length)
-				break;
+            if (++n >= args.Length)
+                break;
 
-			if (!args[n].Equals("1") && !args[n].Equals("\"1\""))
-				continue;
+            if (!args[n].Equals("1") && !args[n].Equals("\"1\""))
+                continue;
 
-			Com.Printf("Starting in dedicated mode.\n");
-			dedicated = true;
-		}
+            Com.Printf("Starting in dedicated mode.\n");
+            dedicated = true;
+        }
 
-		Globals.dedicated = Cvar.Get("dedicated", "0", Defines.CVAR_NOSET);
+        Globals.dedicated = Cvar.Get("dedicated", "0", Defines.CVAR_NOSET);
 
-		if (dedicated)
-			Globals.dedicated.value = 1.0f;
+        if (dedicated)
+            Globals.dedicated.value = 1.0f;
 
-		Qcommon.Init(args);
+        Qcommon.Init(args);
 
-		Globals.nostdout = Cvar.Get("nostdout", "0", 0);
+        Globals.nostdout = Cvar.Get("nostdout", "0", 0);
 
-		while (!Program.Exit)
-		{
-			// find time spending rendering last frame
-			var now = Timer.Milliseconds();
-			var delta = now - Program.last;
+        while (!Program.Exit)
+        {
+            // find time spending rendering last frame
+            var now = Timer.Milliseconds();
+            var delta = now - Program.last;
 
-			if (Program.UpdateLoop != null)
-				Program.UpdateLoop(delta);
-			else if (delta > 0)
-			{
-				Qcommon.FrameUpdate(delta);
-				Qcommon.FrameRender(delta);
-			}
+            if (Program.UpdateLoop != null)
+                Program.UpdateLoop(delta);
+            else if (delta > 0)
+            {
+                Qcommon.FrameUpdate(delta);
+                Qcommon.FrameRender(delta);
+            }
 
-			Program.last = now;
-		}
-	}
-
-	private static void ExtractResources(Stream data)
-	{
-		using var zipArchive = new ZipArchive(data);
-		zipArchive.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            Program.last = now;
+        }
     }
 
-    private static Stream DownloadResources()
-	{
-        var builder = new ConfigurationBuilder()
-            .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true);
-
-        IConfiguration config = builder.Build();
-
-        var resourceAccessSettings = config.GetSection(nameof(ResourceAccessSettings)).Get<ResourceAccessSettings>();
-
-        try
-        {
-            ClientSecretCredential clientSecretCredential = new ClientSecretCredential(
-				resourceAccessSettings.TenantId,
-				resourceAccessSettings.ClientId,
-                resourceAccessSettings.ClientSecret);
-
-            TokenRequestContext tokenRequestContext =
-                new TokenRequestContext(
-					new string[] {
-                        $"api://{resourceAccessSettings.ClientId}/.default", });
-
-            string token = clientSecretCredential.GetToken(tokenRequestContext).Token;
-
-            HttpClient httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
-
-			Console.WriteLine("Authenticating and downloading the resources");
-
-            var httpResult = httpClient.GetAsync(resourceAccessSettings.ResourceUri).GetAwaiter().GetResult();
-
-			if (!httpResult.IsSuccessStatusCode)
-			{
-				throw new ApplicationException($"Not authenticated. {httpResult.ReasonPhrase}");
-			}
-
-            Console.WriteLine("Resources downloaded");
-
-            return httpResult.Content.ReadAsStream();
-        }
-		catch (Exception)
-		{
-			throw;
-		}
+    private static void ExtractResources(Stream data)
+    {
+        using var zipArchive = new ZipArchive(data);
+        zipArchive.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory);
     }
 }

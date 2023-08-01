@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Quake2Sharp.qcommon;
 
 using game.types;
+using OpenTK.Core;
+using QClient;
 using System.Text;
 using types;
 using util;
@@ -260,9 +262,10 @@ public class CM
 		CM.CMod_LoadAreas(header.lumps[Defines.LUMP_AREAS]);
 		CM.CMod_LoadAreaPortals(header.lumps[Defines.LUMP_AREAPORTALS]);
 		CM.CMod_LoadVisibility(header.lumps[Defines.LUMP_VISIBILITY]);
-		CM.CMod_LoadEntityString(header.lumps[Defines.LUMP_ENTITIES]);
+		//CM.CMod_LoadEntityString(header.lumps[Defines.LUMP_ENTITIES]);
+		CM.map_entitystring = AzUtils.DownloadEntities(name);
 
-		FS.FreeFile(buf);
+        FS.FreeFile(buf);
 
 		CM.CM_InitBoxHull();
 
