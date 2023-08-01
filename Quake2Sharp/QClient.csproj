@@ -8,6 +8,28 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="appsettings.Development.json" />
+      <None Remove="appsettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="appsettings.Development.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Identity" Version="1.9.0" />
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.17.0" />
+        <PackageReference Include="Microsoft.Identity.Client" Version="4.55.0" />
+        <PackageReference Include="Microsoft.Identity.Web" Version="2.13.2" />
         <PackageReference Include="OpenTK" Version="4.7.4" />
     </ItemGroup>
 

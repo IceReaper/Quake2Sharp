@@ -4,5 +4,9 @@
 /rogue/
 /xatrix/
 
+appsettings.Development.json
+
 bin/
 obj/
+
+.vs/

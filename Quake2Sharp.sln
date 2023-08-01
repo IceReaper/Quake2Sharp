@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{01FD5072-2
 		README.MD = README.MD
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QResourceServer", "QResourceServer\QResourceServer.csproj", "{ED664C27-4B75-4320-9F7D-1E640FE1D79A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QResourceServer", "QResourceServer\QResourceServer.csproj", "{ED664C27-4B75-4320-9F7D-1E640FE1D79A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEntitiesServer", "QEntitiesServer\QEntitiesServer.csproj", "{1DFACA79-6E1B-4B37-87AF-F24A2D8F36C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QEntitiesServer", "QEntitiesServer\QEntitiesServer.csproj", "{1DFACA79-6E1B-4B37-87AF-F24A2D8F36C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

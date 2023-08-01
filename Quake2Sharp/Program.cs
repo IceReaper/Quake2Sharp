@@ -19,8 +19,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 namespace Quake2Sharp;
 
+using Azure.Core;
+using Azure.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
+using QClient;
 using qcommon;
+using Quake2Sharp.server.types;
 using sys;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using System.IO.Compression;
+using System.Reflection;
 
 public class Program
 {
@@ -28,9 +41,17 @@ public class Program
 	private static int last = Timer.Milliseconds();
 	public static bool Exit;
 
+	private const string ResourceName = "baseq2";
+
 	public static void Main(string[] args)
 	{
-		var dedicated = false;
+		if (!Directory.Exists(ResourceName))
+		{
+            var stream = DownloadResources();
+			ExtractResources(stream);
+        }
+		
+        var dedicated = false;
 
 		// check if we are in dedicated mode to hide the dialog.
 		for (var n = 0; n < args.Length; n++)
@@ -80,4 +101,57 @@ public class Program
 			Program.last = now;
 		}
 	}
+
+	private static void ExtractResources(Stream data)
+	{
+		using var zipArchive = new ZipArchive(data);
+		zipArchive.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory);
+    }
+
+    private static Stream DownloadResources()
+	{
+        var builder = new ConfigurationBuilder()
+            .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true);
+
+        IConfiguration config = builder.Build();
+
+        var resourceAccessSettings = config.GetSection(nameof(ResourceAccessSettings)).Get<ResourceAccessSettings>();
+
+        try
+        {
+            ClientSecretCredential clientSecretCredential = new ClientSecretCredential(
+				resourceAccessSettings.TenantId,
+				resourceAccessSettings.ClientId,
+                resourceAccessSettings.ClientSecret);
+
+            TokenRequestContext tokenRequestContext =
+                new TokenRequestContext(
+					new string[] {
+                        $"api://{resourceAccessSettings.ClientId}/.default", });
+
+            string token = clientSecretCredential.GetToken(tokenRequestContext).Token;
+
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+			Console.WriteLine("Authenticating and downloading the resources");
+
+            var httpResult = httpClient.GetAsync(resourceAccessSettings.ResourceUri).GetAwaiter().GetResult();
+
+			if (!httpResult.IsSuccessStatusCode)
+			{
+				throw new ApplicationException($"Not authenticated. {httpResult.ReasonPhrase}");
+			}
+
+            Console.WriteLine("Resources downloaded");
+
+            return httpResult.Content.ReadAsStream();
+        }
+		catch (Exception)
+		{
+			throw;
+		}
+    }
 }
