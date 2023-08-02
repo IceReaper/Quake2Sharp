@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using QEntitiesServer.ECS;
 
 namespace QEntitiesServer.Controllers;
 
@@ -8,19 +8,34 @@ namespace QEntitiesServer.Controllers;
 [Route("/")]
 public class EntitiesController : Controller
 {
-    public Features _features;
+    private readonly ECSConfigProvider _configurationProvider;
 
-    public EntitiesController(IOptions<Features> features)
-    {
-        _ = features ?? throw new ArgumentNullException(nameof(features));
-
-        _features = features.Value;
+    public EntitiesController(ECSConfigProvider configurationClient)
+    {   
+        _configurationProvider = configurationClient ?? throw new ArgumentNullException(nameof(configurationClient));
     }
 
     [HttpGet]
     public async Task<ActionResult> GetEntities(string mapName)
     {
-        string entities = await System.IO.File.ReadAllTextAsync("Entities\\Entities1.info");
+        string monstersPositionVersion = _configurationProvider.GetValue("CorrectMonsterPosition");
+
+        string entitiesPath;
+
+        switch (monstersPositionVersion)
+        {
+            case "v1":
+                entitiesPath = "Entities\\Entities2.info";
+                break;
+            case "v2":
+                entitiesPath = "Entities\\Entities1.info";
+                break;
+            default:
+                entitiesPath = "Entities\\Entities_NoMonsters.info";
+                break;
+        }
+
+        string entities = await System.IO.File.ReadAllTextAsync(entitiesPath);
 
         return Content(entities);
     }
