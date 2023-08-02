@@ -77,7 +77,7 @@ public sealed class ECSConfigProvider
 
             string result = await httpResult.Content.ReadAsStringAsync();
 
-            PolulateDictionary(result);
+            PopulateDictionary(result);
 
             // TODO emit metric via open telemetry
             Console.WriteLine("Config updated.");
@@ -88,7 +88,7 @@ public sealed class ECSConfigProvider
         }
     }
 
-    private void PolulateDictionary(string ecsConfigurationsJson)
+    private void PopulateDictionary(string ecsConfigurationsJson)
     {
         JsonDocument doc = JsonDocument.Parse(ecsConfigurationsJson);
         JsonElement configurations = doc.RootElement.GetProperty("configurations");
