@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QEntitiesServer.ECS;
+using OpenFeature.Contrib.Providers.Flagd;
 
 namespace QEntitiesServer.Controllers;
 
@@ -8,17 +8,20 @@ namespace QEntitiesServer.Controllers;
 [Route("/")]
 public class EntitiesController : Controller
 {
-    private readonly ECSConfigProvider _configurationProvider;
+    private readonly OpenFeature.FeatureClient _featureClient;
 
-    public EntitiesController(ECSConfigProvider configurationClient)
-    {   
-        _configurationProvider = configurationClient ?? throw new ArgumentNullException(nameof(configurationClient));
+    public EntitiesController()
+    {
+        var flagdProvider = new FlagdProvider();
+        OpenFeature.Api.Instance.SetProvider(flagdProvider);
+        _featureClient = OpenFeature.Api.Instance.GetClient(nameof(EntitiesController));
     }
 
     [HttpGet]
     public async Task<ActionResult> GetEntities(string mapName)
     {
-        string monstersPositionVersion = _configurationProvider.GetValue("CorrectMonsterPosition");
+        string monstersPositionVersion = await _featureClient.GetStringValue("CorrectMonsterPosition", "none", null).ConfigureAwait(false);
+        Console.WriteLine($"Read CorrectMonsterPosition as {monstersPositionVersion}");
 
         string entitiesPath;
 

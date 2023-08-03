@@ -1,19 +1,19 @@
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
-using QEntitiesServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Memory;
+using ECSConfigProxy.ECS;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureServices((hostContext, services) =>
 {
     services
-        .Configure<Features>(hostContext.Configuration.GetSection(nameof(Features)))
-        .AddOptions<Features>()
+        .Configure<ECSAuthInfo>(hostContext.Configuration.GetSection("AzureAd"))
+        .AddOptions<ECSAuthInfo>()
         .ValidateDataAnnotations()
         .ValidateOnStart();
 
-    var authConfigurationSection = builder.Configuration.GetSection("AzureAd");    
+    var authConfigurationSection = builder.Configuration.GetSection("AzureAd");
 
     services
         .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -23,6 +23,8 @@ builder.Host.ConfigureServices((hostContext, services) =>
     IMemoryCache memoryCache = new MemoryCache(Options.Create(memoryCacheOptions));
 
     services.AddSingleton(memoryCache);
+
+    services.AddSingleton<ECSConfigCache>();
 
     services.AddControllers();
 });

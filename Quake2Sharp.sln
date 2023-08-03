@@ -15,6 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QResourceServer", "QResourc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QEntitiesServer", "QEntitiesServer\QEntitiesServer.csproj", "{1DFACA79-6E1B-4B37-87AF-F24A2D8F36C3}"
 EndProject
+<<<<<<< Updated upstream
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECSConfigProxy", "ECSConfigProxy\ECSConfigProxy.csproj", "{6031E5E7-052B-4191-9486-C68CA0BB5921}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenFeatureTestApp", "OpenFeatureTestApp\OpenFeatureTestApp.csproj", "{C53FB8E8-D15B-4269-AC6C-A62A86447F9C}"
+>>>>>>> Stashed changes
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,17 @@ Global
 		{1DFACA79-6E1B-4B37-87AF-F24A2D8F36C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DFACA79-6E1B-4B37-87AF-F24A2D8F36C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DFACA79-6E1B-4B37-87AF-F24A2D8F36C3}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< Updated upstream
+		{6031E5E7-052B-4191-9486-C68CA0BB5921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6031E5E7-052B-4191-9486-C68CA0BB5921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6031E5E7-052B-4191-9486-C68CA0BB5921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6031E5E7-052B-4191-9486-C68CA0BB5921}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{C53FB8E8-D15B-4269-AC6C-A62A86447F9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C53FB8E8-D15B-4269-AC6C-A62A86447F9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C53FB8E8-D15B-4269-AC6C-A62A86447F9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C53FB8E8-D15B-4269-AC6C-A62A86447F9C}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> Stashed changes
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
